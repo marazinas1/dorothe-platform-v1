@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { ReactNode } from "react";
 
 import { SiteNav } from "@/components/brand/SiteNav";
+import { SiteLogo } from "@/components/brand/SiteLogo";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -29,7 +30,7 @@ function Footer({ locale, settings }: { locale: Locale; settings: SiteSettings }
     <footer className="mt-24 border-t border-border/60 bg-background">
       <div className="mx-auto grid max-w-[1400px] gap-10 px-6 py-14 md:grid-cols-3 lg:px-10">
         <div>
-          <div className="font-heading text-2xl">{settings.site_name}</div>
+          <SiteLogo settings={settings} />
           {settings.address_street ? (
             <p className="mt-3 text-sm text-muted-foreground">
               {settings.address_street}

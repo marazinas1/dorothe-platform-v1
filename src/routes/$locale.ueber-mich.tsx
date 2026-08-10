@@ -6,6 +6,7 @@ import { PublicChrome } from "@/components/public/PublicChrome";
 import { AgentIntro } from "@/components/brand/AgentIntro";
 import { AgentListings } from "@/components/brand/AgentListings";
 import { CredibilityBar } from "@/components/brand/CredibilityBar";
+import { QualificationsList } from "@/components/brand/QualificationsList";
 import { ContactSection } from "@/components/brand/ContactSection";
 import { SoldStrip } from "@/components/brand/SoldStrip";
 import { TeamSection } from "@/components/brand/TeamSection";
@@ -71,9 +72,7 @@ function AboutPage() {
 
   const scope = teamEnabled ? "pages.about.team" : "pages.about.solo";
   const paragraphs = t(`${scope}.paragraphs`, { returnObjects: true }) as string[];
-  const qualifications = teamEnabled
-    ? []
-    : (t("pages.about.solo.qualifications", { returnObjects: true }) as string[]);
+  const qualifications = teamEnabled ? [] : (settings.qualifications ?? []);
 
   const name =
     settings.primary_agent_name ?? settings.legal_name ?? settings.site_name;
@@ -92,27 +91,11 @@ function AboutPage() {
         showSignature={!teamEnabled}
       />
 
-      {qualifications.length > 0 ? (
-        <section className="mx-auto mt-32 max-w-[1400px] px-6 lg:px-10">
-          <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
-            <div className="md:col-span-4">
-              <h2 className="font-heading text-3xl leading-[1.1] md:text-4xl">
-                {t("pages.about.solo.qualifications_title")}
-              </h2>
-            </div>
-            <div className="md:col-span-8">
-              <ul className="space-y-6 border-t border-border pt-8 text-lg">
-                {qualifications.map((q, i) => (
-                  <li key={i} className="flex gap-4">
-                    <span className="mt-3 h-px w-8 shrink-0 bg-foreground" aria-hidden />
-                    <span>{q}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-      ) : null}
+      <QualificationsList
+        className="mt-32"
+        title={t("pages.about.solo.qualifications_title")}
+        items={qualifications}
+      />
 
       {showTeamGrid ? <TeamSection members={team} /> : null}
 
