@@ -120,6 +120,15 @@ function ValuationPage() {
         </div>
       </section>
 
+      <QualificationsList
+        className="mt-32"
+        title={t("pages.valuation.credentials_title")}
+        note={t("pages.valuation.credentials_note")}
+        items={valuationCredentials}
+      />
+
+
+
       <section id="form" className="mx-auto mt-40 max-w-[1400px] px-6 pb-32 lg:px-10">
         <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
           <div className="md:col-span-4">
