@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { PublicChrome } from "@/components/public/PublicChrome";
+import { QualificationsList } from "@/components/brand/QualificationsList";
 import { SellerInquiryForm } from "@/components/brand/SellerInquiryForm";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
@@ -46,6 +47,11 @@ function ValuationPage() {
 
   const steps = t("pages.valuation.steps", { returnObjects: true }) as Step[];
   const deliverables = t("pages.valuation.deliverables", { returnObjects: true }) as string[];
+  // Valuation-relevant credentials only: the certifications that qualify her to
+  // value a property, drawn from site_settings so a clone shows its own.
+  const valuationCredentials = (settings.qualifications ?? []).filter((q) =>
+    /bewert|DEKRA|Sprengnetter/i.test(q),
+  );
 
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>

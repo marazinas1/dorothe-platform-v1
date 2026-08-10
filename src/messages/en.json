@@ -608,7 +608,9 @@
         "A no-obligation recommendation on how to proceed"
       ],
       "form_title": "Request a valuation",
-      "form_intro": "The more precise your input, the sharper the first estimate. Everything you share stays confidential."
+      "form_intro": "The more precise your input, the sharper the first estimate. Everything you share stays confidential.",
+      "credentials_title": "Valued by a certified expert",
+      "credentials_note": "Your valuation is prepared by a DEKRA-certified property valuation expert with IHK valuer qualification — not by an automated estimate alone."
     },
     "selling": {
       "title": "Selling",
@@ -665,13 +667,7 @@
           "I have deliberately chosen not to build a team. Whoever calls, gets me on the line — not a call centre, not rotating colleagues. That limits how many properties I can handle at once, but it is exactly the difference a personal sale asks for.",
           "Professionally I stand on solid ground: IHK-certified, years of valuation practice, well connected with the notaries, trades and financing partners in the region. That helps when questions come up mid-process and need a quick answer."
         ],
-        "qualifications_title": "Qualifications & background",
-        "qualifications": [
-          "IHK-certified estate agent",
-          "Over 12 years in real estate across the Saarland",
-          "Certified property valuation practitioner",
-          "Member of the German real estate association IVD"
-        ]
+        "qualifications_title": "Qualifications & background"
       },
       "team": {
         "headline": "We sell property the way we would want it sold to us.",
