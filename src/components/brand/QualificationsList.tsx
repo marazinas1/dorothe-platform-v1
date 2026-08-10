@@ -1,5 +1,3 @@
-import { useTranslation } from "react-i18next";
-
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -15,7 +13,6 @@ type Props = {
  * site_settings.qualifications, the heading from translations.
  */
 export function QualificationsList({ items, title, note, className }: Props) {
-  const { t } = useTranslation();
   if (!items || items.length === 0) return null;
 
   return (
@@ -36,7 +33,6 @@ export function QualificationsList({ items, title, note, className }: Props) {
               </li>
             ))}
           </ul>
-          <p className="sr-only">{t("pages.about.solo.qualifications_title")}</p>
         </div>
       </div>
     </section>
