@@ -650,6 +650,7 @@ export type Database = {
           primary_agent_photo_url: string | null
           primary_agent_role: string | null
           primary_color: string | null
+          qualifications: Json
           secondary_color: string | null
           site_name: string
           social: Json
@@ -694,6 +695,7 @@ export type Database = {
           primary_agent_photo_url?: string | null
           primary_agent_role?: string | null
           primary_color?: string | null
+          qualifications?: Json
           secondary_color?: string | null
           site_name: string
           social?: Json
@@ -738,6 +740,7 @@ export type Database = {
           primary_agent_photo_url?: string | null
           primary_agent_role?: string | null
           primary_color?: string | null
+          qualifications?: Json
           secondary_color?: string | null
           site_name?: string
           social?: Json
