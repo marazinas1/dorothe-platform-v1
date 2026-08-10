@@ -27,13 +27,13 @@ export function SiteLogo({ settings, tone = "dark", className, size = "md" }: Pr
       src={src}
       alt={settings.site_name}
       className={cn(
-        size === "sm" ? "h-8" : "h-10 md:h-12",
+        size === "sm" ? "h-9 md:h-10" : "h-12 md:h-14",
         "w-auto object-contain",
         // Neutralising display treatment — no palette clash while the brand
         // decision is still open.
         tone === "light"
           ? "opacity-90 brightness-0 invert"
-          : "opacity-80 grayscale contrast-[1.05] brightness-[0.55]",
+          : "grayscale opacity-90 contrast-[0.9] brightness-[0.95]",
         className,
       )}
       loading="eager"
