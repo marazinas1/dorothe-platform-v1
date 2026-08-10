@@ -42,6 +42,8 @@ export interface SiteSettings {
   homepage_sections: HomepageSection[];
   credibility_stats: CredibilityStat[];
   credibility_heading: Record<string, string>;
+  /** Professional certifications, displayed as a calm list. */
+  qualifications: string[];
   about_body: Record<string, string>;
 }
 

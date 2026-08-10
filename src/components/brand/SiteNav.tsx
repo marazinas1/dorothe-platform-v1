@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { BrandMark } from "@/components/brand/BrandMark";
+import { SiteLogo } from "@/components/brand/SiteLogo";
 import { NavDrawer } from "@/components/brand/NavDrawer";
 import { LocaleSwitcher } from "@/components/shared/LocaleSwitcher";
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
@@ -59,7 +59,7 @@ export function SiteNav({ locale, settings }: Props) {
           params={{ locale }}
           className="min-w-0 justify-self-start whitespace-nowrap transition-opacity duration-300 hover:opacity-70"
         >
-          <BrandMark settings={settings} />
+          <SiteLogo settings={settings} size="sm" />
         </Link>
 
         <nav className="hidden items-center gap-7 justify-self-center lg:flex">

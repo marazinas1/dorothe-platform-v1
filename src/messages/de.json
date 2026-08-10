@@ -608,7 +608,9 @@
         "Eine unverbindliche Empfehlung zum weiteren Vorgehen"
       ],
       "form_title": "Bewertung anfordern",
-      "form_intro": "Je genauer die Angaben, desto präziser die erste Einschätzung. Alle Angaben sind vertraulich."
+      "form_intro": "Je genauer die Angaben, desto präziser die erste Einschätzung. Alle Angaben sind vertraulich.",
+      "credentials_title": "Bewertung durch zertifizierte Sachverständige",
+      "credentials_note": "Ihre Bewertung erstellt eine DEKRA-zertifizierte Sachverständige für Immobilienbewertung mit IHK-Qualifikation als Immobilienbewerterin — nicht nur eine automatische Schätzung."
     },
     "selling": {
       "title": "Verkaufen",
@@ -665,13 +667,7 @@
           "Ich habe mich bewusst gegen ein Team entschieden. Wer mich anruft, bekommt mich ans Telefon — nicht ein Callcenter, nicht wechselnde Kolleginnen. Das begrenzt die Anzahl der Objekte, die ich gleichzeitig betreuen kann, macht aber genau den Unterschied, den ein persönlicher Verkauf verlangt.",
           "Fachlich stehe ich auf einem soliden Fundament: IHK-zertifiziert, langjährige Praxis in der Bewertung, gute Vernetzung mit den Notariaten, Handwerksbetrieben und Finanzierungspartnern in der Region. Das hilft, wenn im Prozess Fragen auftauchen, die schnell beantwortet werden müssen."
         ],
-        "qualifications_title": "Qualifikationen & Werdegang",
-        "qualifications": [
-          "IHK-zertifizierte Immobilienmaklerin",
-          "Über 12 Jahre in der Immobilienvermittlung im Saarland",
-          "Zertifizierte Sachkundige für Immobilienbewertung",
-          "Mitglied im Immobilienverband IVD"
-        ]
+        "qualifications_title": "Qualifikationen & Werdegang"
       },
       "team": {
         "headline": "Wir vermitteln Immobilien so, wie wir selbst gerne verkauft oder gekauft würden.",

@@ -38,10 +38,10 @@ UPDATE public.site_settings SET
   accent_color     = '#A67C6D',
   font_heading     = '"Fraunces Variable", Georgia, serif',
   font_body        = '"Inter Variable", ui-sans-serif, system-ui, sans-serif',
-  contact_email    = 'kontakt@waltner-immobilien.de',
-  contact_phone    = '+49 6898 4478 210',
-  whatsapp         = '+49 175 6612480',
-  address_street   = 'Marktstraße 12',
+  contact_email    = 'dorothe.waltner@gmail.com',
+  contact_phone    = '0160 4444047',
+  whatsapp         = NULL,
+  address_street   = 'Kyllbergstraße 140',
   address_zip      = '66346',
   address_city     = 'Püttlingen',
   address_country  = 'Deutschland',
@@ -62,10 +62,22 @@ UPDATE public.site_settings SET
     {"key":"areas","enabled":true},
     {"key":"contact","enabled":true}
   ]'::jsonb,
+  logo_url         = 'https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/brand/logo-4-waende-saar.avif',
+  qualifications = '[
+    "Dipl. Betriebswirtin (BA)",
+    "Versicherungsfachwirtin (IHK)",
+    "Immobilienmaklerin (IHK)",
+    "Immobilienbewerterin (IHK)",
+    "Sachverständige für Immobilienbewertung (DEKRA)",
+    "Immo-Erbrechts-Expertin (Sprengnetter)",
+    "Mitglied der Europäischen Immobilienakademie"
+  ]'::jsonb,
+  -- Credentials, not invented numbers: no years/volume claims until verified.
   credibility_stats = '[
-    {"value":"12","label":{"de":"Jahre persönliche Beratung","en":"Years of personal advice"}},
-    {"value":"150+","label":{"de":"Erfolgreich vermittelte Objekte","en":"Properties successfully sold"}},
-    {"value":"IHK","label":{"de":"Zertifizierte Immobilienmaklerin","en":"IHK-certified estate agent"}}
+    {"value":"IHK","label":{"de":"Immobilienmaklerin & Immobilienbewerterin","en":"Certified estate agent & property valuer"}},
+    {"value":"DEKRA","label":{"de":"Sachverständige für Immobilienbewertung","en":"Certified property valuation expert"}},
+    {"value":"Sprengnetter","label":{"de":"Immo-Erbrechts-Expertin","en":"Property inheritance law expert"}},
+    {"value":"EIA","label":{"de":"Mitglied der Europäischen Immobilienakademie","en":"Member of the European Real Estate Academy"}}
   ]'::jsonb,
   credibility_heading = '{"de":"Warum Dorothe Waltner","en":"Why Dorothe Waltner"}'::jsonb,
   about_body = '{"de":"Ich begleite Eigentümer und Käufer im Saarland persönlich — von der ersten Wertermittlung bis zum Notartermin. Als Einzelmaklerin arbeite ich bewusst mit wenigen Objekten gleichzeitig, damit jedes die Aufmerksamkeit bekommt, die es verdient. Kein Callcenter, keine Übergabe an Kollegen: Sie sprechen mit mir.","en":"I personally guide owners and buyers across the Saarland — from the first valuation to signing at the notary. As a solo broker I deliberately handle only a handful of properties at a time, so each one gets the attention it deserves. No call centre, no handovers: you speak with me."}'::jsonb;
