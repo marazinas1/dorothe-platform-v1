@@ -11,7 +11,13 @@
 import decodeJpeg, { init as initJpegDecode } from "https://esm.sh/@jsquash/jpeg@1.6.0/decode?target=deno";
 import decodePng, { init as initPngDecode } from "https://esm.sh/@jsquash/png@3.1.1/decode?target=deno";
 import decodeWebpJs, { init as initWebpDecode } from "https://esm.sh/@jsquash/webp@1.5.0/decode?target=deno";
-import encodeAvif, { init as initAvifEncode } from "https://esm.sh/@jsquash/avif@2.1.1/encode?target=deno";
+// AVIF: import the SINGLE-THREADED emscripten codec directly. @jsquash/avif's
+// own `encode` entry runs wasm-feature-detect and loads `avif_enc_mt` whenever
+// threads look available; the Supabase edge runtime passes that detection but
+// refuses the actual allocation with "Creating a shared memory is not
+// supported". Bypassing the wrapper means no SharedArrayBuffer is ever
+// requested. Do not switch back to "@jsquash/avif/encode".
+import avifEncInit from "https://esm.sh/@jsquash/avif@2.1.1/codec/enc/avif_enc.mjs?target=deno";
 import encodeWebp, { init as initWebpEncode } from "https://esm.sh/@jsquash/webp@1.5.0/encode?target=deno";
 import resize, { initResize } from "https://esm.sh/@jsquash/resize@2.1.1?target=deno";
 import { encode as encodeBlurhash } from "https://esm.sh/blurhash@2.0.5?target=deno";
@@ -30,12 +36,46 @@ async function ensureInit() {
     initJpegDecode?.(),
     initPngDecode?.(),
     initWebpDecode?.(),
-    initAvifEncode?.(),
     initWebpEncode?.(),
     initResize?.(),
   ]);
   initialised = true;
 }
+
+// AVIF encoder options mirror @jsquash/avif's defaults; we own them now that
+// the wrapper is bypassed.
+const AVIF_OPTS = {
+  quality: 55,
+  qualityAlpha: -1,
+  denoiseLevel: 0,
+  tileColsLog2: 0,
+  tileRowsLog2: 0,
+  speed: 6,
+  subsample: 1,
+  chromaDeltaQ: false,
+  sharpness: 0,
+  tune: 0,
+  enableSharpYUV: false,
+  bitDepth: 8,
+  lossless: false,
+};
+
+interface AvifEncoder {
+  encode: (
+    data: Uint8Array,
+    width: number,
+    height: number,
+    opts: typeof AVIF_OPTS,
+  ) => Uint8Array | null;
+}
+
+let avifEncoder: Promise<AvifEncoder> | undefined;
+function getAvifEncoder(): Promise<AvifEncoder> {
+  // deno-lint-ignore no-explicit-any
+  avifEncoder ??= (avifEncInit as any)({ noInitialRun: true }) as Promise<AvifEncoder>;
+  return avifEncoder;
+}
+
 
 export async function decodeImage(bytes: Uint8Array, contentType: string): Promise<PixelBuffer> {
   await ensureInit();
@@ -60,7 +100,9 @@ export async function readOrientation(bytes: Uint8Array, contentType: string): P
     return 1;
   }
   try {
-    const meta = await exifr.parse(bytes, { pick: ["Orientation"] });
+    // translateValues:false is required — exifr otherwise returns human
+    // strings like "Rotate 90 CW" and rotation is silently skipped.
+    const meta = await exifr.parse(bytes, { pick: ["Orientation"], translateValues: false });
     const o = meta?.Orientation;
     return typeof o === "number" && o >= 1 && o <= 8 ? o : 1;
   } catch {
@@ -147,9 +189,15 @@ export async function coverCrop(pix: PixelBuffer, w: number, h: number): Promise
 }
 
 export async function toAvif(pix: PixelBuffer): Promise<Uint8Array> {
-  await ensureInit();
-  const buf = await encodeAvif(new ImageData(pix.data, pix.width, pix.height), { quality: 55 });
-  return new Uint8Array(buf);
+  const enc = await getAvifEncoder();
+  const out = enc.encode(
+    new Uint8Array(pix.data.buffer, pix.data.byteOffset, pix.data.byteLength),
+    pix.width,
+    pix.height,
+    AVIF_OPTS,
+  );
+  if (!out) throw new Error("AVIF encoding failed");
+  return new Uint8Array(out);
 }
 export async function toWebp(pix: PixelBuffer): Promise<Uint8Array> {
   await ensureInit();
