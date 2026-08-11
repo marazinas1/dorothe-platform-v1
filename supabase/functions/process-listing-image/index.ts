@@ -76,6 +76,7 @@ Deno.serve(async (req) => {
   // Shared-secret gate. Reject BEFORE parsing or touching the database.
   const provided = req.headers.get("x-edge-secret") ?? "";
   if (!EDGE_SECRET || !timingSafeEqual(provided, EDGE_SECRET)) {
+    console.warn("request rejected: authentication");
     return new Response("Unauthorized", { status: 401 });
   }
 
@@ -87,6 +88,13 @@ Deno.serve(async (req) => {
   }
   if (!payload?.listingId || !payload?.imageId || !payload?.originalStoragePath ||
       !SPECS.some((s) => s.key === payload.variant) || !FORMATS.includes(payload.format)) {
+    console.warn("request rejected: payload", {
+      hasListingId: Boolean(payload?.listingId),
+      hasImageId: Boolean(payload?.imageId),
+      hasOriginalPath: Boolean(payload?.originalStoragePath),
+      variant: payload?.variant,
+      format: payload?.format,
+    });
     return new Response("Missing fields", { status: 400 });
   }
 
@@ -98,12 +106,14 @@ Deno.serve(async (req) => {
     .select("id, listing_id, original_storage_path")
     .eq("id", payload.imageId)
     .maybeSingle();
-  if (rowErr) return new Response(rowErr.message, { status: 500 });
-  if (!row) return new Response("Image row not found", { status: 404 });
+  if (rowErr) { console.error("request rejected: row read", rowErr.message); return new Response(rowErr.message, { status: 500 }); }
+  if (!row) { console.warn("request rejected: row missing"); return new Response("Image row not found", { status: 404 }); }
   if (row.listing_id !== payload.listingId) {
+    console.warn("request rejected: listing mismatch");
     return new Response("Listing mismatch", { status: 403 });
   }
   if (row.original_storage_path !== payload.originalStoragePath) {
+    console.warn("request rejected: path mismatch");
     return new Response("Original path mismatch", { status: 403 });
   }
 
