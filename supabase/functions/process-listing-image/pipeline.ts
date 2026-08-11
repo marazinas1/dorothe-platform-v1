@@ -77,9 +77,12 @@ const AVIF_OPTS = {
   quality: 55,
   qualityAlpha: -1,
   denoiseLevel: 0,
-  tileColsLog2: 0,
-  tileRowsLog2: 0,
-  speed: 6,
+  // Tiling splits the frame so libavif works on smaller buffers at a time;
+  // the edge runtime's memory ceiling is the binding constraint here.
+  tileColsLog2: 1,
+  tileRowsLog2: 1,
+  // Faster presets keep far less lookahead state in memory.
+  speed: 8,
   subsample: 1,
   chromaDeltaQ: false,
   sharpness: 0,
@@ -88,6 +91,7 @@ const AVIF_OPTS = {
   bitDepth: 8,
   lossless: false,
 };
+
 
 interface AvifEncoder {
   encode: (
