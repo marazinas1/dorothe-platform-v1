@@ -239,7 +239,8 @@
       "team": "Team",
       "content": "Content",
       "analytics": "Analytics",
-      "settings": "Settings"
+      "settings": "Settings",
+      "viewSite": "View public site"
     },
     "pages": {
       "dashboard": "Dashboard",
@@ -520,7 +521,8 @@
           "processing": "Processing…",
           "done": "Ready",
           "failed": "Failed"
-        }
+        },
+        "pipelineNote": "Photos are optimised automatically: resized for every screen, converted to modern formats, and stripped of location data. Just upload the originals."
       },
       "preview": "Preview",
       "publish": "Publish",
@@ -528,7 +530,20 @@
       "publishFailed": "Could not change the status:",
       "noImages": "No photos",
       "noImagesWarning": "This listing has no photos yet. Add photos before publishing.",
-      "actions": "Actions",
+      "actions": {
+        "edit": "Edit",
+        "more": "More actions",
+        "copyLink": "Copy public link",
+        "linkCopied": "Link copied",
+        "duplicate": "Duplicate",
+        "duplicated": "Copy created as draft",
+        "delete": "Delete",
+        "deleteTitle": "Delete this listing?",
+        "deleteBody": "The listing and its photos are permanently removed. This cannot be undone.",
+        "cancel": "Cancel",
+        "confirmDelete": "Delete permanently",
+        "deleted": "Listing deleted"
+      },
       "toolbar": {
         "search": "Search",
         "searchPlaceholder": "Search title or town",
