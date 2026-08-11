@@ -83,11 +83,17 @@
 }
 
 :root {
-  /* Named brand palette — the single source of the client's colours. */
-  --paper: #f6f3ed;
-  --ink: #2a2622;
-  --stone: #8a8175;
-  --linen: #e8e3d9;
+  /*
+   * Neutral template defaults. Every one of these is overridden per client
+   * from site_settings (see @/lib/theme/tokens) — nothing here is client data.
+   * Base is a near-white with the faintest warmth, not a visible cream.
+   */
+  --paper: #fbfaf8;
+  --surface: #ffffff;
+  --ink: #23211f;
+  --stone: #78736c;
+  --linen: #f0eee9;
+  --hairline: #e6e3dd;
   --sage: #6b7259;
   --clay: #a67c6d;
 
@@ -100,15 +106,14 @@
   /* Button shape; site_settings.button_style overrides it via ThemeStyleTag. */
   --radius-button: var(--radius);
 
-
-
   --background: var(--paper);
   --foreground: var(--ink);
 
-  --card: var(--paper);
+  --card: var(--surface);
   --card-foreground: var(--ink);
-  --popover: var(--paper);
+  --popover: var(--surface);
   --popover-foreground: var(--ink);
+
 
   /* Sage is the signature accent; overridden per project by ThemeStyleTag. */
   --primary: var(--sage);
