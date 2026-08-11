@@ -33,8 +33,16 @@ export function getI18n(locale: Locale) {
   return i18n;
 }
 
-/** Pure translation lookup usable during SSR head() without React context. */
-export function translate(locale: Locale, key: string): string {
+/**
+ * Pure translation lookup usable during SSR head() without React context.
+ * Supports {{var}} interpolation so client-specific words (region, agent name)
+ * can come from site_settings instead of the translation files.
+ */
+export function translate(
+  locale: Locale,
+  key: string,
+  vars?: Record<string, string | number | null | undefined>,
+): string {
   const dict = locale === "de" ? de : en;
   const parts = key.split(".");
   let node: unknown = dict;
@@ -45,5 +53,10 @@ export function translate(locale: Locale, key: string): string {
       return key;
     }
   }
-  return typeof node === "string" ? node : key;
+  if (typeof node !== "string") return key;
+  if (!vars) return node;
+  return node.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, name: string) => {
+    const value = vars[name];
+    return value == null ? match : String(value);
+  });
 }
