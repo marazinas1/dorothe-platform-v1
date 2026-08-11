@@ -2,7 +2,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { Badge } from "@/components/ui/badge";
+import { ImageOff } from "lucide-react";
+
 import {
   Table,
   TableBody,
