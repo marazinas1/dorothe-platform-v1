@@ -83,11 +83,17 @@
 }
 
 :root {
-  /* Named brand palette — the single source of the client's colours. */
-  --paper: #f6f3ed;
-  --ink: #2a2622;
-  --stone: #8a8175;
-  --linen: #e8e3d9;
+  /*
+   * Neutral template defaults. Every one of these is overridden per client
+   * from site_settings (see @/lib/theme/tokens) — nothing here is client data.
+   * Base is a near-white with the faintest warmth, not a visible cream.
+   */
+  --paper: #fbfaf8;
+  --surface: #ffffff;
+  --ink: #23211f;
+  --stone: #78736c;
+  --linen: #f0eee9;
+  --hairline: #e6e3dd;
   --sage: #6b7259;
   --clay: #a67c6d;
 
@@ -95,17 +101,19 @@
   --font-body: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-script: "Tangerine", cursive;
 
-  --radius: 0.125rem;
+  --radius: 0.5rem;
   --radius-media: 0.875rem;
-
+  /* Button shape; site_settings.button_style overrides it via ThemeStyleTag. */
+  --radius-button: var(--radius);
 
   --background: var(--paper);
   --foreground: var(--ink);
 
-  --card: var(--paper);
+  --card: var(--surface);
   --card-foreground: var(--ink);
-  --popover: var(--paper);
+  --popover: var(--surface);
   --popover-foreground: var(--ink);
+
 
   /* Sage is the signature accent; overridden per project by ThemeStyleTag. */
   --primary: var(--sage);
@@ -122,8 +130,8 @@
   --destructive: oklch(0.55 0.18 27);
   --destructive-foreground: var(--paper);
 
-  --border: var(--linen);
-  --input: var(--linen);
+  --border: var(--hairline);
+  --input: var(--hairline);
   --ring: var(--sage);
 
   --chart-1: var(--sage);
@@ -132,13 +140,13 @@
   --chart-4: oklch(0.7 0.06 84);
   --chart-5: oklch(0.65 0.07 70);
 
-  --sidebar: var(--paper);
+  --sidebar: var(--surface);
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--sage);
   --sidebar-primary-foreground: var(--paper);
   --sidebar-accent: var(--linen);
   --sidebar-accent-foreground: var(--ink);
-  --sidebar-border: var(--linen);
+  --sidebar-border: var(--hairline);
   --sidebar-ring: var(--sage);
 }
 
@@ -179,72 +187,36 @@
 }
 
 /*
- * ADMIN PALETTE — core, never per-client.
+ * ADMIN DENSITY — a scale, not a second theme.
  *
- * The admin is template core: it must look the same for every clone, so it
- * defines its own cool near-white / near-black tokens on `.admin-theme`.
- * ThemeStyleTag writes the client's brand tokens on `:root`; a class selector
- * on the admin shell re-declares them for that subtree, so brand colours and
- * brand fonts never reach the working tool. The client's logo still appears —
- * identity, not theming.
+ * There is exactly ONE design system: the admin reads the same tokens as the
+ * public site (colours, fonts, radii come from site_settings via
+ * ThemeStyleTag). The only difference the admin is allowed is a tighter type
+ * scale, because a working tool needs more information per screen than a
+ * marketing page.
  */
-.admin-theme {
-  --admin-canvas: oklch(0.985 0.002 250);
-  --admin-surface: oklch(1 0 0);
-  --admin-ink: oklch(0.21 0.01 260);
-  --admin-muted-ink: oklch(0.53 0.012 260);
-  --admin-hairline: oklch(0.915 0.004 260);
-  --admin-accent: oklch(0.52 0.14 258);
-
-  /* Neutral system type — brand fonts stay on the public site. */
-  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-heading: var(--font-body);
-  font-family: var(--font-body);
-
-  --radius: 0.5rem;
-  --radius-media: 0.875rem;
-
-  --background: var(--admin-canvas);
-  --foreground: var(--admin-ink);
-
-  --card: var(--admin-surface);
-  --card-foreground: var(--admin-ink);
-  --popover: var(--admin-surface);
-  --popover-foreground: var(--admin-ink);
-
-  --primary: var(--admin-accent);
-  --primary-foreground: oklch(0.99 0 0);
-
-  --secondary: oklch(0.96 0.003 260);
-  --secondary-foreground: var(--admin-ink);
-  --muted: oklch(0.965 0.003 260);
-  --muted-foreground: var(--admin-muted-ink);
-  --accent: oklch(0.955 0.006 258);
-  --accent-foreground: var(--admin-ink);
-
-  --destructive: oklch(0.55 0.19 25);
-  --destructive-foreground: oklch(0.99 0 0);
-
-  --border: var(--admin-hairline);
-  --input: var(--admin-hairline);
-  --ring: var(--admin-accent);
-
-  --sidebar: var(--admin-surface);
-  --sidebar-foreground: var(--admin-ink);
-  --sidebar-primary: var(--admin-accent);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.96 0.003 260);
-  --sidebar-accent-foreground: var(--admin-ink);
-  --sidebar-border: var(--admin-hairline);
-  --sidebar-ring: var(--admin-accent);
+.admin-density {
+  font-size: 0.9375rem;
+  line-height: 1.45;
 }
 
-.admin-theme :is(h1, h2, h3, h4, h5, h6, .font-heading) {
-  font-family: var(--font-body);
-  font-weight: 600;
+.admin-density :is(h1, h2, h3, h4, h5, h6, .font-heading) {
+  line-height: 1.15;
   letter-spacing: -0.01em;
-  line-height: 1.2;
 }
+
+.admin-density h1 {
+  font-size: 1.5rem;
+}
+
+.admin-density h2 {
+  font-size: 1.25rem;
+}
+
+.admin-density h3 {
+  font-size: 1.0625rem;
+}
+
 
 
 @layer base {
@@ -268,6 +240,11 @@
     font-weight: 400;
     letter-spacing: -0.015em;
     line-height: 1.05;
+  }
+
+  /* Button shape follows site_settings.button_style, one token everywhere. */
+  button, [data-slot="button"] {
+    border-radius: var(--radius-button);
   }
 
   /* Tabular figures on numeric utility so prices/areas align. */

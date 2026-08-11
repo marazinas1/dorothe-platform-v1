@@ -40,8 +40,11 @@ export function BrandingPreview({ primary, secondary, accent, fontHeading, fontB
       <div className="mt-4 flex gap-2">
         <button
           type="button"
-          className="rounded-md px-4 py-2 text-sm font-medium text-white"
-          style={{ background: "var(--preview-primary)" }}
+          className="px-4 py-2 text-sm font-medium"
+          style={{
+            background: "var(--preview-primary)",
+            color: "var(--primary-foreground)",
+          }}
         >
           {t("admin.settings.branding.preview_button")}
         </button>

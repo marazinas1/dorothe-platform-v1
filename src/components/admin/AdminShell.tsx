@@ -29,8 +29,9 @@ export function AdminShell({
 
   return (
     <SidebarProvider>
-      {/* admin-theme: core neutral palette, independent of brand tokens. */}
-      <div className="admin-theme flex min-h-screen w-full bg-background text-foreground">
+      {/* One design system: same tokens as the public site, denser scale only. */}
+      <div className="admin-density flex min-h-screen w-full bg-background text-foreground">
+
         <AdminSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border bg-card px-3 sm:px-4">

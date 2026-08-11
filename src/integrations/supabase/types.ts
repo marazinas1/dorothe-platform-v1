@@ -620,6 +620,9 @@ export type Database = {
           address_street: string | null
           address_zip: string | null
           area_unit: string
+          background_color: string | null
+          border_color: string | null
+          button_style: string | null
           contact_email: string | null
           contact_phone: string | null
           country: string
@@ -643,6 +646,7 @@ export type Database = {
           legal_terms: Json
           logo_dark_url: string | null
           logo_url: string | null
+          muted_text_color: string | null
           og_default_image: string | null
           opening_hours: Json
           plausible_domain: string | null
@@ -651,10 +655,13 @@ export type Database = {
           primary_agent_role: string | null
           primary_color: string | null
           qualifications: Json
+          radius_scale: string | null
           secondary_color: string | null
           service_region: Json
           site_name: string
           social: Json
+          surface_color: string | null
+          text_color: string | null
           updated_at: string
           whatsapp: string | null
         }
@@ -666,6 +673,9 @@ export type Database = {
           address_street?: string | null
           address_zip?: string | null
           area_unit?: string
+          background_color?: string | null
+          border_color?: string | null
+          button_style?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           country: string
@@ -689,6 +699,7 @@ export type Database = {
           legal_terms?: Json
           logo_dark_url?: string | null
           logo_url?: string | null
+          muted_text_color?: string | null
           og_default_image?: string | null
           opening_hours?: Json
           plausible_domain?: string | null
@@ -697,10 +708,13 @@ export type Database = {
           primary_agent_role?: string | null
           primary_color?: string | null
           qualifications?: Json
+          radius_scale?: string | null
           secondary_color?: string | null
           service_region?: Json
           site_name: string
           social?: Json
+          surface_color?: string | null
+          text_color?: string | null
           updated_at?: string
           whatsapp?: string | null
         }
@@ -712,6 +726,9 @@ export type Database = {
           address_street?: string | null
           address_zip?: string | null
           area_unit?: string
+          background_color?: string | null
+          border_color?: string | null
+          button_style?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           country?: string
@@ -735,6 +752,7 @@ export type Database = {
           legal_terms?: Json
           logo_dark_url?: string | null
           logo_url?: string | null
+          muted_text_color?: string | null
           og_default_image?: string | null
           opening_hours?: Json
           plausible_domain?: string | null
@@ -743,10 +761,13 @@ export type Database = {
           primary_agent_role?: string | null
           primary_color?: string | null
           qualifications?: Json
+          radius_scale?: string | null
           secondary_color?: string | null
           service_region?: Json
           site_name?: string
           social?: Json
+          surface_color?: string | null
+          text_color?: string | null
           updated_at?: string
           whatsapp?: string | null
         }

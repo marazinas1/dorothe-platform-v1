@@ -330,7 +330,24 @@
         "preview": "Preview",
         "preview_heading": "Sample heading",
         "preview_button": "Sample action",
-        "preview_body": "This is how your colors and fonts look on the site."
+        "preview_body": "This is how your colors and fonts look on the site.",
+        "background_color": "Background",
+        "surface_color": "Surface (cards)",
+        "text_color": "Text",
+        "muted_text_color": "Muted text",
+        "border_color": "Borders",
+        "radius_scale": "Corner radius",
+        "button_style": "Button shape",
+        "radiusOption": {
+          "sharp": "Sharp",
+          "soft": "Soft",
+          "rounded": "Rounded"
+        },
+        "buttonOption": {
+          "square": "Square",
+          "rounded": "Rounded",
+          "pill": "Pill"
+        }
       },
       "contact": {
         "contact_email": "Email",

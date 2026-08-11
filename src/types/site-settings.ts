@@ -19,8 +19,18 @@ export interface SiteSettings {
   primary_color: string | null;
   secondary_color: string | null;
   accent_color: string | null;
+  /** Surface + text neutrals — shared by the public site and the admin. */
+  background_color: string | null;
+  surface_color: string | null;
+  text_color: string | null;
+  muted_text_color: string | null;
+  border_color: string | null;
+  /** Registry keys from @/lib/theme/tokens. */
+  radius_scale: string | null;
+  button_style: string | null;
   font_heading: string | null;
   font_body: string | null;
+
   contact_email: string | null;
   contact_phone: string | null;
   whatsapp: string | null;

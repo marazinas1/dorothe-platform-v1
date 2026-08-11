@@ -64,6 +64,13 @@ export const BrandingSchema = z.object({
   primary_color: nullableColor,
   secondary_color: nullableColor,
   accent_color: nullableColor,
+  background_color: nullableColor,
+  surface_color: nullableColor,
+  text_color: nullableColor,
+  muted_text_color: nullableColor,
+  border_color: nullableColor,
+  radius_scale: z.enum(["sharp", "soft", "rounded"]).nullable().optional(),
+  button_style: z.enum(["square", "rounded", "pill"]).nullable().optional(),
   font_heading: nullableText(100),
   font_body: nullableText(100),
 });
