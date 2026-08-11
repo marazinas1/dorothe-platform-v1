@@ -1,21 +1,11 @@
-// Build a public URL for a processed listing-image variant. The pipeline
-// stores bucket-relative paths in listing_images.variants; the bucket
-// (listing-images) is public, the originals bucket never is.
-const BASE = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const BUCKET = "listing-images";
+// Admin-side helper for reading a processed variant URL out of
+// listing_images.variants. The browser pipeline stores absolute public URLs
+// (the listing-images bucket is public; originals never are).
+import { pickImageUrl } from "@/lib/listings/image";
+import type { ImageVariant } from "@/lib/listings/media-paths";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function variantUrl(variants: any, size: "thumb" | "medium" = "thumb"): string | null {
-  if (!variants || typeof variants !== "object") return null;
-  const order = size === "thumb" ? ["thumb", "medium", "large"] : ["medium", "large", "thumb"];
-  for (const key of order) {
-    const entry = variants[key];
-    const path = entry?.webp?.path ?? entry?.avif?.path;
-    if (typeof path === "string" && path.length > 0 && BASE) {
-      return `${BASE}/storage/v1/object/public/${BUCKET}/${path}`;
-    }
-  }
-  return null;
+export function variantUrl(variants: unknown, size: ImageVariant = "card"): string | null {
+  return pickImageUrl(variants, size);
 }
 
 export function fileExtension(name: string, contentType: string): string {
