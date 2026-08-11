@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { GEO_PRECISIONS } from "@/lib/listings/admin-schema";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow, FormSection } from "./FieldRow";
+import { AddressMapPicker } from "./AddressMapPicker";
 
 const TEXT_FIELDS = [
   "address_street",
@@ -17,8 +18,8 @@ const TEXT_FIELDS = [
 ] as const;
 
 /**
- * Address + geo precision. The raw coordinates are stored on `listings`;
- * the public `listings_public` view is what masks them, so what the visitor
+ * Address, map position and geo precision. The raw coordinates are stored on
+ * `listings`; the public `listings_public` view masks them, so what the visitor
  * sees follows from this selector without any public-side code change.
  */
 export function LocationSection({ form }: { form: ListingFormApi }) {
@@ -39,28 +40,7 @@ export function LocationSection({ form }: { form: ListingFormApi }) {
           ))}
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FieldRow label={t("admin.listings.fields.geo_lat")}>
-            <Input
-              type="number"
-              step="0.000001"
-              value={values.geo_lat ?? ""}
-              onChange={(e) =>
-                form.setField("geo_lat", e.target.value === "" ? null : Number(e.target.value))
-              }
-            />
-          </FieldRow>
-          <FieldRow label={t("admin.listings.fields.geo_lng")}>
-            <Input
-              type="number"
-              step="0.000001"
-              value={values.geo_lng ?? ""}
-              onChange={(e) =>
-                form.setField("geo_lng", e.target.value === "" ? null : Number(e.target.value))
-              }
-            />
-          </FieldRow>
-        </div>
+        <AddressMapPicker form={form} />
 
         <div className="space-y-2">
           <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">

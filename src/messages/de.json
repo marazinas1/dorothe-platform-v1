@@ -111,7 +111,21 @@
       "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an.",
       "contact_agent": "Kontakt aufnehmen",
       "location_approximate": "Ungefähre Lage — die genaue Adresse teilen wir auf Anfrage mit.",
-      "preview_notice": "Vorschau — dieses Objekt ist nicht öffentlich ({{status}})"
+      "preview_notice": "Vorschau — dieses Objekt ist nicht öffentlich ({{status}})",
+      "service_charge": "Hausgeld / Monat",
+      "commission": "Provision",
+      "commission_payer": {
+        "buyer": "zahlt der Käufer",
+        "seller": "zahlt der Verkäufer",
+        "shared": "geteilt"
+      },
+      "rental_status": "Vermietung",
+      "rental_let": "Aktuell vermietet",
+      "rental_vacant": "Frei — bezugsfertig",
+      "investment_note": "Verkauf als Kapitalanlage: Die Immobilie ist vermietet, das Mietverhältnis geht auf den Käufer über. Ein Eigenbezug ist nicht möglich.",
+      "availability": "Verfügbar ab",
+      "availability_after_tenancy": "Nach Ende des laufenden Mietverhältnisses",
+      "availability_immediately": "Sofort"
     },
     "pager": {
       "prev": "Zurück",
@@ -223,7 +237,8 @@
     "topbar": {
       "signOut": "Abmelden",
       "toggleSidebar": "Navigation umschalten",
-      "unknownUser": "Unbekannter Nutzer"
+      "unknownUser": "Unbekannter Nutzer",
+      "interfaceLanguage": "Oberfläche"
     },
     "role": {
       "owner": "Inhaber",
@@ -442,7 +457,9 @@
         "location": "Lage",
         "energy": "Energieausweis",
         "content": "Inhaltsabschnitte",
-        "images": "Fotos"
+        "images": "Fotos",
+        "seo": "SEO & Metadaten",
+        "market": "Kosten, Provision & Vermietung"
       },
       "fields": {
         "title": "Titel",
@@ -473,7 +490,13 @@
         "address_country": "Land",
         "geo_lat": "Breitengrad",
         "geo_lng": "Längengrad",
-        "geo_precision": "Adress-Sichtbarkeit"
+        "geo_precision": "Adress-Sichtbarkeit",
+        "service_charge": "Hausgeld pro Monat",
+        "commission_value": "Provision",
+        "commission_type": "Provision als",
+        "commission_payer": "Provision zahlt",
+        "rental_status": "Vermietungsstand",
+        "availability_date": "Verfügbar ab"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -488,13 +511,26 @@
       "help": {
         "price_on_request": "Preis ausblenden und „Preis auf Anfrage“ zeigen.",
         "price_period": "Mietzeitraum, z. B. Monat.",
-        "content": "Ein Stichpunkt pro Zeile, je Sprache."
+        "content": "Ein Stichpunkt pro Zeile, je Sprache.",
+        "meta": "Optional. Bleibt das Feld leer, werden Titel und Beschreibung verwendet.",
+        "service_charge": "Monatliche Nebenkosten für Eigentümer — danach fragen Käufer zuerst.",
+        "commission": "Die Angabe der Provision ist in Deutschland gesetzlich vorgeschrieben.",
+        "rental": "Ob aktuell jemand darin wohnt. Unabhängig davon, ob Sie verkaufen oder vermieten.",
+        "availability_date": "Leer lassen, wenn das Datum noch nicht feststeht."
       },
       "energy": {
         "intro": "Pflichtfelder für {{country}}. Ohne sie ist eine Veröffentlichung nicht möglich.",
         "required": "Vor Veröffentlichung erforderlich",
         "notRequired": "Für {{country}} sind keine landesspezifischen Energiefelder erforderlich.",
-        "exempt": "Grundstücke und Garagen benötigen keinen Energieausweis."
+        "exempt": "Grundstücke und Garagen benötigen keinen Energieausweis.",
+        "exemptionLabel": "Ausnahme vom Energieausweis",
+        "exemptionHelp": "Nach GEG benötigen manche Objekte keinen Energieausweis. Mit einer Ausnahme entfallen die Energiefelder in der Checkliste.",
+        "exemptions": {
+          "none": "Keine Ausnahme — Angaben erforderlich",
+          "not_required": "Nicht erforderlich (z. B. Grundstück)",
+          "listed_building": "Denkmalgeschütztes Gebäude",
+          "new_build_pending": "Neubau, Ausweis in Vorbereitung"
+        }
       },
       "geo": {
         "exact": {
@@ -539,7 +575,11 @@
           "done": "Fertig",
           "failed": "Fehlgeschlagen"
         },
-        "pipelineNote": "Fotos werden automatisch optimiert: passend skaliert, in moderne Formate umgewandelt und von Standortdaten befreit. Laden Sie einfach die Originale hoch."
+        "pipelineNote": "Fotos werden automatisch optimiert: passend skaliert, in moderne Formate umgewandelt und von Standortdaten befreit. Laden Sie einfach die Originale hoch.",
+        "dropHintLong": "Dateien hierher ziehen oder klicken, um sie auszuwählen.",
+        "coverHint": "Markieren Sie ein Foto als Titelbild — standardmäßig ist es das erste.",
+        "makeCover": "Als Titelbild",
+        "cover": "Titelbild"
       },
       "preview": "Vorschau",
       "publish": "Veröffentlichen",
@@ -583,6 +623,75 @@
         "rooms": "Zimmer",
         "bedrooms": "Schlafz.",
         "bathrooms": "Bäder"
+      },
+      "deal": {
+        "sale": "Kauf",
+        "rent": "Miete"
+      },
+      "propertyType": {
+        "apartment": "Wohnung",
+        "house": "Haus",
+        "villa": "Villa",
+        "townhouse": "Reihenhaus",
+        "penthouse": "Penthouse",
+        "land": "Grundstück",
+        "commercial": "Gewerbe",
+        "garage": "Garage"
+      },
+      "contentLanguage": "Inhalt bearbeiten in",
+      "contentLanguageHint": "Das ändert nur, welche Übersetzung Sie schreiben — nicht die Sprache der Oberfläche.",
+      "commissionType": {
+        "percent": "Prozent (%)",
+        "amount": "Festbetrag"
+      },
+      "commissionPayer": {
+        "buyer": "Käufer",
+        "seller": "Verkäufer",
+        "shared": "Geteilt"
+      },
+      "rentalStatus": {
+        "unset": "Keine Angabe",
+        "let": "Aktuell vermietet",
+        "vacant": "Frei — bezugsfertig"
+      },
+      "investmentNote": "Diese Immobilie steht zum Verkauf und ist aktuell vermietet. Sie wird daher als Kapitalanlage dargestellt: Das Mietverhältnis geht auf den Käufer über, ein Eigenbezug ist nicht möglich.",
+      "autosave": {
+        "saving": "Wird gespeichert…",
+        "saved": "Gespeichert {{time}}",
+        "failed": "Automatisches Speichern fehlgeschlagen — bitte Speichern nutzen."
+      },
+      "checklist": {
+        "title": "Vor der Veröffentlichung",
+        "ready": "Alles bereit zur Veröffentlichung.",
+        "remaining": "{{count}} Angabe fehlt noch",
+        "remaining_other": "{{count}} Angaben fehlen noch",
+        "items": {
+          "title": "Titel",
+          "photo": "Mindestens ein Foto",
+          "price": "Preis oder ‚Preis auf Anfrage‘",
+          "city": "Ort",
+          "energy": "Angaben zum Energieausweis"
+        },
+        "energyExempt": "Für dieses Objekt ist kein Energieausweis erforderlich."
+      },
+      "geocode": {
+        "title": "Position auf der Karte",
+        "lookup": "Auf Karte suchen",
+        "searching": "Adresse wird gesucht…",
+        "found": "Position aus der Adresse ermittelt. Ziehen Sie den Pin zum Korrigieren.",
+        "notFound": "Adresse nicht gefunden — Pin ziehen oder Koordinaten manuell eingeben.",
+        "limited": "Der Suchdienst ist ausgelastet — Pin ziehen oder Koordinaten manuell eingeben.",
+        "failed": "Suche nicht verfügbar — Pin ziehen oder Koordinaten manuell eingeben.",
+        "retry": "Erneut versuchen",
+        "manual": "Position manuell gesetzt.",
+        "editManually": "Koordinaten manuell eingeben",
+        "useAutomatic": "Wieder automatisch suchen",
+        "dragHint": "Ziehen Sie den Pin, um die Position anzupassen.",
+        "noAddress": "Ort oder Postleitzahl eingeben, um den Pin zu setzen."
+      },
+      "autodraft": {
+        "creating": "Neues Objekt wird vorbereitet…",
+        "failed": "Neues Objekt konnte nicht angelegt werden:"
       }
     },
     "inquiries": {

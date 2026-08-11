@@ -4,6 +4,8 @@
 // before a round trip.
 import { z } from "zod";
 
+import { ENERGY_EXEMPTIONS } from "@/lib/validation/energy";
+
 export const DEAL_TYPES = ["sale", "rent"] as const;
 
 export const PROPERTY_TYPES = [
@@ -30,6 +32,16 @@ export const LISTING_STATUSES = [
 export type ListingStatus = (typeof LISTING_STATUSES)[number];
 
 export const GEO_PRECISIONS = ["exact", "approximate", "hidden"] as const;
+
+/** German-market fields. Commission disclosure is legally required in DE. */
+export const COMMISSION_TYPES = ["percent", "amount"] as const;
+export const COMMISSION_PAYERS = ["buyer", "seller", "shared"] as const;
+
+/**
+ * Tenancy state. Deliberately independent of deal_type: a property can be for
+ * sale AND currently let at the same time (Kapitalanlage).
+ */
+export const RENTAL_STATUSES = ["let", "vacant"] as const;
 
 /** Mirrors public.listings_enforce_status_flow. */
 export const STATUS_FLOW: Record<ListingStatus, ListingStatus[]> = {
@@ -75,6 +87,14 @@ const nullableText = z
   .optional()
   .transform((v) => (v === undefined || v === "" ? null : v));
 
+/** Optional single-choice field stored as NULL when unset. */
+function nullableEnum<T extends readonly [string, ...string[]]>(values: T) {
+  return z
+    .union([z.enum(values), z.literal(""), z.null()])
+    .optional()
+    .transform((v) => (v === undefined || v === "" ? null : v));
+}
+
 export const ListingFormSchema = z.object({
   id: z.string().uuid().optional(),
 
@@ -112,8 +132,17 @@ export const ListingFormSchema = z.object({
   geo_lng: nullableNumber,
   geo_precision: z.enum(GEO_PRECISIONS).default("approximate"),
 
+  // Market fields (costs, commission, tenancy)
+  service_charge: nullableNumber,
+  commission_value: nullableNumber,
+  commission_type: nullableEnum(COMMISSION_TYPES),
+  commission_payer: nullableEnum(COMMISSION_PAYERS),
+  rental_status: nullableEnum(RENTAL_STATUSES),
+  availability_date: nullableText,
+
   // Energy + content
   energy: z.record(z.string(), z.unknown()).default({}),
+  energy_exemption: nullableEnum(ENERGY_EXEMPTIONS),
   content_sections: z.array(ContentSection).default([]),
 });
 

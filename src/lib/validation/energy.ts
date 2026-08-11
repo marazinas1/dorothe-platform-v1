@@ -9,6 +9,32 @@ export type Country = (typeof COUNTRIES)[number];
 
 export const EXEMPT_PROPERTY_TYPES = ["land", "garage"] as const;
 
+/**
+ * Legal exemptions from the certificate requirement (GEG in DE, comparable
+ * rules elsewhere). Set on the listing itself, because whether an exemption
+ * applies is a property fact and not derivable from the property type alone.
+ */
+export const ENERGY_EXEMPTIONS = [
+  "not_required",
+  "listed_building",
+  "new_build_pending",
+] as const;
+
+export type EnergyExemption = (typeof ENERGY_EXEMPTIONS)[number];
+
+/**
+ * Single source of truth for "does this listing need energy data?", mirroring
+ * public.listings_validate_energy_on_publish. Used by the form, the publish
+ * checklist and the public page so all three agree.
+ */
+export function isEnergyExempt(
+  propertyType: string,
+  exemption?: string | null,
+): boolean {
+  if (exemption) return true;
+  return (EXEMPT_PROPERTY_TYPES as readonly string[]).includes(propertyType);
+}
+
 export const EFFICIENCY_CLASS_AT = [
   "A++", "A+", "A", "B", "C", "D", "E", "F", "G",
 ] as const;

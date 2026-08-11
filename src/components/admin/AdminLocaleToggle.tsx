@@ -12,18 +12,19 @@ export function AdminLocaleToggle() {
   const { locale } = useParams({ strict: false }) as { locale: Locale };
   const { t } = useTranslation();
   const location = useLocation();
-  const rest = location.pathname.split("/").slice(2).join("/");
+  const rest = location.pathname.split("/").slice(2).filter(Boolean);
 
   return (
     <nav
-      aria-label={t("locale.switch")}
+      aria-label={t("admin.topbar.interfaceLanguage")}
       className="flex items-center gap-0.5 rounded-md border border-border p-0.5"
     >
       {SUPPORTED_LOCALES.map((loc: Locale) => (
         <Link
           key={loc}
-          to={`/$locale/${rest}` as string}
-          params={{ locale: loc }}
+          // Same path under the other locale prefix; the route params are
+          // already in the pathname, so a concrete path is what we need here.
+          to={["", loc, ...rest].join("/") as never}
           replace
           className={cn(
             "rounded px-2 py-0.5 text-xs font-medium uppercase tracking-wide transition-colors",

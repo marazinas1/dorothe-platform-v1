@@ -79,6 +79,13 @@ export function toListingRow(data: ListingFormParsed): Record<string, any> {
     geo_lat: data.geo_lat,
     geo_lng: data.geo_lng,
     geo_precision: data.geo_precision,
+    service_charge: data.service_charge,
+    commission_value: data.commission_value,
+    commission_type: data.commission_type,
+    commission_payer: data.commission_payer,
+    rental_status: data.rental_status,
+    availability_date: data.availability_date,
+    energy_exemption: data.energy_exemption,
     energy: data.energy ?? {},
     content_sections: sections,
   };
