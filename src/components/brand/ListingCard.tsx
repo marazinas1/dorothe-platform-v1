@@ -23,7 +23,7 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
   const { t } = useTranslation();
   const primary = listing.images.find((i) => i.is_primary) ?? listing.images[0];
   const image =
-    pickImageUrl(primary?.variants, size === "large" ? "large" : "medium") ??
+    pickImageUrl(primary?.variants, size === "large" ? "detail" : "card") ??
     pickImageUrl(primary?.variants, "card");
   // Second photograph drives the exterior → interior cross-fade on hover.
   const secondary = listing.images.find((i) => i !== primary);
