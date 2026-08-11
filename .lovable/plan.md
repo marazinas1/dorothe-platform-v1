@@ -34,12 +34,18 @@ Junk prevention:
 
 **Automatic geocoding (Nominatim).** After street/zip/city are filled (debounced, on blur), a server function queries Nominatim with a proper identifying User-Agent and returns lat/lng plus the matched display name. The pin shows on a small map built from the existing MapLibre/CARTO components, and the broker can drag it to correct the position — dragging writes lat/lng and switches the source to "manual". Raw lat/lng stay visible but read-only until "Edit manually" is clicked.
 
+Provider is a single swappable function (`geocodeAddress` in one file) with a provider-agnostic input/output contract, so switching services later is a one-file change.
+
 Failure handling, all non-blocking:
 - No result: a neutral note "Address not found — drag the pin or enter coordinates manually", the map centres on the city (or the configured site coordinates), and the manual fields unlock.
+- Rate limited (429) or throttled: treated exactly like any other failure — no error styling, no scary wording, just the manual-pin fallback and a retry button. Requests are debounced and serialised (max one in flight, minimum one second apart) to stay inside Nominatim's limit.
 - Request error or timeout: same note, retry button. Never blocks saving or publishing.
 - Geocoding is skipped entirely when the broker has set coordinates manually.
 
-**Publish checklist replaces the red warning.** A persistent panel (neutral tokens, not red) lists what is still missing: title, at least one photo, price or "price on request", address city, and the country-specific energy fields from `site_settings.country`. Items tick off live as fields fill. It is informational on a draft; the publish button stays enabled and reports the server's reason if the database refuses.
+**Publish checklist replaces the red warning.** A persistent panel (neutral tokens, not red) lists what is still missing: title, at least one photo, price or "price on request", address city, and the energy fields required for `site_settings.country`. Items tick off live as fields fill. It is informational on a draft; the publish button stays enabled and reports the server's reason if the database refuses.
+
+Energy exemptions: the checklist derives its energy requirement from the same shared rule set the database validation uses (`validate_listing_energy` / `src/lib/validation/energy.ts`), so the two can never disagree. Land and garages are exempt today; the rule set is extended so further GEG exemptions (listed building, new build with certificate pending) can be flagged on the listing. When an exemption applies the checklist states it explicitly ("No Energieausweis required for this property type / exemption noted") rather than falling silent.
+
 
 **Autosave + sticky bar.** Autosave fires on field blur and on a periodic timer while dirty, with a quiet "Saved HH:MM" indicator. Autosave writes content fields only — it never touches `status`, so it can never publish, unpublish or trip the publish triggers. Publish validation runs only on the explicit publish action, where the database's status-flow, publish-permission and energy triggers are authoritative and their message is surfaced inline. A save/publish bar is fixed to the bottom of the form.
 
@@ -49,7 +55,7 @@ Failure handling, all non-blocking:
 
 - **Hausgeld / monthly service charge** — figure, shown for apartment-type properties.
 - **Provision / commission** — value plus type (percent or amount) plus who pays (buyer / seller / shared).
-- **Rental status** — currently let (Kapitalanlage) or vacant, with the existing available-from date surfaced next to it.
+- **Rental status** — currently let (Kapitalanlage) or vacant, with the existing available-from date surfaced next to it. Strictly independent of `deal_type`: `deal_type` says what the transaction is (sale / rent), `rental_status` says whether someone lives there now (let / vacant), and both can be set together. When a sale listing is marked as currently let, the form shows a short note that it will be presented as an investment property with the tenancy passing to the buyer. On the public detail page a let property being sold reads unambiguously as such — the investment/tenancy line takes precedence and "available immediately" is never shown alongside "currently let"; the availability line becomes "let — available after tenancy ends" (with the date when set).
 
 Added to the migration, the shared schema, the form, and the public detail facts area (respecting the existing "commission note public" switch for the commission line).
 
