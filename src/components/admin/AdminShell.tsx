@@ -24,8 +24,7 @@ export function AdminShell({
     if (locale) getI18n(locale);
   }, [locale]);
 
-  const displayName =
-    profile.full_name || profile.email || t("admin.topbar.unknownUser");
+  const displayName = profile.full_name || profile.email || t("admin.topbar.unknownUser");
   const roleLabel = t(`admin.role.${profile.role}`);
 
   return (
@@ -45,15 +44,11 @@ export function AdminShell({
               <AdminLocaleToggle />
               <div className="hidden min-w-0 text-right sm:block">
                 <div className="truncate text-sm font-medium">{displayName}</div>
-                <div className="truncate text-xs text-muted-foreground">
-                  {roleLabel}
-                </div>
+                <div className="truncate text-xs text-muted-foreground">{roleLabel}</div>
               </div>
             </div>
           </header>
-          <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
-            {children}
-          </main>
+          <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
         </div>
       </div>
     </SidebarProvider>

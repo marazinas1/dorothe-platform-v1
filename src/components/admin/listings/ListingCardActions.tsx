@@ -23,10 +23,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { adminListingsQueryOptions } from "@/lib/listings/admin.functions";
-import {
-  deleteListing,
-  duplicateListing,
-} from "@/lib/listings/admin-mutations.functions";
+import { deleteListing, duplicateListing } from "@/lib/listings/admin-mutations.functions";
 
 /** Edit (primary) plus an overflow menu: copy public link, duplicate, delete. */
 export function ListingCardActions({
@@ -72,9 +69,7 @@ export function ListingCardActions({
         type="button"
         size="sm"
         variant="secondary"
-        onClick={() =>
-          navigate({ to: "/$locale/admin/listings/$id", params: { locale, id } })
-        }
+        onClick={() => navigate({ to: "/$locale/admin/listings/$id", params: { locale, id } })}
       >
         <Pencil className="mr-2 h-3.5 w-3.5" />
         {t("admin.listings.actions.edit")}
@@ -114,7 +109,6 @@ export function ListingCardActions({
           </DropdownMenuItem>
           <DropdownMenuItem
             className="text-destructive focus:text-destructive"
-
             onSelect={(event) => {
               event.preventDefault();
               setConfirmOpen(true);
@@ -129,9 +123,7 @@ export function ListingCardActions({
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t("admin.listings.actions.deleteTitle")}
-            </AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.listings.actions.deleteTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
               {t("admin.listings.actions.deleteBody")}
             </AlertDialogDescription>
@@ -152,7 +144,6 @@ export function ListingCardActions({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
     </div>
   );
 }

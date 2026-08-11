@@ -35,10 +35,7 @@ export function AdminSidebarFooter() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <SidebarMenuButton
-            tooltip={t("admin.topbar.signOut")}
-            onClick={() => void signOut()}
-          >
+          <SidebarMenuButton tooltip={t("admin.topbar.signOut")} onClick={() => void signOut()}>
             <LogOut className="h-4 w-4" />
             <span>{t("admin.topbar.signOut")}</span>
           </SidebarMenuButton>
