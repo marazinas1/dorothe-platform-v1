@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ListingsTable } from "@/components/admin/listings/ListingsTable";
+import { ListingsBrowser } from "@/components/admin/listings/ListingsBrowser";
 import { adminListingsQueryOptions } from "@/lib/listings/admin.functions";
 
 export const Route = createFileRoute("/$locale/admin/listings/")({
@@ -27,7 +27,7 @@ function ListingsIndex() {
           </Link>
         </Button>
       </div>
-      <ListingsTable rows={data} locale={locale} />
+      <ListingsBrowser rows={data} locale={locale} />
     </div>
   );
 }
