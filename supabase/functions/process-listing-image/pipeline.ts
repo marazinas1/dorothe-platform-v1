@@ -58,18 +58,11 @@ export interface PixelBuffer {
 }
 
 
-let initialised = false;
-async function ensureInit() {
-  if (initialised) return;
-  await Promise.all([
-    initJpegDecode?.(),
-    initPngDecode?.(),
-    initWebpDecode?.(),
-    initWebpEncode?.(),
-    initResize?.(),
-  ]);
-  initialised = true;
-}
+let jpegReady = false;
+let pngReady = false;
+let webpDecodeReady = false;
+let webpEncodeReady = false;
+let resizeReady = false;
 
 // AVIF encoder options mirror @jsquash/avif's defaults; we own them now that
 // the wrapper is bypassed.
@@ -111,15 +104,17 @@ function getAvifEncoder(): Promise<AvifEncoder> {
 
 
 export async function decodeImage(bytes: Uint8Array, contentType: string): Promise<PixelBuffer> {
-  await ensureInit();
   const buf = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
   const type = contentType.toLowerCase();
   let img: ImageData;
   if (type.includes("jpeg") || type.includes("jpg")) {
+    if (!jpegReady) { await initJpegDecode?.(); jpegReady = true; }
     img = (await decodeJpeg(buf)) as unknown as ImageData;
   } else if (type.includes("png")) {
+    if (!pngReady) { await initPngDecode?.(); pngReady = true; }
     img = (await decodePng(buf)) as unknown as ImageData;
   } else if (type.includes("webp")) {
+    if (!webpDecodeReady) { await initWebpDecode?.(); webpDecodeReady = true; }
     img = (await decodeWebpJs(buf)) as unknown as ImageData;
   } else {
     throw new Error(`Unsupported image content-type: ${contentType}`);
@@ -190,6 +185,7 @@ function rotate270(p: PixelBuffer): PixelBuffer { return rotate90(rotate90(rotat
 // Resize preserving aspect ratio, never upscaling.
 export async function resizeMax(pix: PixelBuffer, targetWidth: number): Promise<PixelBuffer> {
   if (pix.width <= targetWidth) return pix;
+  if (!resizeReady) { await initResize?.(); resizeReady = true; }
   const newH = Math.max(1, Math.round((pix.height * targetWidth) / pix.width));
   const out = await resize(
     new ImageData(pix.data, pix.width, pix.height),
@@ -203,6 +199,7 @@ export async function coverCrop(pix: PixelBuffer, w: number, h: number): Promise
   const scale = Math.max(w / pix.width, h / pix.height);
   const scaled = await (async () => {
     if (scale >= 1) return pix; // never upscale — fall through to pad-less crop of original
+    if (!resizeReady) { await initResize?.(); resizeReady = true; }
     const nw = Math.max(w, Math.round(pix.width * scale));
     const nh = Math.max(h, Math.round(pix.height * scale));
     const out = await resize(
@@ -231,7 +228,7 @@ export async function toAvif(pix: PixelBuffer): Promise<Uint8Array> {
 }
 
 export async function toWebp(pix: PixelBuffer): Promise<Uint8Array> {
-  await ensureInit();
+  if (!webpEncodeReady) { await initWebpEncode?.(); webpEncodeReady = true; }
   const buf = await encodeWebp(new ImageData(pix.data, pix.width, pix.height), { quality: 78 });
   return new Uint8Array(buf);
 }

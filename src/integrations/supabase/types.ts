@@ -171,6 +171,7 @@ export type Database = {
           original_size_bytes: number | null
           original_storage_path: string | null
           processing_error: string | null
+          processing_started_at: string | null
           processing_status: string
           sort_order: number
           storage_path: string
@@ -192,6 +193,7 @@ export type Database = {
           original_size_bytes?: number | null
           original_storage_path?: string | null
           processing_error?: string | null
+          processing_started_at?: string | null
           processing_status?: string
           sort_order?: number
           storage_path: string
@@ -213,6 +215,7 @@ export type Database = {
           original_size_bytes?: number | null
           original_storage_path?: string | null
           processing_error?: string | null
+          processing_started_at?: string | null
           processing_status?: string
           sort_order?: number
           storage_path?: string

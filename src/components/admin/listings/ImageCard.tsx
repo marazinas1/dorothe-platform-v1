@@ -44,6 +44,8 @@ export function ImageCard({
   const { t } = useTranslation();
   const url = variantUrl(image.variants, "thumb");
   const failed = image.processing_status === "failed";
+  const processing =
+    image.processing_status === "pending" || image.processing_status === "processing";
 
   return (
     <div
@@ -85,6 +87,11 @@ export function ImageCard({
         {failed && image.processing_error ? (
           <p className="text-xs leading-snug text-destructive">
             {image.processing_error}
+          </p>
+        ) : null}
+        {processing ? (
+          <p className="text-xs leading-snug text-muted-foreground">
+            {t("admin.listings.images.processingHelp")}
           </p>
         ) : null}
         <div className="mt-auto flex items-center gap-1">

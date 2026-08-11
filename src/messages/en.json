@@ -576,6 +576,7 @@
           "failed": "Failed"
         },
         "pipelineNote": "Photos are optimised automatically: resized for every screen, converted to modern formats, and stripped of location data. Just upload the originals.",
+        "processingHelp": "This can take a moment. If processing cannot finish, it will time out and become available to retry.",
         "dropHintLong": "Drag files here, or click to select them from your device.",
         "coverHint": "Mark one photo as the cover image — the first one is used by default.",
         "makeCover": "Make cover image",
