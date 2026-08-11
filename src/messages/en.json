@@ -3,8 +3,8 @@
     "complete": "Setup complete"
   },
   "home": {
-    "title": "Real estate in the Saarland",
-    "description": "Carefully selected houses and apartments in Püttlingen, Völklingen, Saarbrücken and Riegelsberg.",
+    "title": "Real estate in {{region}}",
+    "description": "Carefully selected houses and apartments across {{region}}.",
     "hero_line": "Your home in good hands",
     "featured": "Selected properties",
     "categories": "Browse by type",
@@ -36,7 +36,7 @@
   },
   "listings": {
     "title": "Properties",
-    "description": "Current offerings across the Aichfeld region.",
+    "description": "Current offerings across {{region}}.",
     "sold_title": "Sold & completed",
     "sold_description": "A record of recently completed transactions.",
     "empty": "No properties match these criteria.",
@@ -68,7 +68,7 @@
       "land": "Land",
       "commercial": "Commercial",
       "city": "Town",
-      "city_placeholder": "e.g. Judenburg",
+      "city_placeholder": "e.g. {{city}}",
       "rooms_min": "Rooms from",
       "price_min": "Price from (EUR)",
       "price_max": "Price up to (EUR)",
@@ -657,7 +657,7 @@
       "cta_button": "Request a valuation"
     },
     "about": {
-      "meta_description_solo": "About Dorothe Waltner — a solo real estate advisor in the Saarland with personal support from valuation to handover.",
+      "meta_description_solo": "About {{agent}} — a solo real estate advisor in {{region}} with personal support from valuation to handover.",
       "meta_description_team": "Meet the team behind our real estate practice — personal, careful, rooted in the region.",
       "kicker": "Personal",
       "solo": {
