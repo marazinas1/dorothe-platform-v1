@@ -16,6 +16,7 @@ import type { AdminListingRow } from "@/lib/listings/admin.functions";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import type { Locale } from "@/i18n/config";
 import { variantUrl } from "./listing-image-url";
+import { ListingRowActions } from "./ListingRowActions";
 
 function primaryThumb(row: AdminListingRow): string | null {
   const sorted = [...(row.images ?? [])].sort(
@@ -49,6 +50,7 @@ export function ListingsTable({
               {t("admin.listings.fields.price")}
             </TableHead>
             <TableHead>{t("admin.listings.fields.status")}</TableHead>
+            <TableHead className="text-right">{t("admin.listings.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -64,7 +66,11 @@ export function ListingsTable({
                   >
                     {thumb ? (
                       <img src={thumb} alt="" className="h-full w-full object-cover" />
-                    ) : null}
+                    ) : (
+                      <span className="flex h-full w-full items-center justify-center">
+                        <ImageOff className="h-4 w-4 text-muted-foreground/70" />
+                      </span>
+                    )}
                   </Link>
                 </TableCell>
                 <TableCell>
@@ -90,6 +96,13 @@ export function ListingsTable({
                   })}
                 </TableCell>
                 <TableCell>
+                  <span
+                    className="text-[13px] tracking-[0.02em] text-foreground"
+                    data-status={row.status}
+                  >
+                    {t(`listings.status.${row.status}`)}
+                  </span>
+                  <div className="sr-only">
                   <Badge
                     variant={
                       row.status === "active" || row.status === "coming_soon"
@@ -99,6 +112,7 @@ export function ListingsTable({
                   >
                     {t(`listings.status.${row.status}`)}
                   </Badge>
+                  </div>
                 </TableCell>
               </TableRow>
             );
