@@ -21,6 +21,10 @@ export type AdminListingRow = {
   price: number | null;
   price_on_request: boolean | null;
   address_city: string | null;
+  rooms: number | null;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  living_area: number | null;
   title: Json;
   updated_at: string;
   images: { variants: Json; is_primary: boolean | null; sort_order: number | null }[];
@@ -32,7 +36,7 @@ export const listAdminListings = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("listings")
       .select(
-        "id, slug, status, deal_type, property_type, price, price_on_request, address_city, title, updated_at, listing_images(variants, is_primary, sort_order)",
+        "id, slug, status, deal_type, property_type, price, price_on_request, address_city, rooms, bedrooms, bathrooms, living_area, title, updated_at, listing_images(variants, is_primary, sort_order)",
       )
       .order("updated_at", { ascending: false });
     if (error) throw new Response(error.message, { status: 400 });
@@ -41,6 +45,7 @@ export const listAdminListings = createServerFn({ method: "GET" })
       images: (row.listing_images ?? []) as AdminListingRow["images"],
     }));
   });
+
 
 export const adminListingsQueryOptions = queryOptions({
   queryKey: ["admin", "listings"],
