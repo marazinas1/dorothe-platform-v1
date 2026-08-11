@@ -1,0 +1,1 @@
+DELETE FROM public.listing_images WHERE processing_status <> 'done' OR variants = '{}'::jsonb;

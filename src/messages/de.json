@@ -559,14 +559,12 @@
         "help": "Das erste Foto ist das Titelbild. Zum Sortieren ziehen oder die Pfeile nutzen.",
         "dropHint": "Fotos hier ablegen oder vom Gerät auswählen.",
         "select": "Fotos auswählen",
-        "uploaded": "Fotos hochgeladen. Die Verarbeitung läuft im Hintergrund.",
+        "uploaded": "Fotos hinzugefügt.",
         "primary": "Titelbild",
         "moveLeft": "Nach vorne",
         "moveRight": "Nach hinten",
         "delete": "Foto löschen",
         "retry": "Erneut versuchen",
-        "retryQueued": "Verarbeitung neu gestartet.",
-        "retryImpossible": "Die Originaldatei fehlt – bitte das Foto erneut hochladen.",
         "saveFirstTitle": "Zuerst Entwurf speichern",
         "saveFirstHelp": "Fotos gehören zu einem Objekt. Speichere diesen Entwurf einmal, dann erscheint hier der Upload-Bereich.",
         "status": {
@@ -575,12 +573,12 @@
           "done": "Fertig",
           "failed": "Fehlgeschlagen"
         },
-        "pipelineNote": "Fotos werden automatisch optimiert: passend skaliert, in moderne Formate umgewandelt und von Standortdaten befreit. Laden Sie einfach die Originale hoch.",
-        "processingHelp": "Das kann einen Moment dauern. Falls die Verarbeitung nicht abgeschlossen werden kann, wird sie beendet und kann erneut gestartet werden.",
+        "pipelineNote": "Fotos werden direkt im Browser verarbeitet: korrekt gedreht, auf 1600 px für die Detailseite, 800 px für Karten und eine 1200×630-Vorschau für soziale Netzwerke skaliert, als WebP gespeichert und von allen EXIF- und GPS-Daten befreit. Das unveränderte Original wird privat aufbewahrt.",
         "dropHintLong": "Dateien hierher ziehen oder klicken, um sie auszuwählen.",
         "coverHint": "Markieren Sie ein Foto als Titelbild — standardmäßig ist es das erste.",
         "makeCover": "Als Titelbild",
-        "cover": "Titelbild"
+        "cover": "Titelbild",
+        "dismiss": "Ausblenden"
       },
       "preview": "Vorschau",
       "publish": "Veröffentlichen",

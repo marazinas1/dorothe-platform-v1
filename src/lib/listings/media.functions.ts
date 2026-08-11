@@ -1,6 +1,8 @@
 // Server functions for the listing media pipeline:
-//   - enqueueImageProcessing: caller uploads the ORIGINAL, then invokes this
-//     to insert the row and kick off async processing on the edge function.
+//   - recordListingImage: the browser resizes/encodes the variants, uploads
+//     them plus the untouched original, then calls this to persist the row.
+//     A row is only ever written when the variants already exist, so nothing
+//     can get stuck in "processing".
 //   - deleteListingImage: removes every variant plus the original from storage
 //     and deletes the DB row.
 //   - signListingDocument: issues a short-lived signed URL, gated by edit
@@ -15,81 +17,61 @@ import {
   IMAGES_BUCKET,
   ORIGINALS_BUCKET,
   imageFolderPrefix,
-  VARIANT_FORMATS,
   VARIANT_SPECS,
   variantPath,
 } from "./media-paths";
 
-const enqueueSchema = z.object({
+const variantEntry = z.object({
+  path: z.string().min(1),
+  url: z.string().url(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  bytes: z.number().int().nonnegative(),
+});
+
+const recordSchema = z.object({
   listingId: z.string().uuid(),
   imageId: z.string().uuid(),
   originalStoragePath: z.string().min(1),
   contentType: z.string().min(1).max(120),
   originalSizeBytes: z.number().int().nonnegative().optional(),
   filename: z.string().max(255).optional(),
+  variants: z.record(z.enum(["card", "detail", "og"]), variantEntry),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  blurhash: z.string().max(120).optional(),
 });
 
-export const enqueueImageProcessing = createServerFn({ method: "POST" })
+export const recordListingImage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => enqueueSchema.parse(input))
+  .inputValidator((input: unknown) => recordSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     await assertEditListing(supabase, userId, data.listingId);
 
-    // Insert / upsert the pending row. storage_path stays empty until a
-    // "done" run writes the primary variant path; keep original path here.
+    const primary = data.variants.detail ?? data.variants.card ?? data.variants.og;
+
     const { error: insertError } = await supabase
       .from("listing_images")
       .upsert(
         {
           id: data.imageId,
           listing_id: data.listingId,
-          storage_path: "",
+          storage_path: primary?.path ?? "",
           original_storage_path: data.originalStoragePath,
-          content_type: data.contentType,
+          content_type: "image/webp",
           original_size_bytes: data.originalSizeBytes ?? null,
-          processing_status: "pending",
+          processing_status: "done",
           processing_error: null,
-          processing_started_at: new Date().toISOString(),
-          variants: {},
+          processing_started_at: null,
+          variants: data.variants,
+          width: data.width,
+          height: data.height,
+          blurhash: data.blurhash ?? null,
         },
         { onConflict: "id" },
       );
     if (insertError) throw new Response(insertError.message, { status: 400 });
-
-    // Fire the edge function. It returns 202 immediately and processes in
-    // the background via EdgeRuntime.waitUntil. A shared secret authenticates
-    // the server-to-function hop; verify_jwt is disabled for that function
-    // since this header is the gate.
-    const edgeSecret = process.env.EDGE_FUNCTION_SECRET;
-    if (!edgeSecret) {
-      throw new Response("EDGE_FUNCTION_SECRET is not configured", { status: 500 });
-    }
-    const jobs = VARIANT_FORMATS.flatMap((format) =>
-      VARIANT_SPECS.map((variant) => ({ format, variant: variant.key })),
-    );
-    for (const [index, job] of jobs.entries()) {
-      const { error: invokeError } = await supabase.functions.invoke("process-listing-image", {
-        headers: { "x-edge-secret": edgeSecret },
-        body: {
-          listingId: data.listingId,
-          imageId: data.imageId,
-          originalStoragePath: data.originalStoragePath,
-          contentType: data.contentType,
-          variant: job.variant,
-          format: job.format,
-          final: index === jobs.length - 1,
-        },
-      });
-      if (invokeError) {
-        await supabase.from("listing_images").update({
-          processing_status: "failed",
-          processing_error: `processing failed: ${invokeError.message}`,
-          processing_started_at: null,
-        }).eq("id", data.imageId);
-        throw new Response(invokeError.message, { status: 502 });
-      }
-    }
 
     return { imageId: data.imageId, status: "done" as const };
   });
@@ -112,9 +94,9 @@ export const deleteListingImage = createServerFn({ method: "POST" })
 
     await assertEditListing(supabase, userId, row.listing_id);
 
-    // Every variant path is deterministic: listings/{listing}/{image}/{v}.{fmt}
-    const variantPaths = VARIANT_SPECS.flatMap((spec) =>
-      VARIANT_FORMATS.map((fmt) => variantPath(row.listing_id, row.id, spec.key, fmt)),
+    // Every variant path is deterministic: listings/{listing}/{image}/{v}.webp
+    const variantPaths = VARIANT_SPECS.map((spec) =>
+      variantPath(row.listing_id, row.id, spec.key),
     );
 
     // Also sweep the folder in case an older run stored extras. Best-effort.

@@ -60,7 +60,7 @@ function RegionHero({
 }) {
   const { t } = useTranslation();
   const fallback = featured[0]
-    ? pickImageUrl(featured[0].images[0]?.variants, "large")
+    ? pickImageUrl(featured[0].images[0]?.variants, "detail")
     : null;
   const src = image?.trim() || fallback || HERO_FALLBACK_IMAGE;
 
@@ -89,7 +89,7 @@ function PropertyHero({
   if (!first) {
     return <RegionHero settings={settings} featured={featured} locale={locale} />;
   }
-  const image = pickImageUrl(first.images[0]?.variants, "large") ?? HERO_FALLBACK_IMAGE;
+  const image = pickImageUrl(first.images[0]?.variants, "detail") ?? HERO_FALLBACK_IMAGE;
   const title = pickLocalized(first.title, locale) || first.slug;
   const price = formatPrice(first.price, settings.currency, locale, {
     onRequest: first.price_on_request,

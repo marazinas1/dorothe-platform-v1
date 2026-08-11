@@ -1,24 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ImagePlus, Loader2 } from "lucide-react";
+import { ImagePlus, Loader2, RotateCcw, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { processImageFile } from "@/lib/images/optimize";
 import {
+  IMAGES_BUCKET,
   ORIGINALS_BUCKET,
   originalPath,
+  publicImageUrl,
+  variantPath,
+  type VariantsJson,
 } from "@/lib/listings/media-paths";
 import {
   deleteListingImage,
-  enqueueImageProcessing,
+  recordListingImage,
 } from "@/lib/listings/media.functions";
 import { reorderListingImages } from "@/lib/listings/admin.functions";
 import { FormSection } from "./FieldRow";
 import { ImageCard, type ImageRecord } from "./ImageCard";
 import { fileExtension } from "./listing-image-url";
 
-const UNFINISHED = new Set(["pending", "processing"]);
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+
+type Job = { id: string; name: string; error: string | null };
 
 export function ImageManager({
   listingId,
@@ -35,15 +42,9 @@ export function ImageManager({
 }) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const filesRef = useRef(new Map<string, File>());
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Poll while the edge function is still working on any image.
-  const pending = images.some((i) => UNFINISHED.has(i.processing_status));
-  useEffect(() => {
-    if (!pending) return;
-    const timer = setInterval(refresh, 2500);
-    return () => clearInterval(timer);
-  }, [pending, refresh]);
 
   if (!listingId) {
     return (
@@ -65,60 +66,84 @@ export function ImageManager({
     );
   }
 
+  /**
+   * One photo, start to finish, in the browser: resize + WebP encode, upload
+   * the variants to the public bucket, the untouched original to the private
+   * one, then write the row. Nothing is persisted before the files exist.
+   */
+  async function processOne(jobId: string, file: File) {
+    const imageId = jobId;
+    const processed = await processImageFile(file);
+
+    const variants: VariantsJson = {};
+    for (const variant of processed.variants) {
+      const path = variantPath(listingId!, imageId, variant.key);
+      const { error } = await supabase.storage
+        .from(IMAGES_BUCKET)
+        .upload(path, variant.blob, { contentType: "image/webp", upsert: true });
+      if (error) throw new Error(error.message);
+      variants[variant.key] = {
+        path,
+        url: publicImageUrl(SUPABASE_URL, path),
+        width: variant.width,
+        height: variant.height,
+        bytes: variant.blob.size,
+      };
+    }
+
+    // The raw original is kept privately so variants can be regenerated.
+    const contentType = file.type || "image/jpeg";
+    const original = originalPath(
+      listingId!,
+      imageId,
+      fileExtension(file.name, contentType),
+    );
+    const { error: originalError } = await supabase.storage
+      .from(ORIGINALS_BUCKET)
+      .upload(original, file, { contentType, upsert: true });
+    if (originalError) throw new Error(originalError.message);
+
+    await recordListingImage({
+      data: {
+        listingId: listingId!,
+        imageId,
+        originalStoragePath: original,
+        contentType,
+        originalSizeBytes: file.size,
+        filename: file.name.slice(0, 255),
+        variants,
+        width: processed.width,
+        height: processed.height,
+        blurhash: processed.blurhash,
+      },
+    });
+  }
+
+  async function runJob(jobId: string, file: File) {
+    filesRef.current.set(jobId, file);
+    setJobs((prev) => [
+      ...prev.filter((j) => j.id !== jobId),
+      { id: jobId, name: file.name, error: null },
+    ]);
+    try {
+      await processOne(jobId, file);
+      filesRef.current.delete(jobId);
+      setJobs((prev) => prev.filter((j) => j.id !== jobId));
+      refresh();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setJobs((prev) =>
+        prev.map((j) => (j.id === jobId ? { ...j, error: message } : j)),
+      );
+    }
+  }
+
   async function uploadFiles(files: FileList | File[]) {
     setBusy(true);
     try {
       for (const file of Array.from(files)) {
-        const imageId = crypto.randomUUID();
-        const contentType = file.type || "image/jpeg";
-        const path = originalPath(listingId!, imageId, fileExtension(file.name, contentType));
-
-        // The raw original goes to the PRIVATE originals bucket; only the
-        // processed AVIF/WebP variants ever land in the public bucket.
-        const { error: uploadError } = await supabase.storage
-          .from(ORIGINALS_BUCKET)
-          .upload(path, file, { contentType, upsert: true });
-        if (uploadError) throw new Error(uploadError.message);
-
-        await enqueueImageProcessing({
-          data: {
-            listingId: listingId!,
-            imageId,
-            originalStoragePath: path,
-            contentType,
-            originalSizeBytes: file.size,
-            filename: file.name.slice(0, 255),
-          },
-        });
+        await runJob(crypto.randomUUID(), file);
       }
-      toast.success(t("admin.listings.images.uploaded"));
-      refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : String(error));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function retry(image: ImageRecord) {
-    if (!image.original_storage_path) {
-      toast.error(t("admin.listings.images.retryImpossible"));
-      return;
-    }
-    setBusy(true);
-    try {
-      await enqueueImageProcessing({
-        data: {
-          listingId: listingId!,
-          imageId: image.id,
-          originalStoragePath: image.original_storage_path,
-          contentType: image.content_type ?? "image/jpeg",
-        },
-      });
-      toast.success(t("admin.listings.images.retryQueued"));
-      refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : String(error));
     } finally {
       setBusy(false);
     }
@@ -170,13 +195,17 @@ export function ImageManager({
     }
   }
 
+  const compact = images.length > 0;
+
   return (
     <FormSection
       title={t("admin.listings.sections.images")}
       description={t("admin.listings.images.coverHint")}
     >
       <div
-        className="rounded-lg border border-dashed border-border bg-muted/20 p-6 text-center"
+        className={`rounded-lg border border-dashed border-border bg-muted/20 text-center ${
+          compact ? "p-4" : "p-6"
+        }`}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -194,7 +223,7 @@ export function ImageManager({
             e.target.value = "";
           }}
         />
-        <p className="mx-auto max-w-md text-sm text-muted-foreground">
+        <p className="mx-auto max-w-xl text-sm text-muted-foreground">
           {t("admin.listings.images.pipelineNote")}
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -212,6 +241,55 @@ export function ImageManager({
         </Button>
       </div>
 
+      {jobs.length > 0 ? (
+        <ul className="mt-4 space-y-2">
+          {jobs.map((job) => (
+            <li
+              key={job.id}
+              className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 text-sm"
+            >
+              {job.error ? null : <Loader2 className="h-4 w-4 animate-spin shrink-0" />}
+              <span className="truncate">{job.name}</span>
+              <span
+                className={`truncate text-xs ${
+                  job.error ? "text-destructive" : "text-muted-foreground"
+                }`}
+              >
+                {job.error ?? t("admin.listings.images.status.processing")}
+              </span>
+              {job.error ? (
+                <div className="ml-auto flex items-center gap-1">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      const file = filesRef.current.get(job.id);
+                      if (file) void runJob(job.id, file);
+                    }}
+                  >
+                    <RotateCcw className="mr-1 h-3.5 w-3.5" />
+                    {t("admin.listings.images.retry")}
+                  </Button>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    aria-label={t("admin.listings.images.dismiss")}
+                    onClick={() => {
+                      filesRef.current.delete(job.id);
+                      setJobs((prev) => prev.filter((j) => j.id !== job.id));
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
       {images.length > 0 ? (
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {images.map((image, index) => (
@@ -223,7 +301,6 @@ export function ImageManager({
               busy={busy}
               onMove={move}
               onMakeCover={makeCover}
-              onRetry={retry}
               onDelete={remove}
             />
           ))}

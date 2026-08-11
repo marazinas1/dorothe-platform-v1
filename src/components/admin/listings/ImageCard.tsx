@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ArrowRight, RotateCcw, Star, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Star, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { variantUrl } from "./listing-image-url";
 
 export type ImageRecord = {
@@ -15,13 +14,6 @@ export type ImageRecord = {
   content_type: string | null;
 };
 
-const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-  pending: "outline",
-  processing: "secondary",
-  done: "default",
-  failed: "destructive",
-};
-
 export function ImageCard({
   image,
   index,
@@ -29,7 +21,6 @@ export function ImageCard({
   busy,
   onMove,
   onMakeCover,
-  onRetry,
   onDelete,
 }: {
   image: ImageRecord;
@@ -38,14 +29,10 @@ export function ImageCard({
   busy: boolean;
   onMove: (index: number, direction: -1 | 1) => void;
   onMakeCover: (image: ImageRecord) => void;
-  onRetry: (image: ImageRecord) => void;
   onDelete: (image: ImageRecord) => void;
 }) {
   const { t } = useTranslation();
-  const url = variantUrl(image.variants, "thumb");
-  const failed = image.processing_status === "failed";
-  const processing =
-    image.processing_status === "pending" || image.processing_status === "processing";
+  const url = variantUrl(image.variants, "card");
 
   return (
     <div
@@ -81,19 +68,6 @@ export function ImageCard({
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-3">
-        <Badge variant={STATUS_VARIANT[image.processing_status] ?? "outline"}>
-          {t(`admin.listings.images.status.${image.processing_status}`)}
-        </Badge>
-        {failed && image.processing_error ? (
-          <p className="text-xs leading-snug text-destructive">
-            {image.processing_error}
-          </p>
-        ) : null}
-        {processing ? (
-          <p className="text-xs leading-snug text-muted-foreground">
-            {t("admin.listings.images.processingHelp")}
-          </p>
-        ) : null}
         <div className="mt-auto flex items-center gap-1">
           <Button
             type="button"
@@ -126,18 +100,6 @@ export function ImageCard({
               title={t("admin.listings.images.makeCover")}
             >
               <Star className="h-4 w-4" />
-            </Button>
-          ) : null}
-          {failed ? (
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              disabled={busy}
-              onClick={() => onRetry(image)}
-            >
-              <RotateCcw className="mr-1 h-3.5 w-3.5" />
-              {t("admin.listings.images.retry")}
             </Button>
           ) : null}
           <Button

@@ -1,0 +1,1 @@
+UPDATE public.listing_images SET listing_id='33333333-0000-0000-0000-000000000001', sort_order=-1 WHERE id='a87b0841-aae7-44c9-a0b7-f82ca64403e1';
