@@ -528,7 +528,30 @@
       "publishFailed": "Status konnte nicht geändert werden:",
       "noImages": "Keine Fotos",
       "noImagesWarning": "Dieses Objekt hat noch keine Fotos. Bitte vor der Veröffentlichung Fotos hinzufügen.",
-      "actions": "Aktionen"
+      "actions": "Aktionen",
+      "toolbar": {
+        "search": "Suche",
+        "searchPlaceholder": "Titel oder Ort suchen",
+        "allDealTypes": "Alle Angebotsarten",
+        "allPropertyTypes": "Alle Objektarten",
+        "allStatuses": "Alle Status",
+        "sort": "Sortierung",
+        "sortOptions": {
+          "newest": "Neueste zuerst",
+          "oldest": "Älteste zuerst",
+          "price_desc": "Preis hoch → niedrig",
+          "price_asc": "Preis niedrig → hoch"
+        },
+        "gridView": "Kartenansicht",
+        "tableView": "Tabellenansicht",
+        "count": "{{count}} Objekte",
+        "count_one": "{{count}} Objekt"
+      },
+      "figures": {
+        "rooms": "Zimmer",
+        "bedrooms": "Schlafz.",
+        "bathrooms": "Bäder"
+      }
     },
     "inquiries": {
       "summary": "{{total}} insgesamt · {{unread}} neu",

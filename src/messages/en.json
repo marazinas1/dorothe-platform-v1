@@ -528,7 +528,30 @@
       "publishFailed": "Could not change the status:",
       "noImages": "No photos",
       "noImagesWarning": "This listing has no photos yet. Add photos before publishing.",
-      "actions": "Actions"
+      "actions": "Actions",
+      "toolbar": {
+        "search": "Search",
+        "searchPlaceholder": "Search title or town",
+        "allDealTypes": "All deal types",
+        "allPropertyTypes": "All property types",
+        "allStatuses": "All statuses",
+        "sort": "Sort",
+        "sortOptions": {
+          "newest": "Newest first",
+          "oldest": "Oldest first",
+          "price_desc": "Price high → low",
+          "price_asc": "Price low → high"
+        },
+        "gridView": "Card view",
+        "tableView": "Table view",
+        "count": "{{count}} listings",
+        "count_one": "{{count}} listing"
+      },
+      "figures": {
+        "rooms": "rooms",
+        "bedrooms": "bed",
+        "bathrooms": "bath"
+      }
     },
     "inquiries": {
       "summary": "{{total}} total · {{unread}} new",
