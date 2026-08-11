@@ -125,7 +125,8 @@
       "investment_note": "Sold as an investment property: the property is let and the tenancy passes to the buyer, so it is not available to move into.",
       "availability": "Available from",
       "availability_after_tenancy": "After the current tenancy ends",
-      "availability_immediately": "Immediately"
+      "availability_immediately": "Immediately",
+      "reference_short": "Ref."
     },
     "pager": {
       "prev": "Previous",
@@ -166,6 +167,57 @@
     "dealType": {
       "sale": "For sale",
       "rent": "For rent"
+    },
+    "condition": {
+      "first_occupancy": "First occupancy",
+      "like_new": "Like new",
+      "renovated": "Renovated",
+      "modernised": "Modernised",
+      "well_kept": "Well kept",
+      "needs_renovation": "Needs renovation",
+      "for_demolition": "For demolition"
+    },
+    "heating": {
+      "central": "Central heating",
+      "floor_level": "Floor-level heating",
+      "underfloor": "Underfloor heating",
+      "district": "District heating",
+      "gas": "Gas heating",
+      "oil": "Oil heating",
+      "heat_pump": "Heat pump",
+      "pellet": "Pellet heating",
+      "night_storage": "Night storage heating"
+    },
+    "energySource": {
+      "district_heating": "District heating",
+      "natural_gas": "Natural gas",
+      "lpg": "LPG",
+      "heating_oil": "Heating oil",
+      "electricity": "Electricity",
+      "heat_pump": "Heat pump",
+      "wood_pellets": "Wood pellets",
+      "solar": "Solar",
+      "geothermal": "Geothermal",
+      "chp": "Combined heat and power"
+    },
+    "features": {
+      "balcony": "Balcony",
+      "terrace": "Terrace",
+      "garden": "Garden",
+      "cellar": "Cellar",
+      "lift": "Lift",
+      "garage": "Garage",
+      "parking_space": "Parking space",
+      "underground_parking": "Underground parking",
+      "fitted_kitchen": "Fitted kitchen",
+      "guest_wc": "Guest WC",
+      "barrier_free": "Step-free access",
+      "underfloor_heating": "Underfloor heating",
+      "fireplace": "Fireplace",
+      "attic": "Attic",
+      "storage_room": "Storage room",
+      "high_ceilings": "High ceilings",
+      "wooden_floors": "Wooden floors"
     }
   },
   "inquiry": {
@@ -459,7 +511,8 @@
         "content": "Content sections",
         "images": "Photos",
         "seo": "SEO & metadata",
-        "market": "Costs, commission & tenancy"
+        "market": "Costs, commission & tenancy",
+        "equipment": "Equipment & features"
       },
       "fields": {
         "title": "Title",
@@ -496,7 +549,11 @@
         "commission_type": "Commission as",
         "commission_payer": "Commission paid by",
         "rental_status": "Rental status",
-        "availability_date": "Available from"
+        "availability_date": "Available from",
+        "reference_code": "Reference number",
+        "features": "Features",
+        "condition": "Condition",
+        "heating_type": "Heating"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -516,7 +573,8 @@
         "service_charge": "Monthly running costs for the owner — buyers ask for this first.",
         "commission": "Stating the commission is legally required in Germany.",
         "rental": "Whether someone lives there right now. Independent of whether you sell or let the property.",
-        "availability_date": "Leave empty if the date is not fixed yet."
+        "availability_date": "Leave empty if the date is not fixed yet.",
+        "reference_code": "Optional. Your own internal number, shown on the public page."
       },
       "energy": {
         "intro": "Required fields for {{country}}. Publishing is blocked until they are complete.",
@@ -573,7 +631,7 @@
           "done": "Ready",
           "failed": "Failed"
         },
-        "pipelineNote": "Photos are processed in your browser before upload: rotated upright, resized to 1600 px for the detail page, 800 px for cards and a 1200×630 social preview, saved as WebP, and all EXIF and GPS data removed. Your untouched original is kept privately for future use.",
+        "pipelineNote": "Drag files here or click to select — up to 50 photos at once. Each photo is processed in your browser before upload: rotated upright, resized to 1600 px for the detail page, 800 px for cards and a 1200×630 social preview, saved as WebP, and all EXIF and GPS data removed. Your untouched original is kept privately and is never published. Mark one photo as the cover.",
         "dropHintLong": "Drag files here, or click to select them from your device.",
         "coverHint": "Mark one photo as the cover image — the first one is used by default.",
         "makeCover": "Make cover image",
@@ -616,7 +674,8 @@
         "gridView": "Card view",
         "tableView": "Table view",
         "count": "{{count}} listings",
-        "count_one": "{{count}} listing"
+        "count_one": "{{count}} listing",
+        "searchReference": "Search title, town or reference"
       },
       "figures": {
         "rooms": "rooms",
@@ -691,6 +750,16 @@
       "autodraft": {
         "creating": "Preparing a new listing…",
         "failed": "Could not start a new listing:"
+      },
+      "notSet": "Not set",
+      "groups": {
+        "price": "Price & costs",
+        "size": "Size & rooms"
+      },
+      "pricePeriod": {
+        "month": "per month",
+        "week": "per week",
+        "total": "total"
       }
     },
     "inquiries": {
@@ -896,5 +965,12 @@
   "contact": {
     "phone": "Call",
     "email": "Email"
+  },
+  "countries": {
+    "DE": "Germany",
+    "AT": "Austria",
+    "CH": "Switzerland",
+    "IS": "Iceland",
+    "US": "United States"
   }
 }

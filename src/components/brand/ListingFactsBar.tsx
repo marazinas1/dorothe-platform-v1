@@ -64,6 +64,19 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
     });
   }
 
+  if (listing.condition) {
+    facts.push({
+      label: t("listings.detail.condition"),
+      value: t(`listings.condition.${listing.condition}`),
+    });
+  }
+  if (listing.heating_type) {
+    facts.push({
+      label: t("listings.detail.heating"),
+      value: t(`listings.heating.${listing.heating_type}`),
+    });
+  }
+
   if (listing.service_charge != null) {
     facts.push({
       label: t("listings.detail.service_charge"),

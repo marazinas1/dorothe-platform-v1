@@ -85,6 +85,9 @@ export function ListingsTable({
                   <div className="text-xs text-muted-foreground">
                     {t(`listings.propertyType.${row.property_type}`)} ·{" "}
                     {t(`listings.dealType.${row.deal_type}`)}
+                    {row.reference_code
+                      ? ` · ${t("listings.detail.reference_short")} ${row.reference_code}`
+                      : ""}
                   </div>
                 </TableCell>
                 <TableCell className="hidden sm:table-cell text-sm">

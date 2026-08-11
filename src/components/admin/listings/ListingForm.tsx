@@ -16,6 +16,7 @@ import { useListingAutosave } from "./use-listing-autosave";
 import { BasicsSection } from "./BasicsSection";
 import { FiguresSection } from "./FiguresSection";
 import { MarketSection } from "./MarketSection";
+import { EquipmentSection } from "./EquipmentSection";
 import { LocationSection } from "./LocationSection";
 import { EnergySection } from "./EnergySection";
 import { SeoSection } from "./SeoSection";
@@ -93,6 +94,12 @@ export function ListingForm({
         void save();
       }}
     >
+      <h1 className="font-heading text-2xl">
+        {form.values.title?.[i18n.language]?.trim() ||
+          Object.values(form.values.title ?? {}).find((v) => v.trim())?.trim() ||
+          t("admin.listings.untitled")}
+      </h1>
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="text-xs text-muted-foreground">
@@ -126,6 +133,7 @@ export function ListingForm({
 
       <PublishChecklist values={form.values} imageCount={images.length} />
 
+      <BasicsSection form={form} lang={lang} />
       <ImageManager
         listingId={listingId}
         images={images}
@@ -133,13 +141,14 @@ export function ListingForm({
         onSaveDraft={() => void save()}
         savingDraft={saving}
       />
-      <BasicsSection form={form} lang={lang} />
       <LocationSection form={form} />
       <FiguresSection form={form} />
+      <EquipmentSection form={form} />
       <MarketSection form={form} />
       <ContentSectionsEditor form={form} lang={lang} />
       <EnergySection form={form} />
       <SeoSection form={form} lang={lang} />
+
 
       <SaveBar
         dirty={form.dirty}

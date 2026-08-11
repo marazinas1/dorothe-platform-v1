@@ -5,6 +5,7 @@
 import { z } from "zod";
 
 import { ENERGY_EXEMPTIONS } from "@/lib/validation/energy";
+import { HEATING_TYPES, LISTING_CONDITIONS } from "./vocabularies";
 
 export const DEAL_TYPES = ["sale", "rent"] as const;
 
@@ -95,6 +96,8 @@ function nullableEnum<T extends readonly [string, ...string[]]>(values: T) {
     .transform((v) => (v === undefined || v === "" ? null : v));
 }
 
+export const PRICE_PERIODS = ["month", "week", "total"] as const;
+
 export const ListingFormSchema = z.object({
   id: z.string().uuid().optional(),
 
@@ -105,11 +108,17 @@ export const ListingFormSchema = z.object({
   meta_description: Translated.optional().default({}),
   deal_type: z.enum(DEAL_TYPES),
   property_type: z.enum(PROPERTY_TYPES),
+  reference_code: nullableText,
+
+  // Equipment
+  features: z.array(z.string()).default([]),
+  condition: nullableEnum(LISTING_CONDITIONS),
+  heating_type: nullableEnum(HEATING_TYPES),
 
   // Figures
   price: nullableNumber,
   price_on_request: z.boolean().default(false),
-  price_period: nullableText,
+  price_period: nullableEnum(PRICE_PERIODS),
   living_area: nullableNumber,
   plot_area: nullableNumber,
   usable_area: nullableNumber,

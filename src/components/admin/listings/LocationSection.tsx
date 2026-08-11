@@ -1,9 +1,20 @@
 import { useTranslation } from "react-i18next";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { GEO_PRECISIONS } from "@/lib/listings/admin-schema";
+import { GERMAN_STATES, isGermany } from "@/lib/listings/vocabularies";
+import { COUNTRIES } from "@/lib/validation/energy";
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow, FormSection } from "./FieldRow";
 import { AddressMapPicker } from "./AddressMapPicker";
@@ -13,8 +24,6 @@ const TEXT_FIELDS = [
   "address_number",
   "address_zip",
   "address_city",
-  "address_region",
-  "address_country",
 ] as const;
 
 /**
@@ -24,7 +33,17 @@ const TEXT_FIELDS = [
  */
 export function LocationSection({ form }: { form: ListingFormApi }) {
   const { t } = useTranslation();
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const { values } = form;
+
+  const country = values.address_country ?? settings.country;
+  // Existing rows may hold a country name rather than a code; keep it selectable
+  // so autosave never silently discards it.
+  const countryOptions = (COUNTRIES as readonly string[]).includes(country)
+    ? (COUNTRIES as readonly string[])
+    : [country, ...COUNTRIES];
+  const regionOptions = isGermany(country) ? GERMAN_STATES : null;
+  const region = values.address_region ?? "";
 
   return (
     <FormSection title={t("admin.listings.sections.location")}>
@@ -38,7 +57,63 @@ export function LocationSection({ form }: { form: ListingFormApi }) {
               />
             </FieldRow>
           ))}
+
+          <FieldRow label={t("admin.listings.fields.address_country")}>
+            <Select
+              value={country}
+              onValueChange={(v) => form.setField("address_country", v)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {countryOptions.map((code) => (
+                  <SelectItem key={code} value={code}>
+                    {(COUNTRIES as readonly string[]).includes(code)
+                      ? t(`countries.${code}`)
+                      : code}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FieldRow>
+
+          <FieldRow label={t("admin.listings.fields.address_region")}>
+            {regionOptions ? (
+              <Select
+                value={region || "none"}
+                onValueChange={(v) =>
+                  form.setField("address_region", v === "none" ? null : v)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">{t("admin.listings.notSet")}</SelectItem>
+                  {[
+                    ...(region && !(GERMAN_STATES as readonly string[]).includes(region)
+                      ? [region]
+                      : []),
+                    ...GERMAN_STATES,
+                  ].map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Input
+                value={region}
+                onChange={(e) =>
+                  form.setField("address_region", e.target.value || null)
+                }
+              />
+            )}
+          </FieldRow>
         </div>
+
 
         <AddressMapPicker form={form} />
 

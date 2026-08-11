@@ -73,3 +73,13 @@ export function formatDate(iso: string | null | undefined, locale: Locale): stri
     month: "short",
   });
 }
+
+/** Currency symbol for input prefixes — never a hardcoded sign. */
+export function currencySymbol(currency: string, locale: Locale = "de"): string {
+  const parts = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  }).formatToParts(0);
+  return parts.find((p) => p.type === "currency")?.value ?? currency;
+}

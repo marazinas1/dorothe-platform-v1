@@ -82,7 +82,18 @@ export function BasicsSection({
             </Select>
           </FieldRow>
         </div>
+        <FieldRow
+          label={t("admin.listings.fields.reference_code")}
+          help={t("admin.listings.help.reference_code")}
+          className="max-w-sm"
+        >
+          <Input
+            value={values.reference_code ?? ""}
+            onChange={(e) => form.setField("reference_code", e.target.value || null)}
+          />
+        </FieldRow>
       </div>
+
     </FormSection>
   );
 }

@@ -27,7 +27,8 @@ function matchesSearch(row: AdminListingRow, needle: string, locale: string): bo
   if (!q) return true;
   const title = pickLocalized(row.title, locale).toLowerCase();
   const city = (row.address_city ?? "").toLowerCase();
-  return title.includes(q) || city.includes(q);
+  const reference = (row.reference_code ?? "").toLowerCase();
+  return title.includes(q) || city.includes(q) || reference.includes(q);
 }
 
 export function filterAndSortListings(
