@@ -3,11 +3,14 @@ import type { ImageVariant } from "./media-paths";
 
 type Variants = Record<string, { url?: string } | undefined> | null | undefined;
 
-/** Fallback order per requested size — three variants only. */
-const ORDER: Record<ImageVariant, ImageVariant[]> = {
-  card: ["card", "detail", "og"],
-  detail: ["detail", "card", "og"],
-  og: ["og", "detail", "card"],
+/**
+ * Fallback order per requested size. The pipeline writes card/detail/og;
+ * the legacy keys keep older rows (and seeded demo data) rendering.
+ */
+const ORDER: Record<ImageVariant, string[]> = {
+  card: ["card", "detail", "og", "medium", "thumb", "large"],
+  detail: ["detail", "card", "og", "large", "medium", "thumb"],
+  og: ["og", "detail", "card", "large", "medium", "thumb"],
 };
 
 export function pickImageUrl(
