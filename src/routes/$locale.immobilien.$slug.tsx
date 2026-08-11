@@ -17,6 +17,7 @@ import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { getListingBySlug, type PublicListing } from "@/lib/listings/queries.functions";
+import { getListingPreview } from "@/lib/listings/preview.functions";
 import { pickImageUrl } from "@/lib/listings/image";
 import { pickLocalized } from "@/lib/listings/format";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
@@ -68,7 +69,8 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
         ],
       };
     }
-    const { settings, origin, locale, listing } = loaderData;
+    const { settings, origin, locale, isPreview } = loaderData;
+    const listing = loaderData.listing as PublicListing;
     const localTitle = pickLocalized(listing.title, locale) || listing.slug;
     const localDesc = pickLocalized(listing.description, locale);
     const title = `${localTitle} — ${settings.site_name}`;
