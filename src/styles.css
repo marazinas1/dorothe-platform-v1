@@ -130,8 +130,8 @@
   --destructive: oklch(0.55 0.18 27);
   --destructive-foreground: var(--paper);
 
-  --border: var(--linen);
-  --input: var(--linen);
+  --border: var(--hairline);
+  --input: var(--hairline);
   --ring: var(--sage);
 
   --chart-1: var(--sage);
@@ -140,13 +140,13 @@
   --chart-4: oklch(0.7 0.06 84);
   --chart-5: oklch(0.65 0.07 70);
 
-  --sidebar: var(--paper);
+  --sidebar: var(--surface);
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--sage);
   --sidebar-primary-foreground: var(--paper);
   --sidebar-accent: var(--linen);
   --sidebar-accent-foreground: var(--ink);
-  --sidebar-border: var(--linen);
+  --sidebar-border: var(--hairline);
   --sidebar-ring: var(--sage);
 }
 
@@ -240,6 +240,11 @@
     font-weight: 400;
     letter-spacing: -0.015em;
     line-height: 1.05;
+  }
+
+  /* Button shape follows site_settings.button_style, one token everywhere. */
+  button, [data-slot="button"] {
+    border-radius: var(--radius-button);
   }
 
   /* Tabular figures on numeric utility so prices/areas align. */
