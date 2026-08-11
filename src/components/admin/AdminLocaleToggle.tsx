@@ -1,7 +1,7 @@
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { LOCALES, type Locale } from "@/i18n/config";
+import { SUPPORTED_LOCALES, type Locale } from "@/i18n/config";
 import { cn } from "@/lib/utils";
 
 /**
@@ -19,7 +19,7 @@ export function AdminLocaleToggle() {
       aria-label={t("locale.switch")}
       className="flex items-center gap-0.5 rounded-md border border-border p-0.5"
     >
-      {LOCALES.map((loc) => (
+      {SUPPORTED_LOCALES.map((loc: Locale) => (
         <Link
           key={loc}
           to={`/$locale/${rest}` as string}
