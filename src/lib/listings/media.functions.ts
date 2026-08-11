@@ -94,9 +94,9 @@ export const deleteListingImage = createServerFn({ method: "POST" })
 
     await assertEditListing(supabase, userId, row.listing_id);
 
-    // Every variant path is deterministic: listings/{listing}/{image}/{v}.{fmt}
-    const variantPaths = VARIANT_SPECS.flatMap((spec) =>
-      VARIANT_FORMATS.map((fmt) => variantPath(row.listing_id, row.id, spec.key, fmt)),
+    // Every variant path is deterministic: listings/{listing}/{image}/{v}.webp
+    const variantPaths = VARIANT_SPECS.map((spec) =>
+      variantPath(row.listing_id, row.id, spec.key),
     );
 
     // Also sweep the folder in case an older run stored extras. Best-effort.
