@@ -125,7 +125,8 @@
       "investment_note": "Verkauf als Kapitalanlage: Die Immobilie ist vermietet, das Mietverhältnis geht auf den Käufer über. Ein Eigenbezug ist nicht möglich.",
       "availability": "Verfügbar ab",
       "availability_after_tenancy": "Nach Ende des laufenden Mietverhältnisses",
-      "availability_immediately": "Sofort"
+      "availability_immediately": "Sofort",
+      "reference_short": "Obj.-Nr."
     },
     "pager": {
       "prev": "Zurück",
@@ -166,6 +167,57 @@
     "dealType": {
       "sale": "Kauf",
       "rent": "Miete"
+    },
+    "condition": {
+      "first_occupancy": "Erstbezug",
+      "like_new": "Neuwertig",
+      "renovated": "Renoviert",
+      "modernised": "Modernisiert",
+      "well_kept": "Gepflegt",
+      "needs_renovation": "Renovierungsbedürftig",
+      "for_demolition": "Abbruchobjekt"
+    },
+    "heating": {
+      "central": "Zentralheizung",
+      "floor_level": "Etagenheizung",
+      "underfloor": "Fußbodenheizung",
+      "district": "Fernwärme",
+      "gas": "Gasheizung",
+      "oil": "Ölheizung",
+      "heat_pump": "Wärmepumpe",
+      "pellet": "Pelletheizung",
+      "night_storage": "Nachtspeicherheizung"
+    },
+    "energySource": {
+      "district_heating": "Fernwärme",
+      "natural_gas": "Erdgas",
+      "lpg": "Flüssiggas",
+      "heating_oil": "Heizöl",
+      "electricity": "Strom",
+      "heat_pump": "Wärmepumpe",
+      "wood_pellets": "Holzpellets",
+      "solar": "Solar",
+      "geothermal": "Erdwärme",
+      "chp": "Blockheizkraftwerk"
+    },
+    "features": {
+      "balcony": "Balkon",
+      "terrace": "Terrasse",
+      "garden": "Garten",
+      "cellar": "Keller",
+      "lift": "Aufzug",
+      "garage": "Garage",
+      "parking_space": "Stellplatz",
+      "underground_parking": "Tiefgaragenstellplatz",
+      "fitted_kitchen": "Einbauküche",
+      "guest_wc": "Gäste-WC",
+      "barrier_free": "Barrierefrei",
+      "underfloor_heating": "Fußbodenheizung",
+      "fireplace": "Kamin",
+      "attic": "Dachboden",
+      "storage_room": "Abstellraum",
+      "high_ceilings": "Hohe Decken",
+      "wooden_floors": "Holzdielen"
     }
   },
   "inquiry": {
@@ -459,7 +511,8 @@
         "content": "Inhaltsabschnitte",
         "images": "Fotos",
         "seo": "SEO & Metadaten",
-        "market": "Kosten, Provision & Vermietung"
+        "market": "Kosten, Provision & Vermietung",
+        "equipment": "Ausstattung & Merkmale"
       },
       "fields": {
         "title": "Titel",
@@ -496,7 +549,11 @@
         "commission_type": "Provision als",
         "commission_payer": "Provision zahlt",
         "rental_status": "Vermietungsstand",
-        "availability_date": "Verfügbar ab"
+        "availability_date": "Verfügbar ab",
+        "reference_code": "Objektnummer",
+        "features": "Merkmale",
+        "condition": "Zustand",
+        "heating_type": "Heizung"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -516,7 +573,8 @@
         "service_charge": "Monatliche Nebenkosten für Eigentümer — danach fragen Käufer zuerst.",
         "commission": "Die Angabe der Provision ist in Deutschland gesetzlich vorgeschrieben.",
         "rental": "Ob aktuell jemand darin wohnt. Unabhängig davon, ob Sie verkaufen oder vermieten.",
-        "availability_date": "Leer lassen, wenn das Datum noch nicht feststeht."
+        "availability_date": "Leer lassen, wenn das Datum noch nicht feststeht.",
+        "reference_code": "Optional. Ihre eigene Objektnummer, wird auf der öffentlichen Seite angezeigt."
       },
       "energy": {
         "intro": "Pflichtfelder für {{country}}. Ohne sie ist eine Veröffentlichung nicht möglich.",
@@ -573,7 +631,7 @@
           "done": "Fertig",
           "failed": "Fehlgeschlagen"
         },
-        "pipelineNote": "Fotos werden direkt im Browser verarbeitet: korrekt gedreht, auf 1600 px für die Detailseite, 800 px für Karten und eine 1200×630-Vorschau für soziale Netzwerke skaliert, als WebP gespeichert und von allen EXIF- und GPS-Daten befreit. Das unveränderte Original wird privat aufbewahrt.",
+        "pipelineNote": "Dateien hierher ziehen oder klicken zum Auswählen — bis zu 50 Fotos gleichzeitig. Jedes Foto wird vor dem Upload direkt im Browser verarbeitet: aufrecht gedreht, auf 1600 px für die Detailseite, 800 px für Karten und eine Social-Vorschau mit 1200×630 skaliert, als WebP gespeichert, alle EXIF- und GPS-Daten entfernt. Ihr unverändertes Original wird privat aufbewahrt und niemals veröffentlicht. Markieren Sie ein Foto als Titelbild.",
         "dropHintLong": "Dateien hierher ziehen oder klicken, um sie auszuwählen.",
         "coverHint": "Markieren Sie ein Foto als Titelbild — standardmäßig ist es das erste.",
         "makeCover": "Als Titelbild",
@@ -616,7 +674,8 @@
         "gridView": "Kartenansicht",
         "tableView": "Tabellenansicht",
         "count": "{{count}} Objekte",
-        "count_one": "{{count}} Objekt"
+        "count_one": "{{count}} Objekt",
+        "searchReference": "Titel, Ort oder Objektnummer suchen"
       },
       "figures": {
         "rooms": "Zimmer",
@@ -691,6 +750,16 @@
       "autodraft": {
         "creating": "Neues Objekt wird vorbereitet…",
         "failed": "Neues Objekt konnte nicht angelegt werden:"
+      },
+      "notSet": "Nicht angegeben",
+      "groups": {
+        "price": "Preis & Kosten",
+        "size": "Größe & Räume"
+      },
+      "pricePeriod": {
+        "month": "pro Monat",
+        "week": "pro Woche",
+        "total": "gesamt"
       }
     },
     "inquiries": {
@@ -896,5 +965,12 @@
   "contact": {
     "phone": "Anrufen",
     "email": "E-Mail"
+  },
+  "countries": {
+    "DE": "Deutschland",
+    "AT": "Österreich",
+    "CH": "Schweiz",
+    "IS": "Island",
+    "US": "Vereinigte Staaten"
   }
 }

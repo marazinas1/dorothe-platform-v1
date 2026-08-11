@@ -64,7 +64,12 @@ const DE_SCHEMA = z.object({
     required_error: "final_energy",
     invalid_type_error: "final_energy",
   }),
-  energy_source: z.string().min(1),
+  // Array of standard keys (see src/lib/listings/vocabularies.ts). The legacy
+  // single-string form is still accepted so old rows validate identically.
+  energy_source: z.union([
+    z.array(z.string().min(1)).min(1),
+    z.string().min(1),
+  ]),
   efficiency_class: z.enum(EFFICIENCY_CLASS_DE, {
     required_error: "efficiency_class",
     invalid_type_error: "efficiency_class",

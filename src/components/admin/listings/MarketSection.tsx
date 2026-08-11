@@ -24,7 +24,7 @@ const UNSET = "unset";
  * it an investment property rather than a home to move into.
  */
 export function MarketSection({ form }: { form: ListingFormApi }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { values } = form;
   const investment = values.deal_type === "sale" && values.rental_status === "let";
 
@@ -33,25 +33,14 @@ export function MarketSection({ form }: { form: ListingFormApi }) {
       <div className="grid gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <FieldRow
-            label={t("admin.listings.fields.service_charge")}
-            help={t("admin.listings.help.service_charge")}
-          >
-            <Input
-              type="number"
-              inputMode="decimal"
-              step="0.01"
-              value={values.service_charge ?? ""}
-              onChange={(e) =>
-                form.setField(
-                  "service_charge",
-                  e.target.value === "" ? null : Number(e.target.value),
-                )
-              }
-            />
-          </FieldRow>
-          <FieldRow
             label={t("admin.listings.fields.availability_date")}
-            help={t("admin.listings.help.availability_date")}
+            help={
+              values.availability_date
+                ? new Intl.DateTimeFormat(i18n.language, { dateStyle: "long" }).format(
+                    new Date(values.availability_date),
+                  )
+                : t("admin.listings.help.availability_date")
+            }
           >
             <Input
               type="date"
@@ -60,6 +49,7 @@ export function MarketSection({ form }: { form: ListingFormApi }) {
             />
           </FieldRow>
         </div>
+
 
         <div className="grid gap-4 sm:grid-cols-3">
           <FieldRow

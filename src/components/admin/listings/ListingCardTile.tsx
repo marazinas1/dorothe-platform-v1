@@ -83,6 +83,9 @@ export function ListingCardTile({
             {t(`listings.propertyType.${row.property_type}`)}
             {row.address_city ? ` · ${row.address_city}` : ""}
             {` · ${t(`listings.dealType.${row.deal_type}`)}`}
+            {row.reference_code
+              ? ` · ${t("listings.detail.reference_short")} ${row.reference_code}`
+              : ""}
           </p>
         </div>
 

@@ -7,6 +7,7 @@ import { ShareButtons } from "@/components/public/ShareButtons";
 import { ListingGallery } from "@/components/brand/ListingGallery";
 import { ListingHeroOverlay } from "@/components/brand/ListingHeroOverlay";
 import { ListingFactsBar } from "@/components/brand/ListingFactsBar";
+import { ListingFeatures } from "@/components/brand/ListingFeatures";
 import { ListingHeadline } from "@/components/brand/ListingHeadline";
 import { ListingContentSections } from "@/components/brand/ListingContentSections";
 import { EnergyPanel } from "@/components/brand/EnergyPanel";
@@ -208,6 +209,11 @@ function ListingDetail() {
               locale={locale as Locale}
               settings={settings}
             />
+          </section>
+
+          {/* 2b. Equipment features */}
+          <section className="mt-20">
+            <ListingFeatures features={l.features} />
           </section>
 
           {/* 3. Description */}

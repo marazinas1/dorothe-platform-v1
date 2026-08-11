@@ -45,7 +45,7 @@ export function ListingsToolbar({
         <Input
           value={filters.search}
           onChange={(e) => set({ search: e.target.value })}
-          placeholder={t("admin.listings.toolbar.searchPlaceholder")}
+          placeholder={t("admin.listings.toolbar.searchReference")}
           aria-label={t("admin.listings.toolbar.search")}
           className="h-9 w-full sm:w-56"
         />

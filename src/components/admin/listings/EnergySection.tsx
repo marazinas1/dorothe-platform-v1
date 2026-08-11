@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -10,12 +11,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
+import { ENERGY_SOURCES, readEnergySources } from "@/lib/listings/vocabularies";
 import {
   EFFICIENCY_CLASS_AT,
   EFFICIENCY_CLASS_DE,
   ENERGY_EXEMPTIONS,
   isEnergyExempt,
-  validateEnergy,
   type Country,
 } from "@/lib/validation/energy";
 import type { ListingFormApi } from "./listing-form-state";
@@ -23,7 +24,7 @@ import { FieldRow, FormSection } from "./FieldRow";
 
 type Field =
   | { key: string; kind: "number" }
-  | { key: string; kind: "text" }
+  | { key: string; kind: "sources" }
   | { key: string; kind: "select"; options: readonly string[] };
 
 const AT_FIELDS: Field[] = [
@@ -40,7 +41,7 @@ const DE_FIELDS: Field[] = [
     options: ["Bedarfsausweis", "Verbrauchsausweis"],
   },
   { key: "final_energy", kind: "number" },
-  { key: "energy_source", kind: "text" },
+  { key: "energy_source", kind: "sources" },
   { key: "efficiency_class", kind: "select", options: EFFICIENCY_CLASS_DE },
   { key: "year_built", kind: "number" },
 ];
@@ -50,6 +51,7 @@ function fieldsFor(country: Country): Field[] {
   if (country === "DE") return DE_FIELDS;
   return [];
 }
+
 
 /**
  * Country-specific energy certificate fields. The database re-validates on
@@ -66,9 +68,13 @@ export function EnergySection({ form }: { form: ListingFormApi }) {
     form.values.property_type,
     form.values.energy_exemption ?? null,
   );
-  const missing = exempt
-    ? []
-    : validateEnergy(country, energy, form.values.property_type).missing;
+  const sources = readEnergySources(energy);
+
+  function toggleSource(key: string, checked: boolean) {
+    const next = checked ? [...sources, key] : sources.filter((s) => s !== key);
+    form.setEnergyField("energy_source", next.length > 0 ? next : null);
+  }
+
 
   if (fields.length === 0) {
     return (
@@ -120,17 +126,35 @@ export function EnergySection({ form }: { form: ListingFormApi }) {
           {t("admin.listings.checklist.energyExempt")}
         </p>
       ) : null}
+      {/* No red "required" hints here: the checklist above the form is the one
+          signal for what publishing still needs. */}
       <div className="grid gap-4 sm:grid-cols-2">
         {fields.map((field) => {
           const value = energy[field.key];
-          const invalid = !exempt && missing.includes(field.key);
           return (
             <FieldRow
               key={field.key}
               label={t(`admin.listings.energyFields.${field.key}`)}
-              error={invalid ? t("admin.listings.energy.required") : undefined}
+              className={field.kind === "sources" ? "sm:col-span-2" : undefined}
             >
-              {field.kind === "select" ? (
+              {field.kind === "sources" ? (
+                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                  {ENERGY_SOURCES.map((key) => (
+                    <label
+                      key={key}
+                      htmlFor={`energy-source-${key}`}
+                      className="flex cursor-pointer items-center gap-2.5 rounded-md border border-border px-3 py-2 text-sm"
+                    >
+                      <Checkbox
+                        id={`energy-source-${key}`}
+                        checked={sources.includes(key)}
+                        onCheckedChange={(checked) => toggleSource(key, checked === true)}
+                      />
+                      {t(`listings.energySource.${key}`)}
+                    </label>
+                  ))}
+                </div>
+              ) : field.kind === "select" ? (
                 <Select
                   value={typeof value === "string" ? value : ""}
                   onValueChange={(v) => form.setEnergyField(field.key, v)}
@@ -148,17 +172,13 @@ export function EnergySection({ form }: { form: ListingFormApi }) {
                 </Select>
               ) : (
                 <Input
-                  type={field.kind === "number" ? "number" : "text"}
-                  step={field.kind === "number" ? "0.01" : undefined}
+                  type="number"
+                  step="0.01"
                   value={value === undefined || value === null ? "" : String(value)}
                   onChange={(e) =>
                     form.setEnergyField(
                       field.key,
-                      field.kind === "number"
-                        ? e.target.value === ""
-                          ? ""
-                          : Number(e.target.value)
-                        : e.target.value,
+                      e.target.value === "" ? "" : Number(e.target.value),
                     )
                   }
                 />
@@ -167,6 +187,7 @@ export function EnergySection({ form }: { form: ListingFormApi }) {
           );
         })}
       </div>
+
     </FormSection>
   );
 }

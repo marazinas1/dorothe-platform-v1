@@ -7,6 +7,7 @@ import {
   type ContentSectionKey,
   type ListingFormValues,
 } from "@/lib/listings/admin-schema";
+import { pruneFeatures } from "@/lib/listings/vocabularies";
 
 export const EMPTY_VALUES: ListingFormValues = {
   title: {},
@@ -15,6 +16,10 @@ export const EMPTY_VALUES: ListingFormValues = {
   meta_description: {},
   deal_type: "sale",
   property_type: "apartment",
+  reference_code: null,
+  features: [],
+  condition: null,
+  heating_type: null,
   price: null,
   price_on_request: false,
   price_period: null,
@@ -95,7 +100,14 @@ export function useListingForm(initial: ListingFormValues) {
 
   const setField = useCallback(
     <K extends keyof ListingFormValues>(key: K, value: ListingFormValues[K]) => {
-      setValues((prev) => ({ ...prev, [key]: value }));
+      setValues((prev) => {
+        const next = { ...prev, [key]: value };
+        // Features are per property type: drop the ones that stop applying.
+        if (key === "property_type") {
+          next.features = pruneFeatures(prev.features ?? [], String(value));
+        }
+        return next;
+      });
       setDirty(true);
     },
     [],

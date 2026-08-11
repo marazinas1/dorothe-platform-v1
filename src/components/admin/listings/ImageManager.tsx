@@ -203,8 +203,10 @@ export function ImageManager({
       description={t("admin.listings.images.coverHint")}
     >
       <div
-        className={`rounded-lg border border-dashed border-border bg-muted/20 text-center ${
-          compact ? "p-4" : "p-6"
+        className={`rounded-lg border border-dashed border-border bg-muted/20 ${
+          compact
+            ? "flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-left"
+            : "px-4 py-4 text-left"
         }`}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
@@ -223,23 +225,39 @@ export function ImageManager({
             e.target.value = "";
           }}
         />
-        <p className="mx-auto max-w-xl text-sm text-muted-foreground">
-          {t("admin.listings.images.pipelineNote")}
-        </p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("admin.listings.images.dropHintLong")}
-        </p>
-        <Button
-          type="button"
-          variant="outline"
-          className="mt-3"
-          disabled={busy}
-          onClick={() => inputRef.current?.click()}
-        >
-          {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          {t("admin.listings.images.select")}
-        </Button>
+        <div className={compact ? "min-w-0" : "flex flex-wrap items-center justify-between gap-3"}>
+          <p className="text-sm text-muted-foreground">
+            {t("admin.listings.images.dropHintLong")}
+          </p>
+          {compact ? null : (
+            <Button
+              type="button"
+              variant="outline"
+              disabled={busy}
+              onClick={() => inputRef.current?.click()}
+            >
+              {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {t("admin.listings.images.select")}
+            </Button>
+          )}
+        </div>
+        {compact ? (
+          <Button
+            type="button"
+            variant="outline"
+            disabled={busy}
+            onClick={() => inputRef.current?.click()}
+          >
+            {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            {t("admin.listings.images.select")}
+          </Button>
+        ) : (
+          <p className="mt-3 max-w-2xl text-xs leading-relaxed text-muted-foreground">
+            {t("admin.listings.images.pipelineNote")}
+          </p>
+        )}
       </div>
+
 
       {jobs.length > 0 ? (
         <ul className="mt-4 space-y-2">

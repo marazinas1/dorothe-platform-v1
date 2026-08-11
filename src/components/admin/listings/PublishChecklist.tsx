@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Check, Circle } from "lucide-react";
+import { Check, Minus } from "lucide-react";
 
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { buildPublishChecklist } from "@/lib/listings/publish-checklist";
@@ -44,7 +44,7 @@ export function PublishChecklist({
             {item.done ? (
               <Check className="mt-0.5 h-4 w-4 text-primary" aria-hidden />
             ) : (
-              <Circle className="mt-0.5 h-4 w-4 text-muted-foreground" aria-hidden />
+              <Minus className="mt-0.5 h-4 w-4 text-muted-foreground" aria-hidden />
             )}
             <span className={item.done ? "text-muted-foreground" : "text-foreground"}>
               {t(`admin.listings.checklist.items.${item.key}`)}
