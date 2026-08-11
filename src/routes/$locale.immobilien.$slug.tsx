@@ -35,9 +35,9 @@ function slugQueryOptions(slug: string, preview?: string) {
 }
 
 export const Route = createFileRoute("/$locale/immobilien/$slug")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    preview: typeof search.preview === "string" ? search.preview : undefined,
-  }),
+  // Optional search param: links to this route must not be forced to pass one.
+  validateSearch: (search: Record<string, unknown>): { preview?: string } =>
+    typeof search.preview === "string" ? { preview: search.preview } : {},
   loaderDeps: ({ search }) => ({ preview: search.preview }),
   loader: async ({ context, params, deps }) => {
     const [settings, origin, listing] = await Promise.all([

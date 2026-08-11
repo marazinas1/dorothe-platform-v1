@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ArrowRight, RotateCcw, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, RotateCcw, Star, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,7 @@ export function ImageCard({
   total,
   busy,
   onMove,
+  onMakeCover,
   onRetry,
   onDelete,
 }: {
@@ -36,6 +37,7 @@ export function ImageCard({
   total: number;
   busy: boolean;
   onMove: (index: number, direction: -1 | 1) => void;
+  onMakeCover: (image: ImageRecord) => void;
   onRetry: (image: ImageRecord) => void;
   onDelete: (image: ImageRecord) => void;
 }) {
@@ -71,7 +73,7 @@ export function ImageCard({
         )}
         {index === 0 ? (
           <span className="absolute left-2 top-2 rounded bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground">
-            {t("admin.listings.images.primary")}
+            {t("admin.listings.images.cover")}
           </span>
         ) : null}
       </div>
@@ -106,6 +108,19 @@ export function ImageCard({
           >
             <ArrowRight className="h-4 w-4" />
           </Button>
+          {index !== 0 ? (
+            <Button
+              type="button"
+              size="icon"
+              variant="outline"
+              disabled={busy}
+              onClick={() => onMakeCover(image)}
+              aria-label={t("admin.listings.images.makeCover")}
+              title={t("admin.listings.images.makeCover")}
+            >
+              <Star className="h-4 w-4" />
+            </Button>
+          ) : null}
           {failed ? (
             <Button
               type="button"

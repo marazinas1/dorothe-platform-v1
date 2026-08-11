@@ -136,6 +136,22 @@ export function ImageManager({
     }
   }
 
+  /** Cover image = first in the gallery, which is what is_primary tracks. */
+  async function makeCover(image: ImageRecord) {
+    const rest = images.filter((i) => i.id !== image.id);
+    setBusy(true);
+    try {
+      await reorderListingImages({
+        data: { listingId: listingId!, order: [image.id, ...rest.map((i) => i.id)] },
+      });
+      refresh();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : String(error));
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function move(index: number, direction: -1 | 1) {
     const next = [...images];
     const target = index + direction;
@@ -157,7 +173,7 @@ export function ImageManager({
   return (
     <FormSection
       title={t("admin.listings.sections.images")}
-      description={t("admin.listings.images.help")}
+      description={t("admin.listings.images.coverHint")}
     >
       <div
         className="rounded-lg border border-dashed border-border bg-muted/20 p-6 text-center"
@@ -181,7 +197,9 @@ export function ImageManager({
         <p className="mx-auto max-w-md text-sm text-muted-foreground">
           {t("admin.listings.images.pipelineNote")}
         </p>
-        <p className="mt-2 text-sm text-muted-foreground">{t("admin.listings.images.dropHint")}</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {t("admin.listings.images.dropHintLong")}
+        </p>
         <Button
           type="button"
           variant="outline"
@@ -204,6 +222,7 @@ export function ImageManager({
               total={images.length}
               busy={busy}
               onMove={move}
+              onMakeCover={makeCover}
               onRetry={retry}
               onDelete={remove}
             />

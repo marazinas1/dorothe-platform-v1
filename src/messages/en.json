@@ -111,7 +111,21 @@
       "unavailable_body": "This listing is no longer online. Browse our current offerings instead.",
       "contact_agent": "Contact agent",
       "location_approximate": "Approximate location — the exact address is shared on request.",
-      "preview_notice": "Preview — this listing is not public ({{status}})"
+      "preview_notice": "Preview — this listing is not public ({{status}})",
+      "service_charge": "Service charge / month",
+      "commission": "Commission",
+      "commission_payer": {
+        "buyer": "paid by the buyer",
+        "seller": "paid by the seller",
+        "shared": "shared"
+      },
+      "rental_status": "Tenancy",
+      "rental_let": "Currently let",
+      "rental_vacant": "Vacant — ready to move in",
+      "investment_note": "Sold as an investment property: the property is let and the tenancy passes to the buyer, so it is not available to move into.",
+      "availability": "Available from",
+      "availability_after_tenancy": "After the current tenancy ends",
+      "availability_immediately": "Immediately"
     },
     "pager": {
       "prev": "Previous",
@@ -223,7 +237,8 @@
     "topbar": {
       "signOut": "Sign out",
       "toggleSidebar": "Toggle navigation",
-      "unknownUser": "Unknown user"
+      "unknownUser": "Unknown user",
+      "interfaceLanguage": "Interface"
     },
     "role": {
       "owner": "Owner",
@@ -442,7 +457,9 @@
         "location": "Location",
         "energy": "Energy certificate",
         "content": "Content sections",
-        "images": "Photos"
+        "images": "Photos",
+        "seo": "SEO & metadata",
+        "market": "Costs, commission & tenancy"
       },
       "fields": {
         "title": "Title",
@@ -473,7 +490,13 @@
         "address_country": "Country",
         "geo_lat": "Latitude",
         "geo_lng": "Longitude",
-        "geo_precision": "Address visibility"
+        "geo_precision": "Address visibility",
+        "service_charge": "Service charge / Hausgeld per month",
+        "commission_value": "Commission",
+        "commission_type": "Commission as",
+        "commission_payer": "Commission paid by",
+        "rental_status": "Rental status",
+        "availability_date": "Available from"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -488,13 +511,26 @@
       "help": {
         "price_on_request": "Hide the price and show “Price on request” instead.",
         "price_period": "Rental period, e.g. month.",
-        "content": "One bullet point per line, per language."
+        "content": "One bullet point per line, per language.",
+        "meta": "Optional. Leave empty and the title and description are used instead.",
+        "service_charge": "Monthly running costs for the owner — buyers ask for this first.",
+        "commission": "Stating the commission is legally required in Germany.",
+        "rental": "Whether someone lives there right now. Independent of whether you sell or let the property.",
+        "availability_date": "Leave empty if the date is not fixed yet."
       },
       "energy": {
         "intro": "Required fields for {{country}}. Publishing is blocked until they are complete.",
         "required": "Required before publishing",
         "notRequired": "No country-specific energy fields are required for {{country}}.",
-        "exempt": "Land and garages are exempt from energy certificate requirements."
+        "exempt": "Land and garages are exempt from energy certificate requirements.",
+        "exemptionLabel": "Energy certificate exemption",
+        "exemptionHelp": "Under GEG some properties need no Energieausweis. Choosing an exemption removes the energy fields from the publish checklist.",
+        "exemptions": {
+          "none": "No exemption — certificate data required",
+          "not_required": "Not required (e.g. building plot)",
+          "listed_building": "Listed building",
+          "new_build_pending": "New build, certificate pending"
+        }
       },
       "geo": {
         "exact": {
@@ -539,7 +575,11 @@
           "done": "Ready",
           "failed": "Failed"
         },
-        "pipelineNote": "Photos are optimised automatically: resized for every screen, converted to modern formats, and stripped of location data. Just upload the originals."
+        "pipelineNote": "Photos are optimised automatically: resized for every screen, converted to modern formats, and stripped of location data. Just upload the originals.",
+        "dropHintLong": "Drag files here, or click to select them from your device.",
+        "coverHint": "Mark one photo as the cover image — the first one is used by default.",
+        "makeCover": "Make cover image",
+        "cover": "Cover"
       },
       "preview": "Preview",
       "publish": "Publish",
@@ -583,6 +623,75 @@
         "rooms": "rooms",
         "bedrooms": "bed",
         "bathrooms": "bath"
+      },
+      "deal": {
+        "sale": "For sale",
+        "rent": "For rent"
+      },
+      "propertyType": {
+        "apartment": "Apartment",
+        "house": "House",
+        "villa": "Villa",
+        "townhouse": "Townhouse",
+        "penthouse": "Penthouse",
+        "land": "Land",
+        "commercial": "Commercial",
+        "garage": "Garage"
+      },
+      "contentLanguage": "Editing content in",
+      "contentLanguageHint": "This only changes which translation you are writing, not the interface language.",
+      "commissionType": {
+        "percent": "Percent (%)",
+        "amount": "Fixed amount"
+      },
+      "commissionPayer": {
+        "buyer": "Buyer",
+        "seller": "Seller",
+        "shared": "Shared"
+      },
+      "rentalStatus": {
+        "unset": "Not specified",
+        "let": "Currently let",
+        "vacant": "Vacant — ready to move in"
+      },
+      "investmentNote": "This property is for sale and currently let, so it is presented as an investment property: the tenancy passes to the buyer and the property is not available to move into.",
+      "autosave": {
+        "saving": "Saving…",
+        "saved": "Saved {{time}}",
+        "failed": "Could not save automatically — use Save."
+      },
+      "checklist": {
+        "title": "Before publishing",
+        "ready": "Everything is ready to publish.",
+        "remaining": "{{count}} item still missing",
+        "remaining_other": "{{count}} items still missing",
+        "items": {
+          "title": "Title",
+          "photo": "At least one photo",
+          "price": "Price or “price on request”",
+          "city": "Town",
+          "energy": "Energy certificate fields"
+        },
+        "energyExempt": "No Energieausweis required for this listing."
+      },
+      "geocode": {
+        "title": "Map position",
+        "lookup": "Find on map",
+        "searching": "Looking up the address…",
+        "found": "Position found from the address. Drag the pin to correct it.",
+        "notFound": "Address not found — drag the pin or enter coordinates manually.",
+        "limited": "The lookup service is busy — drag the pin or enter coordinates manually.",
+        "failed": "Lookup unavailable — drag the pin or enter coordinates manually.",
+        "retry": "Try again",
+        "manual": "Position set manually.",
+        "editManually": "Enter coordinates manually",
+        "useAutomatic": "Use automatic lookup again",
+        "dragHint": "Drag the pin to adjust the exact position.",
+        "noAddress": "Enter a town or postcode to place the pin."
+      },
+      "autodraft": {
+        "creating": "Preparing a new listing…",
+        "failed": "Could not start a new listing:"
       }
     },
     "inquiries": {
@@ -784,5 +893,9 @@
   },
   "brand": {
     "descriptor": "Real Estate"
+  },
+  "contact": {
+    "phone": "Call",
+    "email": "Email"
   }
 }

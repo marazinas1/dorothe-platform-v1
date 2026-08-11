@@ -52,6 +52,13 @@ export type PublicListing = {
   total_floors: number | null;
   title: any;
   description: any;
+  service_charge: number | null;
+  commission_value: number | null;
+  commission_type: string | null;
+  commission_payer: string | null;
+  rental_status: string | null;
+  availability_date: string | null;
+  energy_exemption: string | null;
   agent_id: string | null;
   sold_at: string | null;
   published_at: string | null;

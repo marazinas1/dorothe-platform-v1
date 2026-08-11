@@ -297,13 +297,18 @@ export type Database = {
           bedrooms: number | null
           commission_note: string | null
           commission_note_public: boolean
+          commission_payer: string | null
+          commission_type: string | null
+          commission_value: number | null
           condition: string | null
           content_sections: Json
           created_at: string
           created_by: string | null
+          created_from_autodraft: boolean
           deal_type: string
           description: Json
           energy: Json
+          energy_exemption: string | null
           expose_notes: Json
           features: string[]
           floor: number | null
@@ -326,7 +331,9 @@ export type Database = {
           property_type: string
           published_at: string | null
           reference_code: string | null
+          rental_status: string | null
           rooms: number | null
+          service_charge: number | null
           slug: string
           sold_at: string | null
           sold_price: number | null
@@ -356,13 +363,18 @@ export type Database = {
           bedrooms?: number | null
           commission_note?: string | null
           commission_note_public?: boolean
+          commission_payer?: string | null
+          commission_type?: string | null
+          commission_value?: number | null
           condition?: string | null
           content_sections?: Json
           created_at?: string
           created_by?: string | null
+          created_from_autodraft?: boolean
           deal_type: string
           description?: Json
           energy?: Json
+          energy_exemption?: string | null
           expose_notes?: Json
           features?: string[]
           floor?: number | null
@@ -385,7 +397,9 @@ export type Database = {
           property_type: string
           published_at?: string | null
           reference_code?: string | null
+          rental_status?: string | null
           rooms?: number | null
+          service_charge?: number | null
           slug: string
           sold_at?: string | null
           sold_price?: number | null
@@ -415,13 +429,18 @@ export type Database = {
           bedrooms?: number | null
           commission_note?: string | null
           commission_note_public?: boolean
+          commission_payer?: string | null
+          commission_type?: string | null
+          commission_value?: number | null
           condition?: string | null
           content_sections?: Json
           created_at?: string
           created_by?: string | null
+          created_from_autodraft?: boolean
           deal_type?: string
           description?: Json
           energy?: Json
+          energy_exemption?: string | null
           expose_notes?: Json
           features?: string[]
           floor?: number | null
@@ -444,7 +463,9 @@ export type Database = {
           property_type?: string
           published_at?: string | null
           reference_code?: string | null
+          rental_status?: string | null
           rooms?: number | null
+          service_charge?: number | null
           slug?: string
           sold_at?: string | null
           sold_price?: number | null
@@ -919,12 +940,16 @@ export type Database = {
           bathrooms: number | null
           bedrooms: number | null
           commission_note: string | null
+          commission_payer: string | null
+          commission_type: string | null
+          commission_value: number | null
           condition: string | null
           content_sections: Json | null
           created_at: string | null
           deal_type: string | null
           description: Json | null
           energy: Json | null
+          energy_exemption: string | null
           features: string[] | null
           floor: number | null
           geo_lat: number | null
@@ -945,7 +970,9 @@ export type Database = {
           property_type: string | null
           published_at: string | null
           reference_code: string | null
+          rental_status: string | null
           rooms: number | null
+          service_charge: number | null
           slug: string | null
           sold_at: string | null
           sort_order: number | null
@@ -970,12 +997,16 @@ export type Database = {
           bathrooms?: number | null
           bedrooms?: number | null
           commission_note?: never
+          commission_payer?: never
+          commission_type?: never
+          commission_value?: never
           condition?: string | null
           content_sections?: Json | null
           created_at?: string | null
           deal_type?: string | null
           description?: Json | null
           energy?: Json | null
+          energy_exemption?: string | null
           features?: string[] | null
           floor?: number | null
           geo_lat?: never
@@ -996,7 +1027,9 @@ export type Database = {
           property_type?: string | null
           published_at?: string | null
           reference_code?: string | null
+          rental_status?: string | null
           rooms?: number | null
+          service_charge?: number | null
           slug?: string | null
           sold_at?: string | null
           sort_order?: number | null
@@ -1021,12 +1054,16 @@ export type Database = {
           bathrooms?: number | null
           bedrooms?: number | null
           commission_note?: never
+          commission_payer?: never
+          commission_type?: never
+          commission_value?: never
           condition?: string | null
           content_sections?: Json | null
           created_at?: string | null
           deal_type?: string | null
           description?: Json | null
           energy?: Json | null
+          energy_exemption?: string | null
           features?: string[] | null
           floor?: number | null
           geo_lat?: never
@@ -1047,7 +1084,9 @@ export type Database = {
           property_type?: string | null
           published_at?: string | null
           reference_code?: string | null
+          rental_status?: string | null
           rooms?: number | null
+          service_charge?: number | null
           slug?: string | null
           sold_at?: string | null
           sort_order?: number | null

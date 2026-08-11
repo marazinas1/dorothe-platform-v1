@@ -13,7 +13,8 @@ import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import {
   EFFICIENCY_CLASS_AT,
   EFFICIENCY_CLASS_DE,
-  EXEMPT_PROPERTY_TYPES,
+  ENERGY_EXEMPTIONS,
+  isEnergyExempt,
   validateEnergy,
   type Country,
 } from "@/lib/validation/energy";
@@ -61,8 +62,9 @@ export function EnergySection({ form }: { form: ListingFormApi }) {
   const fields = fieldsFor(country);
   const energy = (form.values.energy ?? {}) as Record<string, unknown>;
 
-  const exempt = (EXEMPT_PROPERTY_TYPES as readonly string[]).includes(
+  const exempt = isEnergyExempt(
     form.values.property_type,
+    form.values.energy_exemption ?? null,
   );
   const missing = exempt
     ? []
@@ -83,15 +85,45 @@ export function EnergySection({ form }: { form: ListingFormApi }) {
       title={t("admin.listings.sections.energy")}
       description={t("admin.listings.energy.intro", { country })}
     >
+      <div className="mb-4 max-w-sm">
+        <FieldRow
+          label={t("admin.listings.energy.exemptionLabel")}
+          help={t("admin.listings.energy.exemptionHelp")}
+        >
+          <Select
+            value={form.values.energy_exemption ?? "none"}
+            onValueChange={(v) =>
+              form.setField(
+                "energy_exemption",
+                v === "none" ? null : (v as (typeof ENERGY_EXEMPTIONS)[number]),
+              )
+            }
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">
+                {t("admin.listings.energy.exemptions.none")}
+              </SelectItem>
+              {ENERGY_EXEMPTIONS.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {t(`admin.listings.energy.exemptions.${option}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </FieldRow>
+      </div>
       {exempt ? (
         <p className="mb-4 text-sm text-muted-foreground">
-          {t("admin.listings.energy.exempt")}
+          {t("admin.listings.checklist.energyExempt")}
         </p>
       ) : null}
       <div className="grid gap-4 sm:grid-cols-2">
         {fields.map((field) => {
           const value = energy[field.key];
-          const invalid = missing.includes(field.key);
+          const invalid = !exempt && missing.includes(field.key);
           return (
             <FieldRow
               key={field.key}

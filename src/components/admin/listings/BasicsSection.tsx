@@ -82,27 +82,6 @@ export function BasicsSection({
             </Select>
           </FieldRow>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FieldRow
-            label={`${t("admin.listings.fields.meta_title")} (${lang.toUpperCase()})`}
-            help={t("admin.listings.help.meta")}
-          >
-            <Input
-              value={values.meta_title?.[lang] ?? ""}
-              onChange={(e) => form.setTranslated("meta_title", lang, e.target.value)}
-            />
-          </FieldRow>
-          <FieldRow
-            label={`${t("admin.listings.fields.meta_description")} (${lang.toUpperCase()})`}
-          >
-            <Input
-              value={values.meta_description?.[lang] ?? ""}
-              onChange={(e) =>
-                form.setTranslated("meta_description", lang, e.target.value)
-              }
-            />
-          </FieldRow>
-        </div>
       </div>
     </FormSection>
   );

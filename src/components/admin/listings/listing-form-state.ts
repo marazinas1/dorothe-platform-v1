@@ -37,6 +37,13 @@ export const EMPTY_VALUES: ListingFormValues = {
   geo_lat: null,
   geo_lng: null,
   geo_precision: "approximate",
+  service_charge: null,
+  commission_value: null,
+  commission_type: null,
+  commission_payer: null,
+  rental_status: null,
+  availability_date: null,
+  energy_exemption: null,
   energy: {},
   content_sections: [],
 };
