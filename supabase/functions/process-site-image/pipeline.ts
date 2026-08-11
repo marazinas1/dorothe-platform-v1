@@ -36,12 +36,46 @@ async function ensureInit() {
     initJpegDecode?.(),
     initPngDecode?.(),
     initWebpDecode?.(),
-    initAvifEncode?.(),
     initWebpEncode?.(),
     initResize?.(),
   ]);
   initialised = true;
 }
+
+// AVIF encoder options mirror @jsquash/avif's defaults; we own them now that
+// the wrapper is bypassed.
+const AVIF_OPTS = {
+  quality: 55,
+  qualityAlpha: -1,
+  denoiseLevel: 0,
+  tileColsLog2: 0,
+  tileRowsLog2: 0,
+  speed: 6,
+  subsample: 1,
+  chromaDeltaQ: false,
+  sharpness: 0,
+  tune: 0,
+  enableSharpYUV: false,
+  bitDepth: 8,
+  lossless: false,
+};
+
+interface AvifEncoder {
+  encode: (
+    data: Uint8Array,
+    width: number,
+    height: number,
+    opts: typeof AVIF_OPTS,
+  ) => Uint8Array | null;
+}
+
+let avifEncoder: Promise<AvifEncoder> | undefined;
+function getAvifEncoder(): Promise<AvifEncoder> {
+  // deno-lint-ignore no-explicit-any
+  avifEncoder ??= (avifEncInit as any)({ noInitialRun: true }) as Promise<AvifEncoder>;
+  return avifEncoder;
+}
+
 
 export async function decodeImage(bytes: Uint8Array, contentType: string): Promise<PixelBuffer> {
   await ensureInit();
