@@ -9,7 +9,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { ListingFormSchema, LISTING_STATUSES } from "./admin-schema";
 import {
   assertCanEditListing,
-  expireStaleImageProcessing,
   toListingRow,
 } from "./admin.server";
 
@@ -60,7 +59,6 @@ export const getAdminListing = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    await expireStaleImageProcessing(context.supabase);
     const { data: row, error } = await context.supabase
       .from("listings")
       .select("*")

@@ -559,14 +559,12 @@
         "help": "The first photo is the hero image. Drag or use the arrows to reorder.",
         "dropHint": "Drop photos here or select them from your device.",
         "select": "Select photos",
-        "uploaded": "Photos uploaded. Processing runs in the background.",
+        "uploaded": "Photos added.",
         "primary": "Hero",
         "moveLeft": "Move earlier",
         "moveRight": "Move later",
         "delete": "Delete photo",
         "retry": "Retry",
-        "retryQueued": "Processing restarted.",
-        "retryImpossible": "The original file is missing — please upload the photo again.",
         "saveFirstTitle": "Save the draft first",
         "saveFirstHelp": "Photos are attached to a listing, so save this draft once and the upload area appears here.",
         "status": {
@@ -575,12 +573,12 @@
           "done": "Ready",
           "failed": "Failed"
         },
-        "pipelineNote": "Photos are optimised automatically: resized for every screen, converted to modern formats, and stripped of location data. Just upload the originals.",
-        "processingHelp": "This can take a moment. If processing cannot finish, it will time out and become available to retry.",
+        "pipelineNote": "Photos are processed in your browser before upload: rotated upright, resized to 1600 px for the detail page, 800 px for cards and a 1200×630 social preview, saved as WebP, and all EXIF and GPS data removed. Your untouched original is kept privately for future use.",
         "dropHintLong": "Drag files here, or click to select them from your device.",
         "coverHint": "Mark one photo as the cover image — the first one is used by default.",
         "makeCover": "Make cover image",
-        "cover": "Cover"
+        "cover": "Cover",
+        "dismiss": "Dismiss"
       },
       "preview": "Preview",
       "publish": "Publish",
