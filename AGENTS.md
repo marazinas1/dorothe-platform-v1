@@ -98,6 +98,22 @@ Rules:
 - Always try to achieve differentiation through configuration first, and add a
   variant or token before adding a bespoke component.
 
+## 5.1 One design system across the product
+
+- The public site and the admin panel share a single visual language. There is no
+  separate admin theme.
+- Colours, accent, fonts, corner radii, button style and spacing scale all come
+  from `site_settings` tokens. Both surfaces read the same tokens, so changing one
+  value changes both.
+- The only permitted difference is scale: the admin may use a denser type scale
+  and tighter spacing, because a working tool shows more per screen. Same
+  tokens, tighter rhythm.
+- Never introduce a theme block, palette or accent that applies to only one side
+  of the product.
+- Test for this: changing the primary colour in `site_settings` must visibly
+  change both the public site and the admin. Anything that doesn't follow is a
+  hardcoded value and must move into tokens.
+
 ## 6. General
 
 - Files stay under 200 lines. Split into components instead of growing one.
