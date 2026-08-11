@@ -6,8 +6,15 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ListingsBrowser } from "@/components/admin/listings/ListingsBrowser";
 import { adminListingsQueryOptions } from "@/lib/listings/admin.functions";
+import { cleanupAbandonedDrafts } from "@/lib/listings/autodraft.functions";
 
 export const Route = createFileRoute("/$locale/admin/listings/")({
+  // Auto-created drafts that were never filled in are removed here, so the
+  // "photos first" flow cannot silently pile up junk rows.
+  loader: async ({ context }) => {
+    const { removed } = await cleanupAbandonedDrafts().catch(() => ({ removed: 0 }));
+    if (removed > 0) await context.queryClient.invalidateQueries(adminListingsQueryOptions);
+  },
   component: ListingsIndex,
 });
 
