@@ -14,7 +14,7 @@ function coverUrl(row: AdminListingRow): string | null {
     (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0),
   );
   const primary = sorted.find((i) => i.is_primary) ?? sorted[0];
-  return primary ? variantUrl(primary.variants, "medium") : null;
+  return primary ? variantUrl(primary.variants, "card") : null;
 }
 
 export function ListingCardTile({

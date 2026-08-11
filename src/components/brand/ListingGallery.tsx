@@ -26,7 +26,7 @@ type Props = {
  */
 export function ListingGallery({ images, locale, title, overlay }: Props) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
-  const list = images.filter((i) => pickImageUrl(i.variants, "large"));
+  const list = images.filter((i) => pickImageUrl(i.variants, "detail"));
 
   useEffect(() => {
     if (openIdx == null) return;
@@ -57,7 +57,7 @@ export function ListingGallery({ images, locale, title, overlay }: Props) {
           className="group block aspect-[4/3] w-full md:aspect-[21/9]"
         >
           <img
-            src={pickImageUrl(hero.variants, "large") ?? ""}
+            src={pickImageUrl(hero.variants, "detail") ?? ""}
             alt={pickLocalized(hero.alt_text, locale) || title}
             className="h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.02]"
           />
@@ -75,7 +75,7 @@ export function ListingGallery({ images, locale, title, overlay }: Props) {
               className="group aspect-[4/3] w-full overflow-hidden rounded-media bg-muted"
             >
               <img
-                src={pickImageUrl(img.variants, "medium") ?? ""}
+                src={pickImageUrl(img.variants, "card") ?? ""}
                 alt={pickLocalized(img.alt_text, locale) || title}
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.03]"
@@ -91,7 +91,7 @@ export function ListingGallery({ images, locale, title, overlay }: Props) {
           onClick={() => setOpenIdx(null)}
         >
           <img
-            src={pickImageUrl(list[openIdx]!.variants, "large") ?? ""}
+            src={pickImageUrl(list[openIdx]!.variants, "detail") ?? ""}
             alt={pickLocalized(list[openIdx]!.alt_text, locale) || title}
             className="max-h-full max-w-full rounded-media object-contain"
           />

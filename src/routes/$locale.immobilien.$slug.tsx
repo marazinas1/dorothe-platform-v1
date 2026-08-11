@@ -76,7 +76,7 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
     const title = `${localTitle} — ${settings.site_name}`;
     const primary = listing.images.find((i) => i.is_primary) ?? listing.images[0];
     const ogImage =
-      pickImageUrl(primary?.variants, "og") ?? pickImageUrl(primary?.variants, "large");
+      pickImageUrl(primary?.variants, "og") ?? pickImageUrl(primary?.variants, "detail");
 
     const head = buildHead({
       origin,
