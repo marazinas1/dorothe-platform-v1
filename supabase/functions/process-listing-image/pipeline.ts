@@ -185,10 +185,12 @@ export async function coverCrop(pix: PixelBuffer, w: number, h: number): Promise
 }
 
 export async function toAvif(pix: PixelBuffer): Promise<Uint8Array> {
-  await ensureInit();
-  const buf = await encodeAvif(new ImageData(pix.data, pix.width, pix.height), { quality: 55 });
-  return new Uint8Array(buf);
+  const enc = await getAvifEncoder();
+  const out = enc.encode(new Uint8Array(pix.data.buffer, pix.data.byteOffset, pix.data.byteLength), pix.width, pix.height, AVIF_OPTS);
+  if (!out) throw new Error("AVIF encoding failed");
+  return new Uint8Array(out);
 }
+
 export async function toWebp(pix: PixelBuffer): Promise<Uint8Array> {
   await ensureInit();
   const buf = await encodeWebp(new ImageData(pix.data, pix.width, pix.height), { quality: 78 });
