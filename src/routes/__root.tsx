@@ -85,34 +85,40 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  // Sitewide defaults ONLY — no page-specific title/description, no canonical, no og:image.
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { title: "Lovable App" },
-      { property: "og:title", content: "Lovable App" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "description", content: "A multi-tenant real estate platform template for brokers, enabling custom branding and features." },
-      { property: "og:description", content: "A multi-tenant real estate platform template for brokers, enabling custom branding and features." },
-      { name: "twitter:description", content: "A multi-tenant real estate platform template for brokers, enabling custom branding and features." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a7034afd-db1a-4c9d-ab7f-da969557b469/id-preview-a68dafa9--3c5a1702-f242-45c6-bbed-cd440fe3233e.lovable.app-1784885743157.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a7034afd-db1a-4c9d-ab7f-da969557b469/id-preview-a68dafa9--3c5a1702-f242-45c6-bbed-cd440fe3233e.lovable.app-1784885743157.png" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
-    ],
-  }),
+  // Sitewide defaults ONLY — no page-specific description, no canonical, no og:image.
+  // Title/site name come from site_settings so a clone never ships another
+  // client's name (or a template placeholder) as its fallback title.
+  head: ({ loaderData }) => {
+    const siteName = loaderData?.siteName ?? "Real estate";
+    return {
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { title: siteName },
+        { property: "og:site_name", content: siteName },
+        { property: "og:title", content: siteName },
+        { name: "twitter:title", content: siteName },
+      ],
+      links: [
+        { rel: "stylesheet", href: appCss },
+        {
+          rel: "icon",
+          href: loaderData?.faviconUrl ?? "/favicon.png",
+          ...(loaderData?.faviconUrl ? {} : { type: "image/png" }),
+        },
+      ],
+    };
+  },
   // Preload config once per request; children re-read via ensureQueryData (dedup).
   loader: async ({ context }) => {
-    await Promise.all([
+    const [settings] = await Promise.all([
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
       context.queryClient.ensureQueryData(featureFlagsQueryOptions),
       context.queryClient.ensureQueryData(currentUserQueryOptions),
     ]);
+    return { siteName: settings.site_name, faviconUrl: settings.favicon_url };
   },
   shellComponent: RootShell,
   component: RootComponent,
