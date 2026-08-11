@@ -35,8 +35,16 @@ UPDATE public.site_settings SET
   currency         = 'EUR',
   area_unit        = 'sqm',
   primary_color    = '#6B7259',
-  secondary_color  = '#E8E3D9',
+  secondary_color  = '#F0EEE9',
   accent_color     = '#A67C6D',
+  -- Shared design tokens: one system for the public site and the admin panel.
+  background_color = '#FBFAF8',
+  surface_color    = '#FFFFFF',
+  text_color       = '#23211F',
+  muted_text_color = '#78736C',
+  border_color     = '#E6E3DD',
+  radius_scale     = 'soft',
+  button_style     = 'rounded',
   -- Font registry keys (src/lib/theme/fonts.ts), never raw CSS stacks.
   font_heading     = 'fraunces',
   font_body        = 'inter',
