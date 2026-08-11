@@ -35,7 +35,7 @@ export const GEO_PRECISIONS = ["exact", "approximate", "hidden"] as const;
 export const STATUS_FLOW: Record<ListingStatus, ListingStatus[]> = {
   draft: ["coming_soon", "active", "archived"],
   coming_soon: ["active", "archived", "draft"],
-  active: ["reserved", "sold", "rented", "archived"],
+  active: ["reserved", "sold", "rented", "archived", "draft"],
   reserved: ["active", "sold", "rented"],
   sold: ["archived", "active"],
   rented: ["archived", "active"],

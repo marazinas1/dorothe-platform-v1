@@ -109,9 +109,11 @@ export function ListingForm({
           status={status}
           slug={slug}
           dirty={form.dirty}
+          hasImages={images.length > 0}
           onChanged={refreshListing}
         />
       ) : null}
+
 
       <BasicsSection form={form} lang={lang} />
       <FiguresSection form={form} />

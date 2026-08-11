@@ -17,29 +17,44 @@ import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { getListingBySlug, type PublicListing } from "@/lib/listings/queries.functions";
+import { getListingPreview } from "@/lib/listings/preview.functions";
 import { pickImageUrl } from "@/lib/listings/image";
 import { pickLocalized } from "@/lib/listings/format";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 import { buildHead } from "@/lib/seo/build-head";
 
-function slugQueryOptions(slug: string) {
+function slugQueryOptions(slug: string, preview?: string) {
   return queryOptions({
-    queryKey: ["listings", "slug", slug],
-    queryFn: () => getListingBySlug({ data: { slug } }),
-    staleTime: 30_000,
+    queryKey: ["listings", "slug", slug, preview ?? null],
+    queryFn: () =>
+      preview
+        ? getListingPreview({ data: { slug, token: preview } })
+        : getListingBySlug({ data: { slug } }),
+    staleTime: preview ? 0 : 30_000,
   });
 }
 
 export const Route = createFileRoute("/$locale/immobilien/$slug")({
-  loader: async ({ context, params }) => {
+  validateSearch: (search: Record<string, unknown>) => ({
+    preview: typeof search.preview === "string" ? search.preview : undefined,
+  }),
+  loaderDeps: ({ search }) => ({ preview: search.preview }),
+  loader: async ({ context, params, deps }) => {
     const [settings, origin, listing] = await Promise.all([
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
       getRequestOrigin(),
-      context.queryClient.ensureQueryData(slugQueryOptions(params.slug)),
+      context.queryClient.ensureQueryData(slugQueryOptions(params.slug, deps.preview)),
     ]);
     if (!listing) throw notFound();
-    return { settings, origin, listing, locale: params.locale as Locale };
+    return {
+      settings,
+      origin,
+      listing,
+      locale: params.locale as Locale,
+      isPreview: Boolean(deps.preview),
+    };
   },
+
   head: ({ loaderData, params }) => {
     if (!loaderData) {
       return {
@@ -54,7 +69,8 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
         ],
       };
     }
-    const { settings, origin, locale, listing } = loaderData;
+    const { settings, origin, locale, isPreview } = loaderData;
+    const listing = loaderData.listing as PublicListing;
     const localTitle = pickLocalized(listing.title, locale) || listing.slug;
     const localDesc = pickLocalized(listing.description, locale);
     const title = `${localTitle} — ${settings.site_name}`;
@@ -113,6 +129,14 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
       numberOfRooms: listing.rooms ?? undefined,
     };
 
+    // A preview URL must never be indexed, even if someone shares the link.
+    if (isPreview) {
+      return {
+        ...head,
+        meta: [...(head.meta ?? []), { name: "robots", content: "noindex, nofollow" }],
+      };
+    }
+
     return {
       ...head,
       scripts: [{ type: "application/ld+json", children: JSON.stringify(ldJson) }],
@@ -136,7 +160,8 @@ function ListingDetail() {
   const { locale, slug } = Route.useParams();
   const { t } = useTranslation();
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
-  const { data: listing } = useSuspenseQuery(slugQueryOptions(slug));
+  const { preview } = Route.useSearch();
+  const { data: listing } = useSuspenseQuery(slugQueryOptions(slug, preview));
   const { origin } = Route.useLoaderData();
 
   if (!listing) return null;
@@ -152,6 +177,13 @@ function ListingDetail() {
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
       <article className="pb-40">
+        {preview ? (
+          <div className="bg-secondary px-6 py-2 text-center text-[11px] uppercase tracking-[0.16em] text-secondary-foreground">
+            {t("listings.detail.preview_notice", {
+              status: t(`listings.status.${l.status}`),
+            })}
+          </div>
+        ) : null}
         {/* 1. Hero gallery + overlaid headline */}
         <section className="mx-auto max-w-[1600px] px-3 pt-6 sm:px-6 lg:px-8">
           <ListingGallery

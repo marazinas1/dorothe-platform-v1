@@ -2,7 +2,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { Badge } from "@/components/ui/badge";
+import { ImageOff } from "lucide-react";
+
 import {
   Table,
   TableBody,
@@ -16,6 +17,7 @@ import type { AdminListingRow } from "@/lib/listings/admin.functions";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import type { Locale } from "@/i18n/config";
 import { variantUrl } from "./listing-image-url";
+import { ListingRowActions } from "./ListingRowActions";
 
 function primaryThumb(row: AdminListingRow): string | null {
   const sorted = [...(row.images ?? [])].sort(
@@ -49,6 +51,7 @@ export function ListingsTable({
               {t("admin.listings.fields.price")}
             </TableHead>
             <TableHead>{t("admin.listings.fields.status")}</TableHead>
+            <TableHead className="text-right">{t("admin.listings.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -64,7 +67,11 @@ export function ListingsTable({
                   >
                     {thumb ? (
                       <img src={thumb} alt="" className="h-full w-full object-cover" />
-                    ) : null}
+                    ) : (
+                      <span className="flex h-full w-full items-center justify-center">
+                        <ImageOff className="h-4 w-4 text-muted-foreground/70" />
+                      </span>
+                    )}
                   </Link>
                 </TableCell>
                 <TableCell>
@@ -90,17 +97,28 @@ export function ListingsTable({
                   })}
                 </TableCell>
                 <TableCell>
-                  <Badge
-                    variant={
-                      row.status === "active" || row.status === "coming_soon"
-                        ? "default"
-                        : "secondary"
-                    }
-                  >
+                  <span className="flex items-center gap-2 text-[13px] tracking-[0.01em]">
+                    <span
+                      aria-hidden
+                      className={
+                        row.status === "active" || row.status === "coming_soon"
+                          ? "h-1.5 w-1.5 rounded-full bg-primary"
+                          : "h-1.5 w-1.5 rounded-full bg-muted-foreground/40"
+                      }
+                    />
                     {t(`listings.status.${row.status}`)}
-                  </Badge>
+                  </span>
+                  {(row.images ?? []).length === 0 ? (
+                    <span className="mt-1 block text-[11px] text-muted-foreground">
+                      {t("admin.listings.noImages")}
+                    </span>
+                  ) : null}
+                </TableCell>
+                <TableCell className="text-right">
+                  <ListingRowActions id={row.id} status={row.status} locale={locale} />
                 </TableCell>
               </TableRow>
+
             );
           })}
         </TableBody>
