@@ -196,7 +196,9 @@ async function encodeAndUpload(
   variants: Record<string, Record<string, { path: string; width: number; height: number; bytes: number }>>,
 ) {
   for (const fmt of FORMATS) {
+    console.log(`stage encode ${key}/${fmt} ${framed.width}x${framed.height}`);
     const encoded = fmt === "avif" ? await toAvif(framed) : await toWebp(framed);
+
     const path = variantPath(p.listingId, p.imageId, key, fmt);
     const { error: upErr } = await admin.storage
       .from(IMAGES_BUCKET)
