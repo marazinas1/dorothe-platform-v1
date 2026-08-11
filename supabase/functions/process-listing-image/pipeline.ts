@@ -93,18 +93,22 @@ export async function decodeImage(bytes: Uint8Array, contentType: string): Promi
 }
 
 // Read EXIF orientation from a JPEG buffer; returns 1 when absent/unreadable.
+// translateValues:false is required — by default exifr returns human strings
+// like "Rotate 90 CW" instead of the numeric tag, which silently skipped
+// rotation for every portrait photo.
 export async function readOrientation(bytes: Uint8Array, contentType: string): Promise<number> {
   if (!contentType.toLowerCase().includes("jpeg") && !contentType.toLowerCase().includes("jpg")) {
     return 1;
   }
   try {
-    const meta = await exifr.parse(bytes, { pick: ["Orientation"] });
+    const meta = await exifr.parse(bytes, { pick: ["Orientation"], translateValues: false });
     const o = meta?.Orientation;
     return typeof o === "number" && o >= 1 && o <= 8 ? o : 1;
   } catch {
     return 1;
   }
 }
+
 
 // Apply EXIF orientation to a raw RGBA buffer. Handles the four rotations
 // and horizontal/vertical mirrors. Transpose/transverse (5, 7) are treated
