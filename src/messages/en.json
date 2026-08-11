@@ -110,7 +110,8 @@
       "unavailable_title": "Property unavailable",
       "unavailable_body": "This listing is no longer online. Browse our current offerings instead.",
       "contact_agent": "Contact agent",
-      "location_approximate": "Approximate location — the exact address is shared on request."
+      "location_approximate": "Approximate location — the exact address is shared on request.",
+      "preview_notice": "Preview — this listing is not public ({{status}})"
     },
     "pager": {
       "prev": "Previous",
@@ -520,7 +521,14 @@
           "done": "Ready",
           "failed": "Failed"
         }
-      }
+      },
+      "preview": "Preview",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "publishFailed": "Could not change the status:",
+      "noImages": "No photos",
+      "noImagesWarning": "This listing has no photos yet. Add photos before publishing.",
+      "actions": "Actions"
     },
     "inquiries": {
       "summary": "{{total}} total · {{unread}} new",

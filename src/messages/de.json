@@ -110,7 +110,8 @@
       "unavailable_title": "Objekt nicht verfügbar",
       "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an.",
       "contact_agent": "Kontakt aufnehmen",
-      "location_approximate": "Ungefähre Lage — die genaue Adresse teilen wir auf Anfrage mit."
+      "location_approximate": "Ungefähre Lage — die genaue Adresse teilen wir auf Anfrage mit.",
+      "preview_notice": "Vorschau — dieses Objekt ist nicht öffentlich ({{status}})"
     },
     "pager": {
       "prev": "Zurück",
@@ -520,7 +521,14 @@
           "done": "Fertig",
           "failed": "Fehlgeschlagen"
         }
-      }
+      },
+      "preview": "Vorschau",
+      "publish": "Veröffentlichen",
+      "unpublish": "Veröffentlichung zurückziehen",
+      "publishFailed": "Status konnte nicht geändert werden:",
+      "noImages": "Keine Fotos",
+      "noImagesWarning": "Dieses Objekt hat noch keine Fotos. Bitte vor der Veröffentlichung Fotos hinzufügen.",
+      "actions": "Aktionen"
     },
     "inquiries": {
       "summary": "{{total}} insgesamt · {{unread}} neu",
