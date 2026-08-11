@@ -8,7 +8,14 @@
 import decodeJpeg, { init as initJpegDecode } from "https://esm.sh/@jsquash/jpeg@1.6.0/decode?target=deno";
 import decodePng, { init as initPngDecode } from "https://esm.sh/@jsquash/png@3.1.1/decode?target=deno";
 import decodeWebpJs, { init as initWebpDecode } from "https://esm.sh/@jsquash/webp@1.5.0/decode?target=deno";
-import encodeAvif, { init as initAvifEncode } from "https://esm.sh/@jsquash/avif@2.1.1/encode?target=deno";
+// AVIF: import the SINGLE-THREADED emscripten codec directly. @jsquash/avif's
+// own `encode` entry runs wasm-feature-detect and loads `avif_enc_mt` whenever
+// threads look available; the Supabase edge runtime passes that detection but
+// refuses the actual allocation with "Creating a shared memory is not
+// supported". Bypassing the wrapper means no SharedArrayBuffer is ever
+// requested. Do not switch back to "@jsquash/avif/encode".
+import avifEncInit from "https://esm.sh/@jsquash/avif@2.1.1/codec/enc/avif_enc.mjs?target=deno";
+
 import encodeWebp, { init as initWebpEncode } from "https://esm.sh/@jsquash/webp@1.5.0/encode?target=deno";
 import resize, { initResize } from "https://esm.sh/@jsquash/resize@2.1.1?target=deno";
 import { encode as encodeBlurhash } from "https://esm.sh/blurhash@2.0.5?target=deno";
