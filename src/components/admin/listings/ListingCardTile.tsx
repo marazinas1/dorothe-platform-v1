@@ -7,6 +7,7 @@ import type { AdminListingRow } from "@/lib/listings/admin.functions";
 import type { Locale } from "@/i18n/config";
 import { variantUrl } from "./listing-image-url";
 import { ListingRowActions } from "./ListingRowActions";
+import { ListingCardActions } from "./ListingCardActions";
 
 function coverUrl(row: AdminListingRow): string | null {
   const sorted = [...(row.images ?? [])].sort(
@@ -37,7 +38,7 @@ export function ListingCardTile({
   ].filter(Boolean) as string[];
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-lg border border-border bg-card">
+    <article className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card">
       <Link
         to="/$locale/admin/listings/$id"
         params={{ locale, id: row.id }}
@@ -96,7 +97,8 @@ export function ListingCardTile({
           })}
         </p>
 
-        <div className="mt-auto border-t border-border pt-3">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+          <ListingCardActions id={row.id} slug={row.slug} locale={locale} />
           <ListingRowActions id={row.id} status={row.status} locale={locale} />
         </div>
       </div>

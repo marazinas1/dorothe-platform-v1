@@ -178,6 +178,75 @@
   --sidebar-ring: oklch(0.5 0.02 60);
 }
 
+/*
+ * ADMIN PALETTE — core, never per-client.
+ *
+ * The admin is template core: it must look the same for every clone, so it
+ * defines its own cool near-white / near-black tokens on `.admin-theme`.
+ * ThemeStyleTag writes the client's brand tokens on `:root`; a class selector
+ * on the admin shell re-declares them for that subtree, so brand colours and
+ * brand fonts never reach the working tool. The client's logo still appears —
+ * identity, not theming.
+ */
+.admin-theme {
+  --admin-canvas: oklch(0.985 0.002 250);
+  --admin-surface: oklch(1 0 0);
+  --admin-ink: oklch(0.21 0.01 260);
+  --admin-muted-ink: oklch(0.53 0.012 260);
+  --admin-hairline: oklch(0.915 0.004 260);
+  --admin-accent: oklch(0.52 0.14 258);
+
+  /* Neutral system type — brand fonts stay on the public site. */
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: var(--font-body);
+  font-family: var(--font-body);
+
+  --radius: 0.5rem;
+  --radius-media: 0.875rem;
+
+  --background: var(--admin-canvas);
+  --foreground: var(--admin-ink);
+
+  --card: var(--admin-surface);
+  --card-foreground: var(--admin-ink);
+  --popover: var(--admin-surface);
+  --popover-foreground: var(--admin-ink);
+
+  --primary: var(--admin-accent);
+  --primary-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.96 0.003 260);
+  --secondary-foreground: var(--admin-ink);
+  --muted: oklch(0.965 0.003 260);
+  --muted-foreground: var(--admin-muted-ink);
+  --accent: oklch(0.955 0.006 258);
+  --accent-foreground: var(--admin-ink);
+
+  --destructive: oklch(0.55 0.19 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: var(--admin-hairline);
+  --input: var(--admin-hairline);
+  --ring: var(--admin-accent);
+
+  --sidebar: var(--admin-surface);
+  --sidebar-foreground: var(--admin-ink);
+  --sidebar-primary: var(--admin-accent);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.96 0.003 260);
+  --sidebar-accent-foreground: var(--admin-ink);
+  --sidebar-border: var(--admin-hairline);
+  --sidebar-ring: var(--admin-accent);
+}
+
+.admin-theme :is(h1, h2, h3, h4, h5, h6, .font-heading) {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+
 @layer base {
   * {
     border-color: var(--color-border);

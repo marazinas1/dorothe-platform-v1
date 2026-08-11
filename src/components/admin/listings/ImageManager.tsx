@@ -178,7 +178,10 @@ export function ImageManager({
             e.target.value = "";
           }}
         />
-        <p className="text-sm text-muted-foreground">{t("admin.listings.images.dropHint")}</p>
+        <p className="mx-auto max-w-md text-sm text-muted-foreground">
+          {t("admin.listings.images.pipelineNote")}
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("admin.listings.images.dropHint")}</p>
         <Button
           type="button"
           variant="outline"

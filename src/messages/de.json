@@ -239,7 +239,8 @@
       "team": "Team",
       "content": "Inhalte",
       "analytics": "Auswertung",
-      "settings": "Einstellungen"
+      "settings": "Einstellungen",
+      "viewSite": "Website ansehen"
     },
     "pages": {
       "dashboard": "Übersicht",
@@ -520,7 +521,8 @@
           "processing": "Wird verarbeitet…",
           "done": "Fertig",
           "failed": "Fehlgeschlagen"
-        }
+        },
+        "pipelineNote": "Fotos werden automatisch optimiert: passend skaliert, in moderne Formate umgewandelt und von Standortdaten befreit. Laden Sie einfach die Originale hoch."
       },
       "preview": "Vorschau",
       "publish": "Veröffentlichen",
@@ -528,7 +530,20 @@
       "publishFailed": "Status konnte nicht geändert werden:",
       "noImages": "Keine Fotos",
       "noImagesWarning": "Dieses Objekt hat noch keine Fotos. Bitte vor der Veröffentlichung Fotos hinzufügen.",
-      "actions": "Aktionen",
+      "actions": {
+        "edit": "Bearbeiten",
+        "more": "Weitere Aktionen",
+        "copyLink": "Öffentlichen Link kopieren",
+        "linkCopied": "Link kopiert",
+        "duplicate": "Duplizieren",
+        "duplicated": "Kopie als Entwurf erstellt",
+        "delete": "Löschen",
+        "deleteTitle": "Dieses Objekt löschen?",
+        "deleteBody": "Das Objekt und seine Fotos werden endgültig entfernt. Das kann nicht rückgängig gemacht werden.",
+        "cancel": "Abbrechen",
+        "confirmDelete": "Endgültig löschen",
+        "deleted": "Objekt gelöscht"
+      },
       "toolbar": {
         "search": "Suche",
         "searchPlaceholder": "Titel oder Ort suchen",
