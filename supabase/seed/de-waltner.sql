@@ -31,13 +31,15 @@ UPDATE public.site_settings SET
   country          = 'DE',
   default_locale   = 'en',
   enabled_locales  = ARRAY['en','de'],
+  service_region   = '{"de":"Saarland","en":"the Saarland"}'::jsonb,
   currency         = 'EUR',
   area_unit        = 'sqm',
   primary_color    = '#6B7259',
   secondary_color  = '#E8E3D9',
   accent_color     = '#A67C6D',
-  font_heading     = '"Fraunces Variable", Georgia, serif',
-  font_body        = '"Inter Variable", ui-sans-serif, system-ui, sans-serif',
+  -- Font registry keys (src/lib/theme/fonts.ts), never raw CSS stacks.
+  font_heading     = 'fraunces',
+  font_body        = 'inter',
   contact_email    = 'dorothe.waltner@gmail.com',
   contact_phone    = '0160 4444047',
   whatsapp         = NULL,
@@ -332,3 +334,13 @@ JOIN LATERAL (
     ('33333333-0000-0000-0000-000000000008'::uuid, 1, 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2'),
     ('33333333-0000-0000-0000-000000000008'::uuid, 2, 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c')
 ) AS img(listing_id, n, base) ON img.listing_id = l.id;
+
+-- ---------------------------------------------------------------------------
+-- 3. Featured selection (homepage). Client-specific, so it lives here and not
+--    in a migration.
+-- ---------------------------------------------------------------------------
+UPDATE public.listings SET is_featured = true
+WHERE id IN (
+  '33333333-0000-0000-0000-000000000002',
+  '33333333-0000-0000-0000-000000000004'
+);

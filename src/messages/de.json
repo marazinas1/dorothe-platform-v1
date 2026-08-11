@@ -3,8 +3,8 @@
     "complete": "Einrichtung abgeschlossen"
   },
   "home": {
-    "title": "Immobilien im Saarland",
-    "description": "Sorgfältig ausgewählte Häuser und Wohnungen in Püttlingen, Völklingen, Saarbrücken und Riegelsberg.",
+    "title": "Immobilien in {{region}}",
+    "description": "Sorgfältig ausgewählte Häuser und Wohnungen in {{region}}.",
     "hero_line": "Your home in good hands",
     "featured": "Ausgewählte Objekte",
     "categories": "Objektarten",
@@ -36,7 +36,7 @@
   },
   "listings": {
     "title": "Immobilien",
-    "description": "Aktuelle Angebote im Saarland.",
+    "description": "Aktuelle Angebote in {{region}}.",
     "sold_title": "Verkauft & vermittelt",
     "sold_description": "Referenzen aus den letzten Monaten.",
     "empty": "Keine Objekte mit diesen Kriterien gefunden.",
@@ -68,7 +68,7 @@
       "land": "Grundstück",
       "commercial": "Gewerbe",
       "city": "Ort",
-      "city_placeholder": "z. B. Saarbrücken",
+      "city_placeholder": "z. B. {{city}}",
       "rooms_min": "Zimmer ab",
       "price_min": "Preis ab (EUR)",
       "price_max": "Preis bis (EUR)",
@@ -152,12 +152,6 @@
       "sale": "Kauf",
       "rent": "Miete"
     }
-  },
-  "areas": {
-    "fohnsdorf": "Fohnsdorf",
-    "judenburg": "Judenburg",
-    "knittelfeld": "Knittelfeld",
-    "zeltweg": "Zeltweg"
   },
   "inquiry": {
     "title": "Anfrage senden",
@@ -314,6 +308,8 @@
         "default_locale": "Standardsprache",
         "enabled_locales": "Aktive Sprachen",
         "enabled_locales_help": "Komma-getrennte Sprachcodes, z. B. de, en",
+        "service_region": "Tätigkeitsregion",
+        "service_region_help": "Regionsname für Seitentitel und Beschreibungen, je Sprache.",
         "currency": "Währung",
         "area_unit": "Flächeneinheit",
         "sqm": "Quadratmeter",
@@ -657,7 +653,7 @@
       "cta_button": "Immobilie bewerten lassen"
     },
     "about": {
-      "meta_description_solo": "Über Dorothe Waltner — Immobilienberatung im Saarland mit persönlicher Betreuung von der Bewertung bis zur Übergabe.",
+      "meta_description_solo": "Über {{agent}} — Immobilienberatung in {{region}} mit persönlicher Betreuung von der Bewertung bis zur Übergabe.",
       "meta_description_team": "Lernen Sie das Team hinter der Immobilienberatung kennen — persönlich, sorgfältig, in der Region verwurzelt.",
       "kicker": "Persönlich",
       "solo": {

@@ -72,11 +72,18 @@ Rules:
 ## 4. Client data — never in code
 
 - Every client-visible string goes in `/src/messages` (`en.json`, `de.json`).
+  Client-specific words are interpolated: `{{region}}`, `{{agent}}`, `{{city}}`,
+  resolved from `site_settings` through `@/lib/config/site-copy`.
 - Every client value goes in `site_settings`.
+- Fonts come from the curated registry in `@/lib/theme/fonts`; `site_settings`
+  stores a registry key, never a raw CSS stack, and `src/styles.css` never
+  decides typography.
 - Every optional capability sits behind a `feature_flags` row and is read
   through `useFeatureFlag`.
 - Client-specific data belongs in `supabase/seed/<client>.sql` only. Migrations
-  contain schema, never client content.
+  contain schema, never client content. Applied migrations are immutable — if
+  client content ever lands in one, add a follow-up migration that neutralises
+  it and move the real values into the seed file.
 - A client's name, address, phone, email, region, town names or any other detail
   must never appear anywhere else in the codebase — including translations,
   comments, placeholders, default values and migration `WHERE` clauses.

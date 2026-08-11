@@ -1,5 +1,9 @@
 import { useNavigate } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
+import { exampleCity } from "@/lib/config/site-copy";
 
 import type { ListingsSearch } from "@/lib/listings/search-schema";
 import type { Locale } from "@/i18n/config";
@@ -13,7 +17,8 @@ type Props = {
 /** URL-driven filter bar. Every change navigates so state is shareable. */
 export function FiltersBar({ locale, search, total }: Props) {
   const { t } = useTranslation();
-  const navigate = useNavigate({ from: "/$locale/immobilien" });
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
+  const navigate = useNavigate({ from: "/$locale/immobilien/" });
 
   const update = (patch: Partial<ListingsSearch>) => {
     navigate({
@@ -76,7 +81,7 @@ export function FiltersBar({ locale, search, total }: Props) {
           <label className={labelCls}>{t("listings.filters.city")}</label>
           <input
             className={inputCls}
-            placeholder={t("listings.filters.city_placeholder")}
+            placeholder={t("listings.filters.city_placeholder", { city: exampleCity(settings, locale) })}
             defaultValue={search.city}
             onBlur={(e) => update({ city: e.target.value })}
             onKeyDown={(e) => {

@@ -15,6 +15,7 @@ import { TeamSection } from "@/components/brand/TeamSection";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
+import { copyVars } from "@/lib/config/site-copy";
 import {
   featuredListingsQueryOptions,
   recentSoldQueryOptions,
@@ -45,7 +46,8 @@ export const Route = createFileRoute("/$locale/")({
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "…" }] };
     const { settings, origin, locale } = loaderData;
-    const title = `${translate(locale, "home.title")} — ${settings.site_name}`;
+    const vars = copyVars(settings, locale);
+    const title = `${translate(locale, "home.title", vars)} — ${settings.site_name}`;
     return buildHead({
       origin,
       path: `/${locale}`,
@@ -53,7 +55,7 @@ export const Route = createFileRoute("/$locale/")({
       enabledLocales: settings.enabled_locales,
       defaultLocale: settings.default_locale,
       title,
-      description: translate(locale, "home.description"),
+      description: translate(locale, "home.description", vars),
       siteName: settings.site_name,
       ogDefaultImage: settings.og_default_image,
       ogType: "website",

@@ -34,6 +34,7 @@ type Values = {
   country: (typeof COUNTRIES)[number];
   default_locale: string;
   enabled_locales: string[];
+  service_region: Record<string, string>;
   currency: string;
   area_unit: (typeof AREA_UNITS)[number];
 };
@@ -49,6 +50,7 @@ export function GeneralTab() {
     country: data.country,
     default_locale: data.default_locale,
     enabled_locales: data.enabled_locales,
+    service_region: data.service_region ?? {},
     currency: data.currency,
     area_unit: data.area_unit,
   };
@@ -109,6 +111,24 @@ export function GeneralTab() {
           }
         />
       </Field>
+      {form.watch("enabled_locales").map((loc) => (
+        <Field
+          key={loc}
+          label={`${t("admin.settings.general.service_region")} (${loc})`}
+          help={t("admin.settings.general.service_region_help")}
+        >
+          <Input
+            value={form.watch("service_region")?.[loc] ?? ""}
+            onChange={(e) =>
+              form.setValue(
+                "service_region",
+                { ...form.getValues("service_region"), [loc]: e.target.value },
+                { shouldDirty: true },
+              )
+            }
+          />
+        </Field>
+      ))}
       <Field label={t("admin.settings.general.currency")}>
         <Input {...form.register("currency")} />
       </Field>

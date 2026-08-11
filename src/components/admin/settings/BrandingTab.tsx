@@ -7,6 +7,14 @@ import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { fontsForRole, fontKeyForValue, resolveFontStack, type FontRole } from "@/lib/theme/fonts";
+import {
   siteSettingsQueryOptions,
   updateSiteSettings,
 } from "@/lib/config/site-settings.functions";
@@ -40,8 +48,8 @@ export function BrandingTab() {
     primary_color: data.primary_color ?? "",
     secondary_color: data.secondary_color ?? "",
     accent_color: data.accent_color ?? "",
-    font_heading: data.font_heading ?? "",
-    font_body: data.font_body ?? "",
+    font_heading: fontKeyForValue(data.font_heading),
+    font_body: fontKeyForValue(data.font_body),
   };
 
   const form = useForm<Values>({
@@ -75,8 +83,8 @@ export function BrandingTab() {
         <ColorField form={form} name="primary_color" label={t("admin.settings.branding.primary_color")} />
         <ColorField form={form} name="secondary_color" label={t("admin.settings.branding.secondary_color")} />
         <ColorField form={form} name="accent_color" label={t("admin.settings.branding.accent_color")} />
-        <TextField form={form} name="font_heading" label={t("admin.settings.branding.font_heading")} />
-        <TextField form={form} name="font_body" label={t("admin.settings.branding.font_body")} />
+        <FontField form={form} name="font_heading" role="heading" label={t("admin.settings.branding.font_heading")} />
+        <FontField form={form} name="font_body" role="body" label={t("admin.settings.branding.font_body")} />
         <SaveButton onSubmit={save} />
       </div>
       <div>
@@ -84,11 +92,38 @@ export function BrandingTab() {
           primary={w.primary_color}
           secondary={w.secondary_color}
           accent={w.accent_color}
-          fontHeading={w.font_heading}
-          fontBody={w.font_body}
+          fontHeading={resolveFontStack(w.font_heading) ?? ""}
+          fontBody={resolveFontStack(w.font_body) ?? ""}
         />
       </div>
     </form>
+  );
+}
+
+/** Heading/body family picker, limited to the curated registry. */
+function FontField({
+  form, name, role, label,
+}: {
+  form: ReturnType<typeof useForm<Values>>;
+  name: "font_heading" | "font_body";
+  role: FontRole;
+  label: string;
+}) {
+  const value = form.watch(name);
+  return (
+    <div className="space-y-1.5">
+      <Label>{label}</Label>
+      <Select value={value} onValueChange={(v) => form.setValue(name, v, { shouldDirty: true })}>
+        <SelectTrigger><SelectValue /></SelectTrigger>
+        <SelectContent>
+          {fontsForRole(role).map((f) => (
+            <SelectItem key={f.key} value={f.key} style={{ fontFamily: f.stack }}>
+              {f.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 

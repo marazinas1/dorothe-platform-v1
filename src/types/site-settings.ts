@@ -8,6 +8,8 @@ export interface SiteSettings {
   country: Country;
   default_locale: string;
   enabled_locales: string[];
+  /** Localized service region name, interpolated into translated copy. */
+  service_region: Record<string, string>;
   currency: string;
   area_unit: AreaUnit;
   logo_url: string | null;
