@@ -20,6 +20,7 @@ import {
   PAGE_SIZE,
   type ListingsSearch,
 } from "@/lib/listings/search-schema";
+import { copyVars } from "@/lib/config/site-copy";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 import { buildHead } from "@/lib/seo/build-head";
 
@@ -77,7 +78,7 @@ export const Route = createFileRoute("/$locale/immobilien/")({
       enabledLocales: settings.enabled_locales,
       defaultLocale: settings.default_locale,
       title,
-      description: translate(locale, "listings.description"),
+      description: translate(locale, "listings.description", copyVars(settings, locale)),
       siteName: settings.site_name,
       ogDefaultImage: settings.og_default_image,
     });

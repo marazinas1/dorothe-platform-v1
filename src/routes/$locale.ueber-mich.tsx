@@ -21,6 +21,7 @@ import {
   recentSoldQueryOptions,
 } from "@/lib/listings/queries.functions";
 import { pickLocalized } from "@/lib/listings/format";
+import { copyVars } from "@/lib/config/site-copy";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 import { buildHead } from "@/lib/seo/build-head";
 
@@ -52,7 +53,7 @@ export const Route = createFileRoute("/$locale/ueber-mich")({
       enabledLocales: settings.enabled_locales,
       defaultLocale: settings.default_locale,
       title,
-      description: translate(locale, descKey),
+      description: translate(locale, descKey, copyVars(settings, locale)),
       siteName: settings.site_name,
       ogDefaultImage: settings.primary_agent_photo_url ?? settings.og_default_image,
     });

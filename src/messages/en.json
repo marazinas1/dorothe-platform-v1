@@ -153,12 +153,6 @@
       "rent": "For rent"
     }
   },
-  "areas": {
-    "fohnsdorf": "Fohnsdorf",
-    "judenburg": "Judenburg",
-    "knittelfeld": "Knittelfeld",
-    "zeltweg": "Zeltweg"
-  },
   "inquiry": {
     "title": "Send enquiry",
     "subtitle": "We reply within one working day.",

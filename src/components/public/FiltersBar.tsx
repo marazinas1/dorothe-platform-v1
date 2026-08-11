@@ -76,7 +76,7 @@ export function FiltersBar({ locale, search, total }: Props) {
           <label className={labelCls}>{t("listings.filters.city")}</label>
           <input
             className={inputCls}
-            placeholder={t("listings.filters.city_placeholder")}
+            placeholder={t("listings.filters.city_placeholder", { city: exampleCity(settings, locale) })}
             defaultValue={search.city}
             onBlur={(e) => update({ city: e.target.value })}
             onKeyDown={(e) => {
