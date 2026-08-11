@@ -96,25 +96,28 @@ export function ListingsTable({
                   })}
                 </TableCell>
                 <TableCell>
-                  <span
-                    className="text-[13px] tracking-[0.02em] text-foreground"
-                    data-status={row.status}
-                  >
+                  <span className="flex items-center gap-2 text-[13px] tracking-[0.01em]">
+                    <span
+                      aria-hidden
+                      className={
+                        row.status === "active" || row.status === "coming_soon"
+                          ? "h-1.5 w-1.5 rounded-full bg-primary"
+                          : "h-1.5 w-1.5 rounded-full bg-muted-foreground/40"
+                      }
+                    />
                     {t(`listings.status.${row.status}`)}
                   </span>
-                  <div className="sr-only">
-                  <Badge
-                    variant={
-                      row.status === "active" || row.status === "coming_soon"
-                        ? "default"
-                        : "secondary"
-                    }
-                  >
-                    {t(`listings.status.${row.status}`)}
-                  </Badge>
-                  </div>
+                  {(row.images ?? []).length === 0 ? (
+                    <span className="mt-1 block text-[11px] text-muted-foreground">
+                      {t("admin.listings.noImages")}
+                    </span>
+                  ) : null}
+                </TableCell>
+                <TableCell className="text-right">
+                  <ListingRowActions id={row.id} status={row.status} locale={locale} />
                 </TableCell>
               </TableRow>
+
             );
           })}
         </TableBody>
