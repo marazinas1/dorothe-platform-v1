@@ -143,7 +143,10 @@ async function processImage(p: Payload) {
   // the edge function's memory limit on ordinary phone photos.
   const variants: Record<string, Record<string, { path: string; width: number; height: number; bytes: number }>> = {};
   // blurhash comes off a tiny preview taken while the full buffer is still here.
+  console.log(`stage decoded ${working.width}x${working.height}`);
   const blurhash = await computeBlurhash(working);
+  console.log("stage blurhash done");
+
 
   const cascade = [...SPECS]
     .filter((s) => s.crop !== "center")
