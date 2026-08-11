@@ -1,3 +1,4 @@
+import { resolveFontStack } from "@/lib/theme/fonts";
 import type { SiteSettings } from "@/types/site-settings";
 
 /**
@@ -10,8 +11,10 @@ export function ThemeStyleTag({ settings }: { settings: SiteSettings }) {
   if (settings.primary_color) rules.push(`--primary: ${settings.primary_color};`);
   if (settings.secondary_color) rules.push(`--secondary: ${settings.secondary_color};`);
   if (settings.accent_color) rules.push(`--accent: ${settings.accent_color};`);
-  if (settings.font_heading) rules.push(`--font-heading: ${settings.font_heading};`);
-  if (settings.font_body) rules.push(`--font-body: ${settings.font_body};`);
+  const heading = resolveFontStack(settings.font_heading);
+  const body = resolveFontStack(settings.font_body);
+  if (heading) rules.push(`--font-heading: ${heading};`);
+  if (body) rules.push(`--font-body: ${body};`);
 
   if (rules.length === 0) return null;
   const css = `:root{${rules.join("")}}`;

@@ -4,13 +4,19 @@
 
 /*
  * Fonts are self-hosted through @fontsource — never the Google Fonts CDN.
- * Fraunces (headings) and Inter (body/UI) ship the `latin-ext` subset in the
- * imports below, which is what makes ä ö ü ß render once German content lands.
- * The script font only ever renders the broker's own name, so its `latin`
- * subset file is imported directly.
+ * These are the families in the curated registry (src/lib/theme/fonts.ts);
+ * a client picks heading/body families in site_settings, so CSS never decides
+ * typography. Every import ships the `latin-ext` subset, which is what makes
+ * ä ö ü ß render. Importing a family does not download it: browsers fetch a
+ * font file only when rendered text actually uses it.
  */
-@import "@fontsource-variable/fraunces/index.css"; /* latin + latin-ext */
-@import "@fontsource-variable/inter/index.css"; /* latin + latin-ext */
+@import "@fontsource-variable/fraunces/index.css";
+@import "@fontsource-variable/playfair-display/index.css";
+@import "@fontsource-variable/lora/index.css";
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource-variable/work-sans/index.css";
+@import "@fontsource-variable/dm-sans/index.css";
+/* Script face, only ever used for the signature motif. */
 @import "@fontsource/tangerine/latin-400.css";
 @import "@fontsource/tangerine/latin-700.css";
 
