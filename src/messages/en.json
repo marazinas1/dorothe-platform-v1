@@ -893,5 +893,9 @@
   },
   "brand": {
     "descriptor": "Real Estate"
+  },
+  "contact": {
+    "phone": "Call",
+    "email": "Email"
   }
 }

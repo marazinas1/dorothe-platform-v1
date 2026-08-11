@@ -893,5 +893,9 @@
   },
   "brand": {
     "descriptor": "Immobilien"
+  },
+  "contact": {
+    "phone": "Anrufen",
+    "email": "E-Mail"
   }
 }
