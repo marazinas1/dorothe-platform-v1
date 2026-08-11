@@ -100,7 +100,9 @@ export async function readOrientation(bytes: Uint8Array, contentType: string): P
     return 1;
   }
   try {
-    const meta = await exifr.parse(bytes, { pick: ["Orientation"] });
+    // translateValues:false is required — exifr otherwise returns human
+    // strings like "Rotate 90 CW" and rotation is silently skipped.
+    const meta = await exifr.parse(bytes, { pick: ["Orientation"], translateValues: false });
     const o = meta?.Orientation;
     return typeof o === "number" && o >= 1 && o <= 8 ? o : 1;
   } catch {
