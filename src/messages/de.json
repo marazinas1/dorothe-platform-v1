@@ -330,7 +330,24 @@
         "preview": "Vorschau",
         "preview_heading": "Musterüberschrift",
         "preview_button": "Beispielaktion",
-        "preview_body": "So sehen Ihre Farben und Schriften auf der Seite aus."
+        "preview_body": "So sehen Ihre Farben und Schriften auf der Seite aus.",
+        "background_color": "Hintergrund",
+        "surface_color": "Flächen (Karten)",
+        "text_color": "Text",
+        "muted_text_color": "Sekundärtext",
+        "border_color": "Rahmen",
+        "radius_scale": "Eckenradius",
+        "button_style": "Button-Form",
+        "radiusOption": {
+          "sharp": "Kantig",
+          "soft": "Weich",
+          "rounded": "Rund"
+        },
+        "buttonOption": {
+          "square": "Kantig",
+          "rounded": "Abgerundet",
+          "pill": "Pille"
+        }
       },
       "contact": {
         "contact_email": "E-Mail",
