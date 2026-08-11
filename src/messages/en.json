@@ -308,6 +308,8 @@
         "default_locale": "Default locale",
         "enabled_locales": "Enabled locales",
         "enabled_locales_help": "Comma-separated locale codes, e.g. de, en",
+        "service_region": "Service region",
+        "service_region_help": "Region name used in page titles and descriptions, per locale.",
         "currency": "Currency",
         "area_unit": "Area unit",
         "sqm": "Square metres",

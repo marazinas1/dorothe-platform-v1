@@ -308,6 +308,8 @@
         "default_locale": "Standardsprache",
         "enabled_locales": "Aktive Sprachen",
         "enabled_locales_help": "Komma-getrennte Sprachcodes, z. B. de, en",
+        "service_region": "Tätigkeitsregion",
+        "service_region_help": "Regionsname für Seitentitel und Beschreibungen, je Sprache.",
         "currency": "Währung",
         "area_unit": "Flächeneinheit",
         "sqm": "Quadratmeter",
