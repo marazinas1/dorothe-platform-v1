@@ -67,7 +67,7 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
   if (listing.service_charge != null) {
     facts.push({
       label: t("listings.detail.service_charge"),
-      value: formatPrice(listing.service_charge, settings.currency, locale, {}),
+      value: formatPrice(listing.service_charge, settings.currency, locale, { onRequestLabel: "" }),
     });
   }
   if (listing.commission_value != null) {
@@ -75,7 +75,7 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
       label: t("listings.detail.commission"),
       value: [
         listing.commission_type === "amount"
-          ? formatPrice(listing.commission_value, settings.currency, locale, {})
+          ? formatPrice(listing.commission_value, settings.currency, locale, { onRequestLabel: "" })
           : `${listing.commission_value} %`,
         listing.commission_payer
           ? t(`listings.detail.commission_payer.${listing.commission_payer}`)
