@@ -21,11 +21,42 @@ import resize, { initResize } from "https://esm.sh/@jsquash/resize@2.1.1?target=
 import { encode as encodeBlurhash } from "https://esm.sh/blurhash@2.0.5?target=deno";
 import exifr from "https://esm.sh/exifr@7.1.3?target=deno";
 
+// The Supabase edge runtime has no `ImageData` global. The emscripten codec
+// glue constructs one when returning decoded pixels, which surfaces as
+// "TypeError: undefined is not a constructor" deep inside the WASM decoder.
+// Provide a minimal, spec-shaped stand-in before any decode runs.
+if (typeof (globalThis as { ImageData?: unknown }).ImageData === "undefined") {
+  class ImageDataPolyfill {
+    data: Uint8ClampedArray;
+    width: number;
+    height: number;
+    readonly colorSpace = "srgb";
+    constructor(
+      a: Uint8ClampedArray | number,
+      b: number,
+      c?: number,
+    ) {
+      if (typeof a === "number") {
+        this.width = a;
+        this.height = b;
+        this.data = new Uint8ClampedArray(a * b * 4);
+      } else {
+        this.data = a;
+        this.width = b;
+        this.height = c ?? (a.length / 4 / b);
+      }
+    }
+  }
+  // deno-lint-ignore no-explicit-any
+  (globalThis as any).ImageData = ImageDataPolyfill;
+}
+
 export interface PixelBuffer {
   data: Uint8ClampedArray;
   width: number;
   height: number;
 }
+
 
 let initialised = false;
 async function ensureInit() {
@@ -46,9 +77,12 @@ const AVIF_OPTS = {
   quality: 55,
   qualityAlpha: -1,
   denoiseLevel: 0,
-  tileColsLog2: 0,
-  tileRowsLog2: 0,
-  speed: 6,
+  // Tiling splits the frame so libavif works on smaller buffers at a time;
+  // the edge runtime's memory ceiling is the binding constraint here.
+  tileColsLog2: 1,
+  tileRowsLog2: 1,
+  // Faster presets keep far less lookahead state in memory.
+  speed: 8,
   subsample: 1,
   chromaDeltaQ: false,
   sharpness: 0,
@@ -57,6 +91,7 @@ const AVIF_OPTS = {
   bitDepth: 8,
   lossless: false,
 };
+
 
 interface AvifEncoder {
   encode: (

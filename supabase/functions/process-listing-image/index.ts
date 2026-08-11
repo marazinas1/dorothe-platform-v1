@@ -129,37 +129,48 @@ async function processImage(p: Payload) {
 
   // 2. Orient + decode to raw RGBA (EXIF stripped by re-encoding downstream).
   const orientation = await readOrientation(bytes, p.contentType);
-  const decoded = await decodeImage(bytes, p.contentType);
-  const rotated = applyOrientation(decoded, orientation);
+  let working: PixelBuffer | null = applyOrientation(
+    await decodeImage(bytes, p.contentType),
+    orientation,
+  );
+  const sourceWidth = working.width;
+  const sourceHeight = working.height;
 
-  // 3. Emit every variant × format.
+  // 3. Emit every variant × format as a CASCADE, largest first: each frame is
+  // derived from the previous (already smaller) one and the bigger buffer is
+  // dropped immediately. Re-framing every variant from the full-resolution
+  // buffer keeps ~30 MB of RGBA alive next to the WASM encoder heaps and blows
+  // the edge function's memory limit on ordinary phone photos.
   const variants: Record<string, Record<string, { path: string; width: number; height: number; bytes: number }>> = {};
-  for (const spec of SPECS) {
-    const framed: PixelBuffer =
-      spec.crop === "center" && spec.height
-        ? await coverCrop(rotated, spec.width, spec.height)
-        : await resizeMax(rotated, spec.width);
-    for (const fmt of FORMATS) {
-      const encoded = fmt === "avif" ? await toAvif(framed) : await toWebp(framed);
-      const path = variantPath(p.listingId, p.imageId, spec.key, fmt);
-      const { error: upErr } = await admin.storage
-        .from(IMAGES_BUCKET)
-        .upload(path, encoded, {
-          contentType: fmt === "avif" ? "image/avif" : "image/webp",
-          upsert: true,
-        });
-      if (upErr) throw new Error(`upload ${spec.key}/${fmt} failed: ${upErr.message}`);
-      (variants[spec.key] ??= {})[fmt] = {
-        path,
-        width: framed.width,
-        height: framed.height,
-        bytes: encoded.byteLength,
-      };
-    }
+  // blurhash comes off a tiny preview taken while the full buffer is still here.
+  console.log(`stage decoded ${working.width}x${working.height}`);
+  const blurhash = await computeBlurhash(working);
+  console.log("stage blurhash done");
+
+
+  const cascade = [...SPECS]
+    .filter((s) => s.crop !== "center")
+    .sort((a, b) => b.width - a.width);
+  const ogSpec = SPECS.find((s) => s.crop === "center" && s.height);
+
+  let ogSource: PixelBuffer | null = null;
+  for (const spec of cascade) {
+    const framed: PixelBuffer = await resizeMax(working!, spec.width);
+    working = framed; // previous, larger buffer is now unreachable
+    if (ogSpec && spec.width >= ogSpec.width) ogSource = framed;
+    await encodeAndUpload(p, spec.key, framed, variants);
   }
 
-  // 4. blurhash + primary storage_path (points at the medium AVIF as canonical).
-  const blurhash = await computeBlurhash(rotated);
+  // og is centre-cropped from the smallest cascade frame that still covers it.
+  if (ogSpec?.height) {
+    const framed = await coverCrop(ogSource ?? working!, ogSpec.width, ogSpec.height);
+    ogSource = null;
+    working = null;
+    await encodeAndUpload(p, ogSpec.key, framed, variants);
+  }
+  working = null;
+
+  // 4. Primary storage_path points at the medium AVIF as canonical.
   const primary = variants.medium?.avif?.path ?? variants.large?.avif?.path ?? "";
 
   const { error: updError } = await admin
@@ -167,8 +178,8 @@ async function processImage(p: Payload) {
     .update({
       variants,
       blurhash,
-      width: rotated.width,
-      height: rotated.height,
+      width: sourceWidth,
+      height: sourceHeight,
       storage_path: primary,
       processing_status: "done",
       processing_error: null,
@@ -177,10 +188,41 @@ async function processImage(p: Payload) {
   if (updError) throw new Error(`row update failed: ${updError.message}`);
 }
 
+/** Encode one frame to every output format, upload it, record the variant. */
+async function encodeAndUpload(
+  p: Payload,
+  key: Variant,
+  framed: PixelBuffer,
+  variants: Record<string, Record<string, { path: string; width: number; height: number; bytes: number }>>,
+) {
+  for (const fmt of FORMATS) {
+    console.log(`stage encode ${key}/${fmt} ${framed.width}x${framed.height}`);
+    const encoded = fmt === "avif" ? await toAvif(framed) : await toWebp(framed);
+
+    const path = variantPath(p.listingId, p.imageId, key, fmt);
+    const { error: upErr } = await admin.storage
+      .from(IMAGES_BUCKET)
+      .upload(path, encoded, {
+        contentType: fmt === "avif" ? "image/avif" : "image/webp",
+        upsert: true,
+      });
+    if (upErr) throw new Error(`upload ${key}/${fmt} failed: ${upErr.message}`);
+    (variants[key] ??= {})[fmt] = {
+      path,
+      width: framed.width,
+      height: framed.height,
+      bytes: encoded.byteLength,
+    };
+  }
+}
+
+
 async function recordFailure(imageId: string, err: unknown) {
-  const message = err instanceof Error ? err.message : String(err);
+  const message = err instanceof Error ? `${err.message}\n${err.stack ?? ""}` : String(err);
+  console.error("image processing failed", imageId, message);
   await admin
     .from("listing_images")
     .update({ processing_status: "failed", processing_error: message.slice(0, 500) })
     .eq("id", imageId);
 }
+
