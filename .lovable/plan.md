@@ -55,7 +55,7 @@ Energy exemptions: the checklist derives its energy requirement from the same sh
 
 - **Hausgeld / monthly service charge** — figure, shown for apartment-type properties.
 - **Provision / commission** — value plus type (percent or amount) plus who pays (buyer / seller / shared).
-- **Rental status** — currently let (Kapitalanlage) or vacant, with the existing available-from date surfaced next to it.
+- **Rental status** — currently let (Kapitalanlage) or vacant, with the existing available-from date surfaced next to it. Strictly independent of `deal_type`: `deal_type` says what the transaction is (sale / rent), `rental_status` says whether someone lives there now (let / vacant), and both can be set together. When a sale listing is marked as currently let, the form shows a short note that it will be presented as an investment property with the tenancy passing to the buyer. On the public detail page a let property being sold reads unambiguously as such — the investment/tenancy line takes precedence and "available immediately" is never shown alongside "currently let"; the availability line becomes "let — available after tenancy ends" (with the date when set).
 
 Added to the migration, the shared schema, the form, and the public detail facts area (respecting the existing "commission note public" switch for the commission line).
 
