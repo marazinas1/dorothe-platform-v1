@@ -22,24 +22,38 @@ import { pickLocalized } from "@/lib/listings/format";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 import { buildHead } from "@/lib/seo/build-head";
 
-function slugQueryOptions(slug: string) {
+function slugQueryOptions(slug: string, preview?: string) {
   return queryOptions({
-    queryKey: ["listings", "slug", slug],
-    queryFn: () => getListingBySlug({ data: { slug } }),
-    staleTime: 30_000,
+    queryKey: ["listings", "slug", slug, preview ?? null],
+    queryFn: () =>
+      preview
+        ? getListingPreview({ data: { slug, token: preview } })
+        : getListingBySlug({ data: { slug } }),
+    staleTime: preview ? 0 : 30_000,
   });
 }
 
 export const Route = createFileRoute("/$locale/immobilien/$slug")({
-  loader: async ({ context, params }) => {
+  validateSearch: (search: Record<string, unknown>) => ({
+    preview: typeof search.preview === "string" ? search.preview : undefined,
+  }),
+  loaderDeps: ({ search }) => ({ preview: search.preview }),
+  loader: async ({ context, params, deps }) => {
     const [settings, origin, listing] = await Promise.all([
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
       getRequestOrigin(),
-      context.queryClient.ensureQueryData(slugQueryOptions(params.slug)),
+      context.queryClient.ensureQueryData(slugQueryOptions(params.slug, deps.preview)),
     ]);
     if (!listing) throw notFound();
-    return { settings, origin, listing, locale: params.locale as Locale };
+    return {
+      settings,
+      origin,
+      listing,
+      locale: params.locale as Locale,
+      isPreview: Boolean(deps.preview),
+    };
   },
+
   head: ({ loaderData, params }) => {
     if (!loaderData) {
       return {
