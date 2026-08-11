@@ -21,6 +21,9 @@ type Fact = { label: string; value: string };
 export function ListingFactsBar({ listing, locale, settings }: Props) {
   const { t } = useTranslation();
   const facts: Fact[] = [];
+  // A sale listing that is currently let is an investment property: the tenancy
+  // passes to the buyer. Independent of deal_type, never derived from it.
+  const investment = listing.deal_type === "sale" && listing.rental_status === "let";
 
   if (listing.living_area != null) {
     facts.push({
@@ -61,6 +64,51 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
     });
   }
 
+  if (listing.service_charge != null) {
+    facts.push({
+      label: t("listings.detail.service_charge"),
+      value: formatPrice(listing.service_charge, settings.currency, locale, {}),
+    });
+  }
+  if (listing.commission_value != null) {
+    facts.push({
+      label: t("listings.detail.commission"),
+      value: [
+        listing.commission_type === "amount"
+          ? formatPrice(listing.commission_value, settings.currency, locale, {})
+          : `${listing.commission_value} %`,
+        listing.commission_payer
+          ? t(`listings.detail.commission_payer.${listing.commission_payer}`)
+          : "",
+      ]
+        .filter(Boolean)
+        .join(" \u00b7 "),
+    });
+  }
+  if (listing.rental_status) {
+    facts.push({
+      label: t("listings.detail.rental_status"),
+      value: t(
+        listing.rental_status === "let"
+          ? "listings.detail.rental_let"
+          : "listings.detail.rental_vacant",
+      ),
+    });
+  }
+  if (listing.availability_date) {
+    facts.push({
+      label: t("listings.detail.availability"),
+      value: new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
+        new Date(listing.availability_date),
+      ),
+    });
+  } else if (investment) {
+    facts.push({
+      label: t("listings.detail.availability"),
+      value: t("listings.detail.availability_after_tenancy"),
+    });
+  }
+
   const price = formatPrice(listing.price, settings.currency, locale, {
     onRequest: listing.price_on_request,
     period: listing.price_period,
@@ -76,6 +124,11 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
         <div className="mt-4 font-heading text-4xl leading-none tabular-figures md:text-5xl">
           {price}
         </div>
+        {investment ? (
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
+            {t("listings.detail.investment_note")}
+          </p>
+        ) : null}
       </div>
 
       <dl className="border-t border-border">
