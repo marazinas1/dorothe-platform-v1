@@ -88,7 +88,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   // Sitewide defaults ONLY — no page-specific description, no canonical, no og:image.
   // Title/site name come from site_settings so a clone never ships another
   // client's name (or a template placeholder) as its fallback title.
-  head: ({ loaderData }) => {
+  head: ({
+    loaderData,
+  }: {
+    loaderData?: { siteName: string; faviconUrl: string | null };
+  }) => {
     const siteName = loaderData?.siteName ?? "Real estate";
     return {
       meta: [
