@@ -129,6 +129,14 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
       numberOfRooms: listing.rooms ?? undefined,
     };
 
+    // A preview URL must never be indexed, even if someone shares the link.
+    if (isPreview) {
+      return {
+        ...head,
+        meta: [...(head.meta ?? []), { name: "robots", content: "noindex, nofollow" }],
+      };
+    }
+
     return {
       ...head,
       scripts: [{ type: "application/ld+json", children: JSON.stringify(ldJson) }],
@@ -152,7 +160,8 @@ function ListingDetail() {
   const { locale, slug } = Route.useParams();
   const { t } = useTranslation();
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
-  const { data: listing } = useSuspenseQuery(slugQueryOptions(slug));
+  const { preview } = Route.useSearch();
+  const { data: listing } = useSuspenseQuery(slugQueryOptions(slug, preview));
   const { origin } = Route.useLoaderData();
 
   if (!listing) return null;
@@ -168,6 +177,13 @@ function ListingDetail() {
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
       <article className="pb-40">
+        {preview ? (
+          <div className="bg-secondary px-6 py-2 text-center text-[11px] uppercase tracking-[0.16em] text-secondary-foreground">
+            {t("listings.detail.preview_notice", {
+              status: t(`listings.status.${l.status}`),
+            })}
+          </div>
+        ) : null}
         {/* 1. Hero gallery + overlaid headline */}
         <section className="mx-auto max-w-[1600px] px-3 pt-6 sm:px-6 lg:px-8">
           <ListingGallery
