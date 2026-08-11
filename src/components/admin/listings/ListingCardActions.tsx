@@ -149,9 +149,9 @@ export function ListingCardActions({
               {t("admin.listings.actions.confirmDelete")}
             </AlertDialogAction>
           </AlertDialogFooter>
-        </AlertDialogFooter>
-      </AlertDialogContent>
+        </AlertDialogContent>
       </AlertDialog>
+
     </div>
   );
 }
