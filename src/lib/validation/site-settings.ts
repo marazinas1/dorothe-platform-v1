@@ -50,6 +50,7 @@ export const GeneralSchema = z.object({
   country: CountrySchema,
   default_locale: z.string().trim().min(2).max(10),
   enabled_locales: z.array(z.string().trim().min(2).max(10)).min(1),
+  service_region: localeMap,
   currency: z.string().trim().min(3).max(10),
   area_unit: AreaUnitSchema,
 });
