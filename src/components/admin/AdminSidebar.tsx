@@ -22,6 +22,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { AdminSidebarFooter } from "./AdminSidebarFooter";
 import { usePermission } from "@/lib/auth/use-permission";
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { PermissionKey } from "@/lib/auth/permissions";
@@ -96,6 +97,7 @@ export function AdminSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <AdminSidebarFooter />
     </Sidebar>
   );
 }
