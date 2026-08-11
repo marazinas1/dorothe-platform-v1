@@ -50,6 +50,7 @@ export const enqueueImageProcessing = createServerFn({ method: "POST" })
           original_size_bytes: data.originalSizeBytes ?? null,
           processing_status: "pending",
           processing_error: null,
+          processing_started_at: new Date().toISOString(),
           variants: {},
         },
         { onConflict: "id" },
@@ -64,30 +65,33 @@ export const enqueueImageProcessing = createServerFn({ method: "POST" })
     if (!edgeSecret) {
       throw new Response("EDGE_FUNCTION_SECRET is not configured", { status: 500 });
     }
-    const { error: invokeError } = await supabase.functions.invoke(
-      "process-listing-image",
-      {
+    const jobs = VARIANT_FORMATS.flatMap((format) =>
+      VARIANT_SPECS.map((variant) => ({ format, variant: variant.key })),
+    );
+    for (const [index, job] of jobs.entries()) {
+      const { error: invokeError } = await supabase.functions.invoke("process-listing-image", {
         headers: { "x-edge-secret": edgeSecret },
         body: {
           listingId: data.listingId,
           imageId: data.imageId,
           originalStoragePath: data.originalStoragePath,
           contentType: data.contentType,
+          variant: job.variant,
+          format: job.format,
+          final: index === jobs.length - 1,
         },
-      },
-    );
-    if (invokeError) {
-      await supabase
-        .from("listing_images")
-        .update({
+      });
+      if (invokeError) {
+        await supabase.from("listing_images").update({
           processing_status: "failed",
-          processing_error: `enqueue failed: ${invokeError.message}`,
-        })
-        .eq("id", data.imageId);
-      throw new Response(invokeError.message, { status: 502 });
+          processing_error: `processing failed: ${invokeError.message}`,
+          processing_started_at: null,
+        }).eq("id", data.imageId);
+        throw new Response(invokeError.message, { status: 502 });
+      }
     }
 
-    return { imageId: data.imageId, status: "pending" as const };
+    return { imageId: data.imageId, status: "done" as const };
   });
 
 const deleteSchema = z.object({ imageId: z.string().uuid() });

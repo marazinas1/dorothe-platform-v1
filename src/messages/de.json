@@ -576,6 +576,7 @@
           "failed": "Fehlgeschlagen"
         },
         "pipelineNote": "Fotos werden automatisch optimiert: passend skaliert, in moderne Formate umgewandelt und von Standortdaten befreit. Laden Sie einfach die Originale hoch.",
+        "processingHelp": "Das kann einen Moment dauern. Falls die Verarbeitung nicht abgeschlossen werden kann, wird sie beendet und kann erneut gestartet werden.",
         "dropHintLong": "Dateien hierher ziehen oder klicken, um sie auszuwählen.",
         "coverHint": "Markieren Sie ein Foto als Titelbild — standardmäßig ist es das erste.",
         "makeCover": "Als Titelbild",

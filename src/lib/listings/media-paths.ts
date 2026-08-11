@@ -19,11 +19,11 @@ export interface VariantSpec {
 export const VARIANT_SPECS: VariantSpec[] = [
   { key: "thumb", width: 400 },
   { key: "medium", width: 1200 },
-  { key: "large", width: 2400 },
+  { key: "large", width: 1200 },
   { key: "og", width: 1200, height: 630, crop: "center" },
 ];
 
-export const VARIANT_FORMATS: VariantFormat[] = ["avif", "webp"];
+export const VARIANT_FORMATS: VariantFormat[] = ["webp", "avif"];
 
 // Storage paths ------------------------------------------------------------
 

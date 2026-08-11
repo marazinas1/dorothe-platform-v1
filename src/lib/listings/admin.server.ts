@@ -4,6 +4,23 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { pruneTranslations, type ListingFormParsed } from "./admin-schema";
 
+/** Turn abandoned worker jobs into actionable failures during admin polling. */
+export async function expireStaleImageProcessing(
+  supabase: SupabaseClient,
+): Promise<void> {
+  const cutoff = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+  const { error } = await supabase
+    .from("listing_images")
+    .update({
+      processing_status: "failed",
+      processing_error: "Image processing timed out. Please retry.",
+      processing_started_at: null,
+    })
+    .in("processing_status", ["pending", "processing"])
+    .lt("processing_started_at", cutoff);
+  if (error) throw new Response(error.message, { status: 400 });
+}
+
 /**
  * Editing is either global (listing.edit.any) or scoped to own listings
  * (listing.edit.own AND agent_id/created_by = auth.uid()).
