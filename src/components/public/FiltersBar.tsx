@@ -13,7 +13,7 @@ type Props = {
 /** URL-driven filter bar. Every change navigates so state is shareable. */
 export function FiltersBar({ locale, search, total }: Props) {
   const { t } = useTranslation();
-  const navigate = useNavigate({ from: "/$locale/immobilien" });
+  const navigate = useNavigate({ from: "/$locale/immobilien/" });
 
   const update = (patch: Partial<ListingsSearch>) => {
     navigate({

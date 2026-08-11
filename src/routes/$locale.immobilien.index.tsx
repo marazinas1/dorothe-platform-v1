@@ -89,7 +89,7 @@ function ListingsIndex() {
   const { locale } = Route.useParams();
   const search = Route.useSearch();
   const { t } = useTranslation();
-  const navigate = useNavigate({ from: "/$locale/immobilien" });
+  const navigate = useNavigate({ from: "/$locale/immobilien/" });
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const { data } = useSuspenseQuery(listingsQueryOptions(search));
 
