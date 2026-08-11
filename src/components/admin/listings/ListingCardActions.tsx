@@ -113,7 +113,8 @@ export function ListingCardActions({
             {t("admin.listings.actions.duplicate")}
           </DropdownMenuItem>
           <DropdownMenuItem
-            variant="destructive"
+            className="text-destructive focus:text-destructive"
+
             onSelect={(event) => {
               event.preventDefault();
               setConfirmOpen(true);
