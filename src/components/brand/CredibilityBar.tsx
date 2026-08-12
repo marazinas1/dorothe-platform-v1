@@ -36,7 +36,7 @@ export function CredibilityBar({ locale, stats, settings }: Props) {
       <div className="grid grid-cols-2 gap-x-8 gap-y-14 border-t border-border pt-14 md:grid-cols-4">
         {stats.map((s, i) => (
           <div key={i} className="flex min-w-0 flex-col">
-            <div className="flex min-h-[3.5rem] items-end md:min-h-[4.5rem]">
+            <div className="flex min-h-14 items-end md:min-h-20">
             <div
               className={`font-sans tabular-figures text-foreground [overflow-wrap:anywhere] leading-[1.05] ${
                 (s.value ?? "").length > 8
