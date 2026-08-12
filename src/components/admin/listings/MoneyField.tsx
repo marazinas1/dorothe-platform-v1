@@ -49,10 +49,10 @@ export function MoneyField({
           disabled={disabled}
           readOnly={readOnly}
           className="border-0 bg-transparent shadow-none tabular-nums focus-visible:ring-0"
-          value={formatMoneyInput(value, raw, i18n.language)}
+          value={formatMoneyInput(value, raw, moneyLocale)}
           onChange={(e) => {
             setRaw(e.target.value);
-            onChange(parseMoneyInput(e.target.value, i18n.language));
+            onChange(parseMoneyInput(e.target.value, moneyLocale));
           }}
           onBlur={() => setRaw("")}
         />
