@@ -63,7 +63,7 @@ export function buildPublishChecklist({
     values.commission_free === true ||
     (values.commission_value != null && Number(values.commission_value) > 0);
 
-  const items: ChecklistItem[] = [
+  const all: ChecklistItem[] = [
     { key: "title", done: hasAnyTranslation(values.title), anchor: "title" },
     { key: "photo", done: imageCount > 0, anchor: "photos" },
     {
@@ -85,7 +85,10 @@ export function buildPublishChecklist({
       missing: energyMissing,
       anchor: energyMissing.length > 0 ? `energy_${energyMissing[0]}` : "energy",
     },
-  ].filter((item) => !(item.exempt && item.key === "commission"));
+  ];
+
+  // A commission item that cannot apply is dropped rather than shown as a dash.
+  const items = all.filter((item) => !(item.exempt && item.key === "commission"));
 
   const outstanding = items.filter((i) => !i.done).length;
   return { items, outstanding, ready: outstanding === 0, energyExempt };
