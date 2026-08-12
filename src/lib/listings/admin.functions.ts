@@ -43,7 +43,7 @@ export const listAdminListings = createServerFn({ method: "GET" })
         "id, slug, status, deal_type, property_type, price, price_on_request, address_city, reference_code, rooms, bedrooms, bathrooms, living_area, title, updated_at, listing_images(variants, is_primary, sort_order)",
       )
       .order("updated_at", { ascending: false });
-    if (error) throw new Response(error.message, { status: 400 });
+    if (error) throw new Error(error.message);
     return (data ?? []).map((row: Json) => ({
       ...(row as unknown as AdminListingRow),
       images: (row.listing_images ?? []) as AdminListingRow["images"],
@@ -65,8 +65,8 @@ export const getAdminListing = createServerFn({ method: "GET" })
       .select("*")
       .eq("id", data.id)
       .maybeSingle();
-    if (error) throw new Response(error.message, { status: 400 });
-    if (!row) throw new Response("Not found", { status: 404 });
+    if (error) throw new Error(error.message);
+    if (!row) throw new Error("Not found");
 
     const { data: images, error: imgError } = await context.supabase
       .from("listing_images")
@@ -75,7 +75,7 @@ export const getAdminListing = createServerFn({ method: "GET" })
       )
       .eq("listing_id", data.id)
       .order("sort_order", { ascending: true });
-    if (imgError) throw new Response(imgError.message, { status: 400 });
+    if (imgError) throw new Error(imgError.message);
 
     return { listing: row as Json, images: (images ?? []) as Json[] };
   });
@@ -103,7 +103,7 @@ export const saveListing = createServerFn({ method: "POST" })
         .select("id, slug, status")
         .maybeSingle();
       if (error || !created) {
-        throw new Response(error?.message ?? "Insert failed", { status: 400 });
+        throw new Error(error?.message ?? "Insert failed");
       }
       return created as { id: string; slug: string; status: string };
     }
@@ -116,7 +116,7 @@ export const saveListing = createServerFn({ method: "POST" })
       .select("id, slug, status")
       .maybeSingle();
     if (error || !updated) {
-      throw new Response(error?.message ?? "Update failed", { status: 400 });
+      throw new Error(error?.message ?? "Update failed");
     }
     return updated as { id: string; slug: string; status: string };
   });
@@ -143,7 +143,7 @@ export const changeListingStatus = createServerFn({ method: "POST" })
       .select("id, status, slug")
       .maybeSingle();
     if (error || !updated) {
-      throw new Response(error?.message ?? "Status change failed", { status: 400 });
+      throw new Error(error?.message ?? "Status change failed");
     }
     return updated as { id: string; status: string; slug: string };
   });
@@ -167,7 +167,7 @@ export const reorderListingImages = createServerFn({ method: "POST" })
         .update({ sort_order: index, is_primary: index === 0 } as never)
         .eq("id", imageId)
         .eq("listing_id", data.listingId);
-      if (error) throw new Response(error.message, { status: 400 });
+      if (error) throw new Error(error.message);
     }
     return { ok: true as const };
   });

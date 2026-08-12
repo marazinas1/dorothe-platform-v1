@@ -66,7 +66,7 @@ export const updateSiteSettings = createServerFn({ method: "POST" })
       "analytics",
     ];
     if (!allowed.includes(input.tab as SettingsTabKey)) {
-      throw new Response("Invalid tab", { status: 400 });
+      throw new Error("Invalid tab");
     }
     return input;
   })
@@ -82,7 +82,7 @@ export const updateSiteSettings = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
     if (readError || !current) {
-      throw new Response("site_settings row missing", { status: 500 });
+      throw new Error("site_settings row missing");
     }
     const { data: updated, error } = await supabase
       .from("site_settings")
@@ -91,9 +91,7 @@ export const updateSiteSettings = createServerFn({ method: "POST" })
       .select("*")
       .maybeSingle();
     if (error || !updated) {
-      throw new Response(`Update failed: ${error?.message ?? "unknown"}`, {
-        status: 500,
-      });
+      throw new Error(`Update failed: ${error?.message ?? "unknown"}`);
     }
     return updated as unknown as SiteSettings;
   });

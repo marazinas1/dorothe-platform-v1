@@ -36,7 +36,7 @@ export const createAutoDraft = createServerFn({ method: "POST" })
       .select("id")
       .maybeSingle();
     if (error || !created) {
-      throw new Response(error?.message ?? "Could not create draft", { status: 400 });
+      throw new Error(error?.message ?? "Could not create draft");
     }
     return created as { id: string };
   });

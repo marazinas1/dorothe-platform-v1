@@ -26,10 +26,10 @@ export async function assertCanEditListing(
     .select("id, agent_id, created_by")
     .eq("id", listingId)
     .maybeSingle();
-  if (error) throw new Response(error.message, { status: 400 });
-  if (!listing) throw new Response("Not found", { status: 404 });
+  if (error) throw new Error(error.message);
+  if (!listing) throw new Error("Not found");
   if (listing.agent_id !== userId && listing.created_by !== userId) {
-    throw new Response("Forbidden", { status: 403 });
+    throw new Error("Forbidden");
   }
 }
 

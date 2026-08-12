@@ -22,7 +22,7 @@ export const submitInquiry = createServerFn({ method: "POST" })
       source: "public_web",
       type: "listing",
     });
-    if (error) throw new Response(error.message, { status: 500 });
+    if (error) throw new Error(error.message);
     return { ok: true };
   });
 
@@ -53,7 +53,7 @@ export const submitBuyerInquiry = createServerFn({ method: "POST" })
       payload: criteria,
       source: "public_web",
     });
-    if (error) throw new Response(error.message, { status: 500 });
+    if (error) throw new Error(error.message);
     return { ok: true };
   });
 
@@ -99,7 +99,7 @@ export const submitSellerInquiry = createServerFn({ method: "POST" })
             contentType: p.content_type || "application/octet-stream",
             upsert: false,
           });
-        if (upErr) throw new Response(upErr.message, { status: 500 });
+        if (upErr) throw new Error(upErr.message);
         photo_paths.push(path);
       }
     }
@@ -115,6 +115,6 @@ export const submitSellerInquiry = createServerFn({ method: "POST" })
       photo_paths,
       source: "public_web",
     });
-    if (error) throw new Response(error.message, { status: 500 });
+    if (error) throw new Error(error.message);
     return { ok: true };
   });

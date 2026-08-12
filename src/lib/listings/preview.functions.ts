@@ -23,7 +23,7 @@ export const createListingPreviewLink = createServerFn({ method: "POST" })
       .eq("id", data.id)
       .maybeSingle();
     if (error || !row?.slug) {
-      throw new Response(error?.message ?? "Not found", { status: 404 });
+      throw new Error(error?.message ?? "Not found");
     }
 
     const { createPreviewToken } = await import("./preview.server");
