@@ -56,7 +56,17 @@ export interface SiteSettings {
   credibility_heading: Record<string, string>;
   /** Professional certifications, displayed as a calm list. */
   qualifications: string[];
+  /** Certification / membership seals shown as images. */
+  seals: Seal[];
   about_body: Record<string, string>;
+}
+
+export interface Seal {
+  /** Public image URL of the seal. */
+  url: string;
+  label: Record<string, string>;
+  /** Optional link to the issuing body. */
+  href?: string;
 }
 
 export type HomepageSectionKey =
