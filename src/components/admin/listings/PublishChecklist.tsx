@@ -48,7 +48,13 @@ export function PublishChecklist({
             )}
             <span className={item.done ? "text-muted-foreground" : "text-foreground"}>
               {t(`admin.listings.checklist.items.${item.key}`)}
+              {!item.done && item.missing?.length
+                ? `: ${item.missing
+                    .map((key) => t(`admin.listings.energyFields.${key}`))
+                    .join(", ")}`
+                : null}
             </span>
+
           </li>
         ))}
       </ul>
