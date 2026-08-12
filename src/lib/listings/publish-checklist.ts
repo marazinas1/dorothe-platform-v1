@@ -13,6 +13,8 @@ export type ChecklistItem = {
   done: boolean;
   /** Set when the requirement does not apply to this listing at all. */
   exempt?: boolean;
+  /** Field keys still missing, when the item can name them. */
+  missing?: string[];
 };
 
 export type Checklist = {
@@ -56,7 +58,12 @@ export function buildPublishChecklist({
       done: !!values.price_on_request || (values.price != null && Number(values.price) > 0),
     },
     { key: "city", done: !!values.address_city?.trim() },
-    { key: "energy", done: energyMissing.length === 0, exempt: energyExempt },
+    {
+      key: "energy",
+      done: energyMissing.length === 0,
+      exempt: energyExempt,
+      missing: energyMissing,
+    },
   ];
 
   const outstanding = items.filter((i) => !i.done).length;
