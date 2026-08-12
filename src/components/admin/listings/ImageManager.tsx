@@ -42,6 +42,8 @@ export function ImageManager({
 }) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
+  const [dragging, setDragging] = useState(false);
+
   const [jobs, setJobs] = useState<Job[]>([]);
   const filesRef = useRef(new Map<string, File>());
   const inputRef = useRef<HTMLInputElement>(null);
