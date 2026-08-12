@@ -165,6 +165,12 @@ export function ListingForm({
         <ChecklistRail checklist={checklist} />
       </div>
 
+      <SaveBar
+        dirty={form.dirty}
+        saving={saving}
+        autosave={autosave.state}
+        onSave={() => void save()}
+      />
     </form>
   );
 }
