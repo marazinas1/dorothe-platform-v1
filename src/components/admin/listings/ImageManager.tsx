@@ -270,7 +270,7 @@ export function ImageManager({
           <p className="mt-4 text-xs text-muted-foreground">
             {t("admin.listings.images.coverHint")}
           </p>
-          <div className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
             {ordered.map((image, index) => (
               <ImageCard
                 key={image.id}

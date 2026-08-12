@@ -31,6 +31,8 @@ const ENUMS = {
   checklist: unionFrom("src/lib/listings/publish-checklist.ts", "ChecklistKey"),
   moneyFields: unionFrom("src/lib/listings/field-labels.ts", "MoneyField"),
   numericFields: unionFrom("src/components/admin/listings/NumberFields.tsx", "NumericKey"),
+  textFields: listFrom("src/lib/listings/text-placement.ts", "TEXT_FIELDS"),
+  outlineRegions: listFrom("src/lib/listings/text-placement.ts", "OUTLINE_REGION_KEYS"),
 };
 
 // prefix -> the enumeration whose values are appended to it at runtime.
@@ -41,6 +43,8 @@ const DYNAMIC_PREFIXES = {
   "admin.listings.statusAction": ENUMS.statuses,
   "admin.role": ENUMS.roles,
   "admin.listings.checklist.items": ENUMS.checklist,
+  "admin.listings.placement": ENUMS.textFields,
+  "admin.listings.outline.regions": ENUMS.outlineRegions,
 };
 
 /** Scope prefixes used by the label resolvers, read from source. */

@@ -691,7 +691,8 @@
         "addMore": "Add more photos",
         "uploadHint": "Drag photos here or click to select — up to 50 at once.",
         "technicalNote": "Photos are prepared in your browser: turned upright, resized for the detail page and cards, converted to WebP, and all EXIF and GPS data removed. Your original is kept privately and never published.",
-        "technicalTitle": "What happens to your photos"
+        "technicalTitle": "What happens to your photos",
+        "dragHandle": "Drag to reorder"
       },
       "preview": "Preview",
       "publish": "Publish",
@@ -830,7 +831,25 @@
         "week": "per week",
         "total": "total"
       },
-      "fallbackFrom": "Shown from {{lang}} while empty"
+      "fallbackFrom": "Shown from {{lang}} while empty",
+      "placement": {
+        "title": "Appears as the headline on the photo at the top of the detail page, and as the heading on listing cards.",
+        "description": "Appears in the “Description” block below the key facts, and as the first two lines on listing cards.",
+        "highlights": "Appears as its own bulleted “Highlights” block below the specification table. Not shown on cards.",
+        "surroundings": "Appears as its own bulleted “Location & surroundings” block below Highlights. Not shown on cards."
+      },
+      "outline": {
+        "title": "Where each text appears on the public page",
+        "regions": {
+          "hero": "Photo with headline (title)",
+          "facts": "Key facts (from the fields)",
+          "description": "Description",
+          "specs": "Full specification (from the fields)",
+          "highlights": "Highlights",
+          "surroundings": "Location & surroundings",
+          "rest": "Energy, map, contact (automatic)"
+        }
+      }
     },
     "inquiries": {
       "summary": "{{total}} total · {{unread}} new",

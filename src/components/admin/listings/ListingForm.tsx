@@ -26,7 +26,6 @@ import { MoreDetailsSection } from "./MoreDetailsSection";
 import { TranslatableBlock } from "./TranslatableBlock";
 import { ImageManager } from "./ImageManager";
 import { ChecklistRail } from "./ChecklistRail";
-import { TitleFields } from "./TitleFields";
 import { StatusBar } from "./StatusBar";
 import { SaveBar } from "./SaveBar";
 import type { ImageRecord } from "./ImageCard";
@@ -176,17 +175,11 @@ export function ListingForm({
       ) : null}
 
       {/* The checklist is the navigation: sticky rail on the right, form on the
-          left, sections in the order a broker fills them. */}
+          left, sections in the order a broker fills them — photos last, so the
+          photo grid never pushes the rest of the form off the screen. */}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
         <div className="space-y-6">
-          <TitleFields form={form} locales={locales} primaryLocale={primaryLocale} />
           <BasicsSection form={form} />
-          <ImageManager
-            listingId={listingId}
-            images={images}
-            refresh={refreshListing}
-            ensureListingId={ensureListingId}
-          />
           <FiguresSection form={form} />
           <LocationSection form={form} />
           <EquipmentSection form={form} />
@@ -196,13 +189,23 @@ export function ListingForm({
             locales={locales}
             primaryLocale={primaryLocale}
             onLangChange={setLang}
+            listingId={listingId}
+            publicLocale={navLocale}
+            onError={(message) => toast.error(message)}
           />
           {applies(shape, "energy") ? <EnergySection form={form} /> : null}
           <MoreDetailsSection form={form} lang={lang} />
+          <ImageManager
+            listingId={listingId}
+            images={images}
+            refresh={refreshListing}
+            ensureListingId={ensureListingId}
+          />
         </div>
 
         <ChecklistRail checklist={checklist} />
       </div>
+
 
       <SaveBar
         dirty={form.dirty}

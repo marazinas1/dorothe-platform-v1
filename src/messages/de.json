@@ -691,7 +691,8 @@
         "addMore": "Weitere Fotos hinzufügen",
         "uploadHint": "Fotos hierher ziehen oder klicken – bis zu 50 auf einmal.",
         "technicalNote": "Fotos werden im Browser vorbereitet: aufrecht gedreht, für Detailseite und Karten verkleinert, in WebP umgewandelt, EXIF- und GPS-Daten entfernt. Das Original bleibt privat und wird nie veröffentlicht.",
-        "technicalTitle": "Was mit den Fotos passiert"
+        "technicalTitle": "Was mit den Fotos passiert",
+        "dragHandle": "Zum Sortieren ziehen"
       },
       "preview": "Vorschau",
       "publish": "Veröffentlichen",
@@ -830,7 +831,25 @@
         "week": "pro Woche",
         "total": "gesamt"
       },
-      "fallbackFrom": "Aus {{lang}} übernommen, solange leer"
+      "fallbackFrom": "Aus {{lang}} übernommen, solange leer",
+      "placement": {
+        "title": "Erscheint als Überschrift auf dem Foto am Anfang der Detailseite und als Titel auf den Objektkarten.",
+        "description": "Erscheint im Block „Beschreibung“ unter den Eckdaten und als erste zwei Zeilen auf den Objektkarten.",
+        "highlights": "Erscheint als eigener Punkte-Block „Highlights“ unter der Objektbeschreibung/Tabelle. Nicht auf den Karten.",
+        "surroundings": "Erscheint als eigener Punkte-Block „Lage & Umgebung“ unter den Highlights. Nicht auf den Karten."
+      },
+      "outline": {
+        "title": "Wo welcher Text auf der öffentlichen Seite erscheint",
+        "regions": {
+          "hero": "Foto mit Überschrift (Titel)",
+          "facts": "Eckdaten (aus den Feldern)",
+          "description": "Beschreibung",
+          "specs": "Vollständige Objektdaten (aus den Feldern)",
+          "highlights": "Highlights",
+          "surroundings": "Lage & Umgebung",
+          "rest": "Energie, Karte, Kontakt (automatisch)"
+        }
+      }
     },
     "inquiries": {
       "summary": "{{total}} insgesamt · {{unread}} neu",
