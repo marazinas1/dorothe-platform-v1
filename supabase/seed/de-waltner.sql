@@ -1,21 +1,14 @@
 -- =============================================================================
--- Demo seed: Immobilienberatung Dorothe Waltner — Saarbrücken area, Germany
+-- Client seed: Immobilienberatung Dorothe Waltner — Püttlingen, Germany
 -- =============================================================================
--- Solo-broker demo tailored for a real prospect. Sales only, warm/personal tone,
--- eight modest properties (140k–420k EUR) around Saarbrücken.
--- Swap wholesale with the other seed files under supabase/seed/ — see README.
+-- REAL client configuration only: identity, locales, design tokens, contact,
+-- credentials and homepage composition. It creates NO listings — the client
+-- enters their own properties in the admin panel.
+-- Optional fictional demo properties live in demo-listings.sql and must never
+-- be run against a real client's database. See README.
 -- =============================================================================
 
--- session_replication_role skipped (insufficient privileges)
 
--- ---------------------------------------------------------------------------
--- 0. Wipe existing demo data.
--- ---------------------------------------------------------------------------
-DELETE FROM public.inquiries;
-DELETE FROM public.listing_documents;
-DELETE FROM public.listing_tours;
-DELETE FROM public.listing_images;
-DELETE FROM public.listings;
 
 -- ---------------------------------------------------------------------------
 -- 1. Site settings — one row per install, updated in place.
