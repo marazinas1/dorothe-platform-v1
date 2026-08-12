@@ -1,74 +1,139 @@
-# Language correctness pass + four defects (revised)
+# Listing form: rentals, working order, and a checklist that navigates
 
-Two separate language axes, plus four fixes. The listing form structure stays as it is.
+## What I found first (the four questions you asked)
 
-## Part 1 — Interface language vs content language
+**`additional_costs` is dead weight, and I am not reusing it.** It is a
+`jsonb NOT NULL DEFAULT '{}'` column on `listings`, passed straight through
+`listings_public`. Nothing in the application reads or writes it — no reference
+anywhere in `src/`, only in old migrations and seed column lists. All 8 existing
+listings hold `{}`. It is a free-form bag from the original schema draft, so it
+cannot carry a `CHECK (>= 0)` constraint, cannot back a computed Warmmiete, and
+cannot be filtered or sorted on. Nebenkosten and Kaution get real typed columns
+instead. `additional_costs` is left untouched (applied migrations are
+immutable), simply unused.
 
-### 1.1 Per-user interface language
-- Migration: add `admin_locale text` to `profiles` (nullable, no default). **No new RLS policy.**
-- Writes go through one server function in `/lib/auth` under `requireSupabaseAuth`, which updates `admin_locale` for `auth.uid()` and no other column. It validates the value against the shipped message-file set and rejects anything else.
-- Reads: the existing admin gate already loads the caller's profile server-side; it starts returning `admin_locale`, so the interface language arrives with the admin route context — no extra round-trip.
-- Resolution order: `profile.admin_locale` → `site_settings.default_locale` → shipped constant. Both profile and settings are resolved in the admin route (`beforeLoad` + loader) before the shell renders, so the panel never renders in an unresolved language and never shows raw keys. If settings fail to load, the shipped constant is used.
-- An `admin_locale` naming a language we have no message file for is ignored and treated as null (falls back to `default_locale`). The stored value is not erased; the toggle shows the resolved language as selected.
-- The offered set is the shipped message files (`de`, `en`) from one exported constant — not `enabled_locales`.
-- Toggle stays in the same top-bar position; it writes, invalidates the profile, and switches the admin i18n instance immediately. No navigation, no URL change.
+**Label switching.** `price` genuinely has two names in German — Kaufpreis and
+Kaltmiete — so there are two strings, but only one place decides which is used:
+a resolver in `field-visibility.ts` returns the label key for a money field
+given the deal type. The admin form, the public detail page and listing cards
+all call that resolver; no component contains a `deal_type === "rent"` ternary
+around a label. Every other money field has a single label.
 
-**Existing defect, reported not silently used:** `profiles` already has a broad self-update policy — "Users can update own profile" (`FOR UPDATE USING (id = auth.uid())`) from migration `20260723133630`. Column-level escalation is currently only blocked by the `profiles_enforce_role_integrity` trigger, not by the policy. I will not rely on or widen it; the toggle uses the server function. Tightening or replacing that policy is a separate task — flagging it as requested.
+**"Provisionsfrei".** A dedicated boolean column `commission_free`
+(`NOT NULL DEFAULT false`) — a deliberate answer, distinct from
+`commission_value IS NULL` which means "not filled in yet". A checkbox in the
+price section; ticking it hides and clears the commission figure fields. The
+checklist item is satisfied by either a commission value or the tick, so an
+empty commission is never a valid published state while "no commission" is.
 
-### 1.2 Admin gets its own i18n scope
-`src/routes/$locale.tsx` currently wraps everything, including `/admin`, in `<I18nProvider locale={URL locale}>`, and `getI18n` is a singleton that calls `changeLanguage` globally — so a profile-set admin language would be reverted on the next navigation.
+**Scroll-to-field from the rail.** Every checklist item carries a stable anchor
+id (e.g. `field-title`, `field-energy-year_built`). Fields register that id
+through `FieldRow`. One helper in `/lib` resolves it: find the element, walk its
+ancestors and open any closed `<details>` on the way, then scroll it into view
+and focus the first control inside it. That is what makes the energy year land
+on the energy field rather than the property one.
 
-- `src/i18n/config.ts` gains a second, named i18next instance (`createInstance`) for the admin, independent of the public singleton. The public site keeps using the URL locale; the admin uses the resolved interface locale.
-- The admin route renders its own provider with that instance, inside/over the `$locale` provider, so navigation within `/admin` cannot revert it (the public instance changing language no longer affects the admin instance).
-- Admin components stop using `i18n.language` for routing:
-  - `ListingForm` post-save navigation and any other in-admin navigation use the route's own `locale` param (`useParams`).
-  - `StatusBar` public link and `PreviewButton` use `site_settings.default_locale`, so a preview shows the site's primary language regardless of panel language.
+**Existing listings.** Nothing breaks and nothing needs a backfill. The new
+money columns are nullable (`NULL` = not stated), the two new booleans default
+to `false`, and Warmmiete is a database-computed column derived from figures
+that already exist. All 8 current listings are sales, so the rental fields never
+appear for them.
 
-### 1.3 Distinguish the two controls
-- Content tabs in the Texts block get a visible label ("Language of this text" / "Sprache dieses Textes").
-- The top-bar control gets an accessible label naming it as the panel/interface language.
+## Part 0 — the two leftovers
 
-### 1.4 Default locale is primary, others optional
-- Content tabs open on `site_settings.default_locale`, always.
-- Non-default tabs are marked optional, and the block states that an empty language falls back to the default one — muted, neutral copy; no warning styling, no incompleteness marker.
-- `buildPublishChecklist` already accepts any single translation (`hasAnyTranslation`), so DE-only publishes; a unit test locks that in.
+- A pending photo reorder is flushed instead of dropped: on unmount, on
+  navigation away, and before any publish or status change.
+- The publish button stays enabled. Clicking it with outstanding items shows the
+  blocker list already built for the checklist, and does not call the server.
 
-### 1.5 Remove the hardcoded English fallback
-`DEFAULT_LOCALE` stays only as a last-resort constant (renamed to say so) for when settings cannot be read. Root head, i18next fallback chains, admin shell and content tabs all take `site_settings.default_locale` where a real setting is available.
+## Part 1 — rental listings
 
-### 1.6 Fix locales in the right place — and truly neutralise the migration
-- Seed `de-waltner.sql`: `default_locale='de'`, `enabled_locales=ARRAY['de','en']`, plus the colour, font and `homepage_sections` values that migration `20260803085652` was carrying (some already present there; the rest move in).
-- `20260803085652` is an unconditional `UPDATE public.site_settings SET ...`, so column defaults are irrelevant. The follow-up migration therefore **UPDATEs the same columns back to neutral template values** (`default_locale='de'` as the schema's own neutral default, `enabled_locales=ARRAY['de']`, null/neutral colours and fonts, the neutral `homepage_sections` template order) and documents that client values live in the seed file. Migrations run in order, so on a fresh clone the neutral values win, and the seed — which runs after migrations — applies the real client configuration.
-- **Effect on this live database:** the follow-up migration will overwrite live values that are currently correct (colours, fonts, homepage sections, locales). Immediately after it runs, `supabase/seed/de-waltner.sql` must be re-applied against this database to restore them. I will run the follow-up migration and then re-apply the seed in the same step, and verify the public site's colours, fonts, homepage order and locales afterwards. Nothing outside `site_settings` is touched, so listings, photos and users are unaffected.
-- Then grep migrations for other client content and list it without fixing: `20260724113849` (client name + regional bio text), `20260803090119` (client font stack), `20260811073823` (client-name `WHERE` clauses).
+Money fields become deal-type dependent, driven by the visibility matrix:
 
-Out of scope: URL structure / locale prefixes.
+```text
+sale                          rent
+  Kaufpreis (price)             Kaltmiete (price)
+  Hausgeld (service_charge,     Nebenkosten (new)
+    apartments only)            Heizkosten inklusive (new, yes/no)
+  Provision                     Warmmiete (computed, read-only)
+                                Kaution (new)
+                                Provision
+                                Verfügbar ab (availability_date)
+```
 
-## Part 2 — Four defects
+New columns on `listings`: `utilities_cost`, `deposit`,
+`heating_costs_included`, `commission_free`, plus a database-computed
+`total_rent` (Kaltmiete + Nebenkosten) that can never contradict its inputs.
+Same CHECK discipline as migration `20260811091553`, plus the column grants and
+public-view rebuild the anon column-grant model requires.
 
-### 2.1 Missing keys + a check that catches dynamic keys
-- Add `admin.listings.help.highlights` and `help.surroundings` to `en.json` and `de.json`.
-- A verification script (run as part of the build/verify step) walks `src/` and checks two kinds of `t()` calls:
-  - **Literal keys** — verified directly against every message file.
-  - **Template-literal keys** — the interpolated variable is resolved against the constant that feeds it (e.g. `EDITABLE_CONTENT_SECTIONS`, deal types, selectable property types, `ChecklistKey`, status values, price periods, commission types, energy field keys). Every expanded key is then checked in every message file. The prefix→value-set mapping lives in one registry module next to the script.
-  - Any `t()` call the script cannot resolve statically **fails the check** with instructions to register its value set. Skipping is never silent — that is exactly what let `help.highlights` through.
-- The script reports file, line, key and the locale(s) missing it.
+## Part 2 — section order
 
-### 2.2 Photo reorder
-- Drop moves the dragged item **to** the target index (splice out, splice in), not one step toward it.
-- `ImageManager` keeps a local order state seeded from props. Every reorder path — drag-drop, arrow buttons and `makeCover` — mutates that local order first and goes through one shared debounced persist (~600 ms, single in-flight request, latest order wins), so several moves in quick succession produce exactly one `reorderListingImages` call. `makeCover` no longer calls the server directly, so it cannot race a pending save. A pending save is flushed on unmount/navigation and before publishing.
-- **Refresh vs pending save:** a `dirty` flag is set on the first local change and cleared only after the persist resolves. While it is set, incoming props are ignored — the local order stays authoritative, so a `refresh()` (or a poll from image processing) cannot revert a drag mid-flight. New/removed images are still reconciled by id: unknown ids are appended, missing ids dropped, existing order preserved. Once the save resolves and the refetch returns, props take over again.
-- A drop indicator (token-based accent line on the target edge) shows where the photo lands. Arrow buttons stay as the keyboard-accessible fallback.
+Final order: Basics (with the title) → Photos → Price & size → Location →
+Equipment → Texts → Energy certificate → More details.
 
-### 2.3 Objektnummer input
-Add a `reference_code` text input in the section matching its existing `details` visibility level, with the existing help text. The level is not changed.
+- The title moves to the top of Basics, with every enabled language shown side
+  by side, primary first and the others visibly optional. Language tabs stay in
+  the Texts block for the long fields.
+- Commission moves out of "More details" into the price section, next to the
+  figure it relates to, and becomes a checklist item.
 
-### 2.4 Readable publish errors
-- A mapper in `/lib/listings` parses the energy validation exception, extracts the country and field keys, and returns a structured result. The UI renders it with `admin.listings.energyFields` labels in the interface language ("Publishing needs: Year built (energy certificate)").
-- Unmapped errors are shown as a readable sentence ("Publishing failed: …"), still logged, never as a raw exception dump.
-- Label disambiguation only: property `year_built` → "Year built (property)" / "Baujahr (Objekt)"; `energy.year_built` → "Year built (energy certificate)" / "Baujahr (Energieausweis)". Fields are not merged or moved.
+## Part 3 — the checklist becomes the navigation
+
+- Sticky side rail beside the form on desktop; on narrow screens it collapses
+  into the save bar as an "N items missing" summary that expands on tap.
+- Every item is clickable, scrolls to its field and focuses it.
+- Every item names the specific missing field, as the energy item already does.
+- Done and missing states are visually distinct and calm — a tick versus an
+  open marker with the item name carrying the weight, no alarm colours.
+- No second section navigation is added.
+
+## Part 4 — smaller fixes
+
+- All money inputs show locale-grouped digits while typing (549.000) and store a
+  plain number.
+- Photo help text reduced to one line ("optimised automatically, location data
+  removed"); the full technical detail moves behind an info affordance.
+- The energy `year_built` becomes independently addressable, so the checklist
+  jump lands on it and not on the property year.
 
 ## Technical notes
-- Files stay under 200 lines; logic lives in `/lib` (locale resolution, key-check registry, error mapping, reorder persistence hook); components render.
-- All new strings in both message files; tokens only, no hardcoded colours.
-- SSR unchanged: the admin subtree keeps `ssr: false`, public routes keep SSR.
+
+Database migration (one migration):
+
+- `utilities_cost numeric`, `deposit numeric` — nullable,
+  `CHECK (… IS NULL OR … >= 0)`.
+- `heating_costs_included boolean NOT NULL DEFAULT false`.
+- `commission_free boolean NOT NULL DEFAULT false`.
+- `total_rent numeric GENERATED ALWAYS AS (price + COALESCE(utilities_cost, 0)) STORED`
+  — computed in the database so admin and public site cannot disagree.
+- Column-level `GRANT SELECT` to `anon` for the new fields on the allow-list and
+  `SELECT/UPDATE` to `authenticated`; `listings_public` recreated to expose
+  `utilities_cost`, `heating_costs_included`, `deposit`, `total_rent`,
+  `commission_free` (commission figures keep their existing
+  `commission_note_public` gate).
+
+Code:
+
+- `src/lib/listings/field-visibility.ts` — gains the deal-type axis. Helpers take
+  `{ property_type, deal_type }` instead of a bare property type, and expose
+  `moneyLabelKey(shape, field)`. All existing call sites (form sections, publish
+  checklist, public specs and facts bar) are updated to the shape argument, so
+  there stays exactly one source of truth.
+- `src/lib/listings/money.ts` — new: grouped-input parsing/formatting.
+- `src/lib/listings/publish-checklist.ts` — items gain `anchor` and named
+  `missing` fields for every item; new `commission` item.
+- `src/lib/listings/scroll-to-field.ts` — new: anchor resolution, opening
+  collapsed `<details>`, scroll and focus.
+- `src/lib/listings/admin-schema.ts` — the new fields, with `total_rent` read-only.
+- Admin components: `PriceGroup` splits into `SalePriceFields`,
+  `RentPriceFields` and `CommissionFields`; new `MoneyInput`, `TitleFields`,
+  `ChecklistRail`; edits to `BasicsSection`, `FiguresSection`, `ListingForm`,
+  `MoreDetailsSection`, `StatusBar`, `SaveBar`, `ImageManager`, `FieldRow`,
+  `use-image-order.ts`, `EnergySection`.
+- Public side: `ListingFactsBar`, `ListingCard`, `ListingSpecs` read the money
+  labels from the resolver and show Nebenkosten, Warmmiete, Kaution and
+  provisionsfrei for rentals. SSR stays intact.
+- New strings added to both `src/messages/de.json` and `en.json`; the existing
+  key check must stay green. Every file stays under 200 lines and all business
+  logic lives in `/lib`.
