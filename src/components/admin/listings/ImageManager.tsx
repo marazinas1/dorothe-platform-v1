@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ImagePlus, Loader2, RotateCcw, Upload, X } from "lucide-react";
+import { Loader2, RotateCcw, Upload, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -240,7 +240,7 @@ export function ImageManager({
                     variant="outline"
                     onClick={() => {
                       const file = filesRef.current.get(job.id);
-                      if (file) void runJob(job.id, file);
+                      if (file && listingId) void runJob(listingId, job.id, file);
                     }}
                   >
                     <RotateCcw className="mr-1 h-3.5 w-3.5" />
