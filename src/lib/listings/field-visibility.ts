@@ -161,10 +161,13 @@ const BY_DEAL_TYPE: Matrix = {
 
 export function fieldLevel(shape: ListingShape, field: VisibleField): FieldLevel {
   const byProperty = BY_PROPERTY_TYPE[shape.property_type]?.[field];
+  // Property type is structural: a plot has no rooms whatever the deal is, so a
+  // hidden rule there always wins. The deal type then decides between the sale
+  // and rental figures, which is why it may reveal a field the base hides.
+  if (byProperty === "hidden") return "hidden";
   const byDeal = BY_DEAL_TYPE[shape.deal_type]?.[field];
-  const base = byProperty ?? BASE[field];
-  if (base === "hidden") return "hidden";
-  return byDeal ?? base;
+  if (byDeal) return byDeal;
+  return byProperty ?? BASE[field];
 }
 
 export function isOpen(shape: ListingShape, field: VisibleField): boolean {
