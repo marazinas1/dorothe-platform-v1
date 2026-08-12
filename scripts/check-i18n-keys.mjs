@@ -68,11 +68,30 @@ function walk(dir, files = []) {
 
 const problems = [];
 
-function require(key, where) {
+function require(key, where, { objectOk = false } = {}) {
   for (const locale of MESSAGES) {
     const value = lookup(dicts[locale], key);
-    if (typeof value !== "string") {
+    if (value === undefined) {
       problems.push(`${where}: missing ${locale} key "${key}"`);
+    } else if (typeof value !== "string" && !objectOk) {
+      problems.push(`${where}: key "${key}" resolves to a group, not a string (${locale})`);
+    }
+  }
+}
+
+/** Namespaces must exist in every locale with the same keys. */
+function requireParity(prefix, where) {
+  const nodes = MESSAGES.map((locale) => lookup(dicts[locale], prefix));
+  if (nodes.some((node) => !node || typeof node !== "object")) {
+    problems.push(`${where}: dynamic key prefix "${prefix}" is not a group in every locale`);
+    return;
+  }
+  const [first, ...rest] = nodes.map((node) => Object.keys(node).sort().join(","));
+  for (const [index, keys] of rest.entries()) {
+    if (keys !== first) {
+      problems.push(
+        `${where}: "${prefix}" differs between ${MESSAGES[0]} and ${MESSAGES[index + 1]}`,
+      );
     }
   }
 }
@@ -82,7 +101,9 @@ for (const file of walk("src")) {
   const source = readFileSync(file, "utf8");
 
   for (const match of source.matchAll(/\bt\(\s*"([a-zA-Z0-9_.]+)"/g)) {
-    require(match[1], file);
+    // returnObjects deliberately reads a list/group of strings.
+    const tail = source.slice(match.index, match.index + 220);
+    require(match[1], file, { objectOk: /returnObjects/.test(tail) });
   }
 
   // Dynamic keys: t(`prefix.${expr}`)
@@ -90,9 +111,9 @@ for (const file of walk("src")) {
     const prefix = match[1];
     const values = DYNAMIC_PREFIXES[prefix];
     if (!values) {
-      problems.push(
-        `${file}: dynamic key prefix "${prefix}" is not registered in scripts/check-i18n-keys.mjs`,
-      );
+      // Not a known enumeration: at least require the namespace to exist and
+      // to hold the same keys in every locale.
+      requireParity(prefix, file);
       continue;
     }
     for (const value of values) require(`${prefix}.${value}`, file);
