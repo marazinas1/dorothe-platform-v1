@@ -1,4 +1,4 @@
-import i18n from "i18next";
+import i18n, { createInstance, type i18n as I18nInstance } from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import de from "@/messages/de.json";
@@ -6,23 +6,49 @@ import en from "@/messages/en.json";
 
 export const SUPPORTED_LOCALES = ["de", "en"] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
-export const DEFAULT_LOCALE: Locale = "en";
 
-export function isLocale(value: string | undefined): value is Locale {
+/**
+ * The locales we actually ship message files for. The admin interface can only
+ * be operated in one of these; a client publishing in other languages still
+ * operates the panel in one of the shipped ones.
+ */
+export const MESSAGE_LOCALES = SUPPORTED_LOCALES;
+
+/**
+ * Last-resort fallback, used ONLY when site_settings cannot be read at all.
+ * Everywhere a real setting is available, site_settings.default_locale decides.
+ * It matches the schema default of site_settings.default_locale.
+ */
+export const FALLBACK_LOCALE: Locale = "de";
+
+export function isLocale(value: string | undefined | null): value is Locale {
   return !!value && (SUPPORTED_LOCALES as readonly string[]).includes(value);
 }
 
+/** Resolve a stored/unknown value against the shipped message files. */
+export function resolveMessageLocale(
+  ...candidates: (string | null | undefined)[]
+): Locale {
+  for (const candidate of candidates) {
+    if (isLocale(candidate)) return candidate;
+  }
+  return FALLBACK_LOCALE;
+}
+
+const resources = {
+  de: { translation: de },
+  en: { translation: en },
+};
+
 let initialized = false;
 
+/** The public site instance. Its language follows the URL locale. */
 export function getI18n(locale: Locale) {
   if (!initialized) {
     i18n.use(initReactI18next).init({
-      resources: {
-        de: { translation: de },
-        en: { translation: en },
-      },
+      resources,
       lng: locale,
-      fallbackLng: DEFAULT_LOCALE,
+      fallbackLng: FALLBACK_LOCALE,
       interpolation: { escapeValue: false },
       react: { useSuspense: false },
     });
@@ -31,6 +57,29 @@ export function getI18n(locale: Locale) {
     void i18n.changeLanguage(locale);
   }
   return i18n;
+}
+
+let adminInstance: I18nInstance | null = null;
+
+/**
+ * A separate instance for the admin panel. The interface language is a per-user
+ * preference, unrelated to the URL locale, so it must not be reverted when the
+ * public instance changes language on navigation.
+ */
+export function getAdminI18n(locale: Locale) {
+  if (!adminInstance) {
+    adminInstance = createInstance();
+    void adminInstance.use(initReactI18next).init({
+      resources,
+      lng: locale,
+      fallbackLng: FALLBACK_LOCALE,
+      interpolation: { escapeValue: false },
+      react: { useSuspense: false },
+    });
+  } else if (adminInstance.language !== locale) {
+    void adminInstance.changeLanguage(locale);
+  }
+  return adminInstance;
 }
 
 /**

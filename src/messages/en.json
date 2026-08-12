@@ -301,7 +301,9 @@
       "signOut": "Sign out",
       "toggleSidebar": "Toggle navigation",
       "unknownUser": "Unknown user",
-      "interfaceLanguage": "Interface"
+      "interfaceLanguage": "Panel language",
+      "interfaceLanguageHint": "Only changes the language of this panel, not the website.",
+      "interfaceLanguageFailed": "Could not save the panel language."
     },
     "role": {
       "owner": "Owner",
