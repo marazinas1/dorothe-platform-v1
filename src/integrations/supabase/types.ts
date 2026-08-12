@@ -1124,6 +1124,7 @@ export type Database = {
       current_user_is_active: { Args: never; Returns: boolean }
       current_user_role: { Args: never; Returns: string }
       has_role: { Args: { _roles: string[] }; Returns: boolean }
+      listing_is_public: { Args: { _listing_id: string }; Returns: boolean }
       map_energy_source_text: { Args: { _input: string }; Returns: string }
       slugify: { Args: { _input: string }; Returns: string }
       storage_can_edit_listing_object: {
