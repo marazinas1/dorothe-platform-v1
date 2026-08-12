@@ -1,41 +1,61 @@
-import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { SUPPORTED_LOCALES, type Locale } from "@/i18n/config";
+import { MESSAGE_LOCALES, type Locale } from "@/i18n/config";
+import { setAdminLocale } from "@/lib/auth/admin-locale.functions";
 import { cn } from "@/lib/utils";
 
 /**
- * EN/DE switch for the admin. Admin routes carry the locale, so switching is a
- * navigation to the same path under the other locale prefix.
+ * Interface language of the panel — a per-user preference stored on the profile,
+ * not a navigation. It is unrelated to the content language of the website and
+ * only offers the languages we ship message files for.
  */
-export function AdminLocaleToggle() {
-  const { locale } = useParams({ strict: false }) as { locale: Locale };
+export function AdminLocaleToggle({ current }: { current: Locale }) {
   const { t } = useTranslation();
-  const location = useLocation();
-  const rest = location.pathname.split("/").slice(2).filter(Boolean);
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+
+  async function choose(locale: Locale) {
+    if (locale === current || busy) return;
+    setBusy(true);
+    try {
+      await setAdminLocale({ data: { locale } });
+      // Re-runs the admin gate, so the resolved interface language comes from
+      // the stored profile rather than from local state.
+      await router.invalidate();
+    } catch {
+      toast.error(t("admin.topbar.interfaceLanguageFailed"));
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
-    <nav
+    <div
+      role="group"
       aria-label={t("admin.topbar.interfaceLanguage")}
+      title={t("admin.topbar.interfaceLanguageHint")}
       className="flex items-center gap-0.5 rounded-md border border-border p-0.5"
     >
-      {SUPPORTED_LOCALES.map((loc: Locale) => (
-        <Link
+      {MESSAGE_LOCALES.map((loc) => (
+        <button
           key={loc}
-          // Same path under the other locale prefix; the route params are
-          // already in the pathname, so a concrete path is what we need here.
-          to={["", loc, ...rest].join("/") as never}
-          replace
+          type="button"
+          disabled={busy}
+          aria-pressed={loc === current}
+          onClick={() => void choose(loc)}
           className={cn(
-            "rounded px-2 py-0.5 text-xs font-medium uppercase tracking-wide transition-colors",
-            loc === locale
+            "rounded px-2 py-0.5 text-xs font-medium uppercase tracking-wide transition-colors disabled:opacity-60",
+            loc === current
               ? "bg-secondary text-secondary-foreground"
               : "text-muted-foreground hover:text-foreground",
           )}
         >
           {loc}
-        </Link>
+        </button>
       ))}
-    </nav>
+    </div>
   );
 }
