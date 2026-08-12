@@ -109,7 +109,10 @@ function helperKeys(name, { file, sets }) {
     keys.push(...variants);
   }
   if (keys.length === 0) problems.push(`${file}: ${name} returns no resolvable key`);
-  return keys;
+  // A helper's generic return (`${prefix}.${field}`) also expands fields that an
+  // earlier, more specific return handles with a suffix (price -> price_sale /
+  // price_rent). Drop a key when a longer key extends it with a suffix.
+  return keys.filter((key) => !keys.some((other) => other.startsWith(`${key}_`)));
 }
 
 /**
