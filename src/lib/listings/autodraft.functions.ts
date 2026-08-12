@@ -1,46 +1,13 @@
-// Auto-draft lifecycle. "New listing" creates the row immediately so photos can
-// be uploaded before anything is filled in; the price of that convenience is
-// abandoned empty drafts, which are cleaned up opportunistically when the list
-// screen loads. Status changes stay explicit — autosave never publishes.
+// Cleanup safety net for auto-created drafts. Rows are now created lazily, on
+// the first meaningful action in the editor, so an empty auto-draft can only
+// exist if a save failed midway. One hour is enough slack for a client that is
+// mid-upload or offline, and short enough that junk never lingers in the list.
 import { createServerFn } from "@tanstack/react-start";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /** Empty drafts older than this are removed on the next admin list load. */
-const JUNK_AGE_HOURS = 24;
-
-export const createAutoDraft = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<{ id: string }> => {
-    const { supabase, userId } = context;
-    const { assertPermission } = await import("@/lib/auth/require-permission.server");
-    await assertPermission(supabase, userId, "listing.create");
-
-    // Country and region come from configuration, never from code.
-    const { data: settings } = await supabase
-      .from("site_settings")
-      .select("country, address_country")
-      .limit(1)
-      .maybeSingle();
-
-    const { data: created, error } = await supabase
-      .from("listings")
-      .insert({
-        status: "draft",
-        created_from_autodraft: true,
-        deal_type: "sale",
-        property_type: "apartment",
-        geo_precision: "approximate",
-        address_country: settings?.address_country ?? settings?.country ?? null,
-      } as never)
-      .select("id")
-      .maybeSingle();
-    if (error || !created) {
-      throw new Error(error?.message ?? "Could not create draft");
-    }
-    return created as { id: string };
-  });
-
+const JUNK_AGE_HOURS = 1;
 /**
  * Delete auto-created drafts that were never touched: no title, no photos,
  * untouched for a day. Anything the user actually typed into is kept.
