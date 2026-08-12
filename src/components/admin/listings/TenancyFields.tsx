@@ -1,4 +1,8 @@
 import { useTranslation } from "react-i18next";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
+import { FALLBACK_LOCALE } from "@/i18n/config";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -51,7 +55,7 @@ export function TenancyFields({
             label={t("admin.listings.fields.availability_date")}
             help={
               values.availability_date
-                ? new Intl.DateTimeFormat(i18n.language, { dateStyle: "long" }).format(
+                ? new Intl.DateTimeFormat(contentLocale, { dateStyle: "long" }).format(
                     new Date(values.availability_date),
                   )
                 : t("admin.listings.help.availability_date")
