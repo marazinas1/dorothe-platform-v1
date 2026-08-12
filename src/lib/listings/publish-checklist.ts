@@ -3,6 +3,7 @@
 // the public view). Shown as a neutral, persistent checklist rather than as
 // red validation errors, because a draft is allowed to be incomplete.
 import type { ListingFormValues } from "./admin-schema";
+import { applies } from "./field-visibility";
 import { isEnergyExempt, validateEnergy, type Country } from "@/lib/validation/energy";
 
 export type ChecklistKey = "title" | "photo" | "price" | "city" | "energy";
@@ -34,7 +35,11 @@ export function buildPublishChecklist({
   imageCount: number;
   country: Country;
 }): Checklist {
-  const energyExempt = isEnergyExempt(values.property_type, values.energy_exemption ?? null);
+  // A type that has no energy fields at all can never owe an energy certificate,
+  // so the checklist and the form agree on one visibility source.
+  const energyExempt =
+    !applies(values.property_type, "energy") ||
+    isEnergyExempt(values.property_type, values.energy_exemption ?? null);
   const energyMissing = energyExempt
     ? []
     : validateEnergy(
