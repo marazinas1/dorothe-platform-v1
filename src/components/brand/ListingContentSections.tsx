@@ -12,7 +12,10 @@ type Props = {
   locale: Locale;
 };
 
-const KNOWN_KEYS = ["highlights", "property_info", "building_info", "surroundings"] as const;
+// Only the sections that are still written by hand. Property and building info
+// were retired in favour of the generated specification table, so legacy rows
+// keep their data in the database but stop being rendered twice.
+const KNOWN_KEYS = ["highlights", "surroundings"] as const;
 
 function pickItems(items: unknown, locale: string): string[] {
   if (!items || typeof items !== "object") return [];
@@ -24,7 +27,7 @@ function pickItems(items: unknown, locale: string): string[] {
 }
 
 /**
- * Structured content blocks (highlights, property info, building info, surroundings).
+ * Hand-written content blocks (highlights, surroundings).
  * Sections without items are skipped. Order comes from the DB.
  */
 export function ListingContentSections({ sections, locale }: Props) {

@@ -105,7 +105,8 @@
         "highlights": "Highlights",
         "property_info": "Property information",
         "building_info": "Building & technology",
-        "surroundings": "Location & surroundings"
+        "surroundings": "Location & surroundings",
+        "specs": "Specification"
       },
       "unavailable_title": "Property unavailable",
       "unavailable_body": "This listing is no longer online. Browse our current offerings instead.",
@@ -126,7 +127,11 @@
       "availability": "Available from",
       "availability_after_tenancy": "After the current tenancy ends",
       "availability_immediately": "Immediately",
-      "reference_short": "Ref."
+      "reference_short": "Ref.",
+      "usable_area_commercial": "Commercial area",
+      "usable_area": "Usable area",
+      "total_floors": "Floors in building",
+      "available_from": "Available from"
     },
     "pager": {
       "prev": "Previous",
@@ -218,6 +223,11 @@
       "storage_room": "Storage room",
       "high_ceilings": "High ceilings",
       "wooden_floors": "Wooden floors"
+    },
+    "rentalStatus": {
+      "let": "Let",
+      "vacant": "Vacant",
+      "partially_let": "Partially let"
     }
   },
   "inquiry": {
@@ -505,14 +515,16 @@
       "saveBeforeStatus": "Save your changes first.",
       "sections": {
         "basics": "Basics",
-        "figures": "Figures & price",
+        "figures": "Price & size",
         "location": "Location",
         "energy": "Energy certificate",
         "content": "Content sections",
         "images": "Photos",
         "seo": "SEO & metadata",
         "market": "Costs, commission & tenancy",
-        "equipment": "Equipment & features"
+        "equipment": "Equipment & features",
+        "more": "More details",
+        "translated": "Texts"
       },
       "fields": {
         "title": "Title",
@@ -553,7 +565,8 @@
         "reference_code": "Reference number",
         "features": "Features",
         "condition": "Condition",
-        "heating_type": "Heating"
+        "heating_type": "Heating",
+        "usable_area_commercial": "Commercial area (m²)"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -574,7 +587,10 @@
         "commission": "Stating the commission is legally required in Germany.",
         "rental": "Whether someone lives there right now. Independent of whether you sell or let the property.",
         "availability_date": "Leave empty if the date is not fixed yet.",
-        "reference_code": "Optional. Your own internal number, shown on the public page."
+        "reference_code": "Optional. Your own internal number, shown on the public page.",
+        "more": "Optional — not required to publish.",
+        "translated": "Only these fields need a language. If one language is empty, the other one is shown.",
+        "legacyPropertyType": "This property type is no longer offered. Please pick a current one."
       },
       "energy": {
         "intro": "Required fields for {{country}}. Publishing is blocked until they are complete.",
@@ -696,9 +712,11 @@
         "villa": "Villa",
         "townhouse": "Townhouse",
         "penthouse": "Penthouse",
-        "land": "Land",
+        "land": "Plot",
         "commercial": "Commercial",
-        "garage": "Garage"
+        "garage": "Garage / parking",
+        "country_house": "Country house",
+        "other": "Other"
       },
       "contentLanguage": "Editing content in",
       "contentLanguageHint": "This only changes which translation you are writing, not the interface language.",
@@ -757,14 +775,15 @@
       },
       "notSet": "Not set",
       "groups": {
-        "price": "Price & costs",
+        "price": "Price",
         "size": "Size & rooms"
       },
       "pricePeriod": {
         "month": "per month",
         "week": "per week",
         "total": "total"
-      }
+      },
+      "fallbackFrom": "Shown from {{lang}} while empty"
     },
     "inquiries": {
       "summary": "{{total}} total · {{unread}} new",

@@ -16,8 +16,17 @@ import { currencySymbol } from "@/lib/listings/format";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow } from "./FieldRow";
 
-/** Price, running costs and commission-adjacent money fields. */
-export function PriceGroup({ form }: { form: ListingFormApi }) {
+/**
+ * Price and, where the property type calls for it, the monthly service charge.
+ * `showServiceCharge` is decided by field-visibility, not here.
+ */
+export function PriceGroup({
+  form,
+  showServiceCharge = true,
+}: {
+  form: ListingFormApi;
+  showServiceCharge?: boolean;
+}) {
   const { t } = useTranslation();
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const { values } = form;
@@ -90,6 +99,7 @@ export function PriceGroup({ form }: { form: ListingFormApi }) {
         </div>
       ) : null}
 
+      {showServiceCharge ? (
       <FieldRow
         label={t("admin.listings.fields.service_charge")}
         help={t("admin.listings.help.service_charge")}
@@ -111,6 +121,7 @@ export function PriceGroup({ form }: { form: ListingFormApi }) {
           />
         </div>
       </FieldRow>
+      ) : null}
     </div>
   );
 }

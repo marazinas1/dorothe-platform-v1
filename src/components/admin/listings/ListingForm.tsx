@@ -4,23 +4,22 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ListingFormSchema, type ListingFormValues } from "@/lib/listings/admin-schema";
 import {
   adminListingQueryOptions,
   adminListingsQueryOptions,
   saveListing,
 } from "@/lib/listings/admin.functions";
+import { applies } from "@/lib/listings/field-visibility";
 import { useListingForm, type ListingFormApi } from "./listing-form-state";
 import { useListingAutosave } from "./use-listing-autosave";
 import { BasicsSection } from "./BasicsSection";
 import { FiguresSection } from "./FiguresSection";
-import { MarketSection } from "./MarketSection";
 import { EquipmentSection } from "./EquipmentSection";
 import { LocationSection } from "./LocationSection";
 import { EnergySection } from "./EnergySection";
-import { SeoSection } from "./SeoSection";
-import { ContentSectionsEditor } from "./ContentSectionsEditor";
+import { MoreDetailsSection } from "./MoreDetailsSection";
+import { TranslatableBlock } from "./TranslatableBlock";
 import { ImageManager } from "./ImageManager";
 import { PublishChecklist } from "./PublishChecklist";
 import { StatusBar } from "./StatusBar";
@@ -100,26 +99,6 @@ export function ListingForm({
           t("admin.listings.untitled")}
       </h1>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-muted-foreground">
-            {t("admin.listings.contentLanguage")}
-          </span>
-          <Tabs value={lang} onValueChange={setLang}>
-            <TabsList>
-              {locales.map((code) => (
-                <TabsTrigger key={code} value={code}>
-                  {code.toUpperCase()}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
-        <p className="max-w-sm text-xs text-muted-foreground">
-          {t("admin.listings.contentLanguageHint")}
-        </p>
-      </div>
-
       {listingId ? (
         <StatusBar
           listingId={listingId}
@@ -133,7 +112,7 @@ export function ListingForm({
 
       <PublishChecklist values={form.values} imageCount={images.length} />
 
-      <BasicsSection form={form} lang={lang} />
+      <BasicsSection form={form} />
       <ImageManager
         listingId={listingId}
         images={images}
@@ -141,14 +120,12 @@ export function ListingForm({
         onSaveDraft={() => void save()}
         savingDraft={saving}
       />
-      <LocationSection form={form} />
       <FiguresSection form={form} />
+      <LocationSection form={form} />
       <EquipmentSection form={form} />
-      <MarketSection form={form} />
-      <ContentSectionsEditor form={form} lang={lang} />
-      <EnergySection form={form} />
-      <SeoSection form={form} lang={lang} />
-
+      {applies(form.values.property_type, "energy") ? <EnergySection form={form} /> : null}
+      <TranslatableBlock form={form} lang={lang} locales={locales} onLangChange={setLang} />
+      <MoreDetailsSection form={form} lang={lang} />
 
       <SaveBar
         dirty={form.dirty}

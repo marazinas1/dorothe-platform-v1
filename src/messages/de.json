@@ -105,7 +105,8 @@
         "highlights": "Highlights",
         "property_info": "Objektdaten",
         "building_info": "Gebäude & Technik",
-        "surroundings": "Lage und Umgebung"
+        "surroundings": "Lage und Umgebung",
+        "specs": "Objektdaten"
       },
       "unavailable_title": "Objekt nicht verfügbar",
       "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an.",
@@ -126,7 +127,11 @@
       "availability": "Verfügbar ab",
       "availability_after_tenancy": "Nach Ende des laufenden Mietverhältnisses",
       "availability_immediately": "Sofort",
-      "reference_short": "Obj.-Nr."
+      "reference_short": "Obj.-Nr.",
+      "usable_area_commercial": "Gewerbefläche",
+      "usable_area": "Nutzfläche",
+      "total_floors": "Etagen im Haus",
+      "available_from": "Verfügbar ab"
     },
     "pager": {
       "prev": "Zurück",
@@ -218,6 +223,11 @@
       "storage_room": "Abstellraum",
       "high_ceilings": "Hohe Decken",
       "wooden_floors": "Holzdielen"
+    },
+    "rentalStatus": {
+      "let": "Vermietet",
+      "vacant": "Frei",
+      "partially_let": "Teilweise vermietet"
     }
   },
   "inquiry": {
@@ -505,14 +515,16 @@
       "saveBeforeStatus": "Bitte zuerst speichern.",
       "sections": {
         "basics": "Grunddaten",
-        "figures": "Zahlen & Preis",
+        "figures": "Preis & Größe",
         "location": "Lage",
         "energy": "Energieausweis",
         "content": "Inhaltsabschnitte",
         "images": "Fotos",
         "seo": "SEO & Metadaten",
         "market": "Kosten, Provision & Vermietung",
-        "equipment": "Ausstattung & Merkmale"
+        "equipment": "Ausstattung & Merkmale",
+        "more": "Weitere Angaben",
+        "translated": "Texte"
       },
       "fields": {
         "title": "Titel",
@@ -553,7 +565,8 @@
         "reference_code": "Objektnummer",
         "features": "Merkmale",
         "condition": "Zustand",
-        "heating_type": "Heizung"
+        "heating_type": "Heizung",
+        "usable_area_commercial": "Gewerbefläche (m²)"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -574,7 +587,10 @@
         "commission": "Die Angabe der Provision ist in Deutschland gesetzlich vorgeschrieben.",
         "rental": "Ob aktuell jemand darin wohnt. Unabhängig davon, ob Sie verkaufen oder vermieten.",
         "availability_date": "Leer lassen, wenn das Datum noch nicht feststeht.",
-        "reference_code": "Optional. Ihre eigene Objektnummer, wird auf der öffentlichen Seite angezeigt."
+        "reference_code": "Optional. Ihre eigene Objektnummer, wird auf der öffentlichen Seite angezeigt.",
+        "more": "Optional – zum Veröffentlichen nicht erforderlich.",
+        "translated": "Nur diese Felder brauchen eine Sprache. Bleibt eine Sprache leer, wird die andere angezeigt.",
+        "legacyPropertyType": "Dieser Objekttyp wird nicht mehr angeboten. Bitte einen aktuellen Typ wählen."
       },
       "energy": {
         "intro": "Pflichtfelder für {{country}}. Ohne sie ist eine Veröffentlichung nicht möglich.",
@@ -698,7 +714,9 @@
         "penthouse": "Penthouse",
         "land": "Grundstück",
         "commercial": "Gewerbe",
-        "garage": "Garage"
+        "garage": "Garage / Stellplatz",
+        "country_house": "Landhaus",
+        "other": "Sonstiges"
       },
       "contentLanguage": "Inhalt bearbeiten in",
       "contentLanguageHint": "Das ändert nur, welche Übersetzung Sie schreiben — nicht die Sprache der Oberfläche.",
@@ -757,14 +775,15 @@
       },
       "notSet": "Nicht angegeben",
       "groups": {
-        "price": "Preis & Kosten",
-        "size": "Größe & Räume"
+        "price": "Preis",
+        "size": "Größe & Zimmer"
       },
       "pricePeriod": {
         "month": "pro Monat",
         "week": "pro Woche",
         "total": "gesamt"
-      }
+      },
+      "fallbackFrom": "Aus {{lang}} übernommen, solange leer"
     },
     "inquiries": {
       "summary": "{{total}} insgesamt · {{unread}} neu",

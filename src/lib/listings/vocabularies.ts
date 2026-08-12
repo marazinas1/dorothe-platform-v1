@@ -10,23 +10,23 @@ export type PropertyType = (typeof PROPERTY_TYPES)[number];
  * to, so a plot never offers a lift. Omitting `types` means "every type".
  */
 export const LISTING_FEATURES: readonly { key: string; types?: readonly PropertyType[] }[] = [
-  { key: "balcony", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial"] },
-  { key: "terrace", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial"] },
-  { key: "garden", types: ["apartment", "house", "villa", "townhouse", "penthouse"] },
-  { key: "cellar", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial"] },
+  { key: "balcony", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial"] },
+  { key: "terrace", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial"] },
+  { key: "garden", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse"] },
+  { key: "cellar", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial"] },
   { key: "lift", types: ["apartment", "penthouse", "commercial"] },
-  { key: "garage", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial"] },
-  { key: "parking_space", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial", "land"] },
+  { key: "garage", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial"] },
+  { key: "parking_space", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial", "land"] },
   { key: "underground_parking", types: ["apartment", "penthouse", "commercial"] },
-  { key: "fitted_kitchen", types: ["apartment", "house", "villa", "townhouse", "penthouse"] },
-  { key: "guest_wc", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial"] },
-  { key: "barrier_free", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial", "garage"] },
-  { key: "underfloor_heating", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial"] },
-  { key: "fireplace", types: ["apartment", "house", "villa", "townhouse", "penthouse"] },
-  { key: "attic", types: ["house", "villa", "townhouse"] },
-  { key: "storage_room", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial", "garage"] },
-  { key: "high_ceilings", types: ["apartment", "house", "villa", "townhouse", "penthouse", "commercial"] },
-  { key: "wooden_floors", types: ["apartment", "house", "villa", "townhouse", "penthouse"] },
+  { key: "fitted_kitchen", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse"] },
+  { key: "guest_wc", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial"] },
+  { key: "barrier_free", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial", "garage"] },
+  { key: "underfloor_heating", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial"] },
+  { key: "fireplace", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse"] },
+  { key: "attic", types: ["house", "country_house", "villa", "townhouse"] },
+  { key: "storage_room", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial", "garage"] },
+  { key: "high_ceilings", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse", "commercial"] },
+  { key: "wooden_floors", types: ["apartment", "house", "country_house", "villa", "townhouse", "penthouse"] },
 ] as const;
 
 export const FEATURE_KEYS = LISTING_FEATURES.map((f) => f.key);

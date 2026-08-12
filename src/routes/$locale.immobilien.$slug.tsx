@@ -8,6 +8,7 @@ import { ListingGallery } from "@/components/brand/ListingGallery";
 import { ListingHeroOverlay } from "@/components/brand/ListingHeroOverlay";
 import { ListingFactsBar } from "@/components/brand/ListingFactsBar";
 import { ListingFeatures } from "@/components/brand/ListingFeatures";
+import { ListingSpecs } from "@/components/brand/ListingSpecs";
 import { ListingHeadline } from "@/components/brand/ListingHeadline";
 import { ListingContentSections } from "@/components/brand/ListingContentSections";
 import { EnergyPanel } from "@/components/brand/EnergyPanel";
@@ -219,6 +220,11 @@ function ListingDetail() {
           {/* 3. Description */}
           <section className="mt-28">
             <ListingHeadline listing={l} locale={locale as Locale} />
+          </section>
+
+          {/* 3b. Full specification, generated from the structured fields */}
+          <section className="mt-28">
+            <ListingSpecs listing={l} locale={locale as Locale} settings={settings} />
           </section>
 
           {/* 4. Content sections */}

@@ -1,5 +1,4 @@
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectContent,
@@ -7,93 +6,75 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTranslation } from "react-i18next";
 
-import { DEAL_TYPES, PROPERTY_TYPES } from "@/lib/listings/admin-schema";
+import {
+  DEAL_TYPES,
+  SELECTABLE_PROPERTY_TYPES,
+  type PROPERTY_TYPES,
+} from "@/lib/listings/admin-schema";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow, FormSection } from "./FieldRow";
 
-/** Title / description per language plus deal & property type. */
-export function BasicsSection({
-  form,
-  lang,
-}: {
-  form: ListingFormApi;
-  lang: string;
-}) {
+/**
+ * Deal type and property type — the two answers that decide which fields the
+ * rest of the form shows. A listing still holding a retired type keeps it as a
+ * visible option until the broker picks one of the current ones.
+ */
+export function BasicsSection({ form }: { form: ListingFormApi }) {
   const { t } = useTranslation();
   const { values } = form;
+  const current = values.property_type;
+  const legacy = !(SELECTABLE_PROPERTY_TYPES as readonly string[]).includes(current);
 
   return (
     <FormSection title={t("admin.listings.sections.basics")}>
-      <div className="grid gap-4">
-        <FieldRow label={`${t("admin.listings.fields.title")} (${lang.toUpperCase()})`}>
-          <Input
-            value={values.title?.[lang] ?? ""}
-            onChange={(e) => form.setTranslated("title", lang, e.target.value)}
-          />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <FieldRow label={t("admin.listings.fields.deal_type")}>
+          <Select
+            value={values.deal_type}
+            onValueChange={(v) => form.setField("deal_type", v as (typeof DEAL_TYPES)[number])}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {DEAL_TYPES.map((d) => (
+                <SelectItem key={d} value={d}>
+                  {t(`admin.listings.deal.${d}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </FieldRow>
+
         <FieldRow
-          label={`${t("admin.listings.fields.description")} (${lang.toUpperCase()})`}
+          label={t("admin.listings.fields.property_type")}
+          help={legacy ? t("admin.listings.help.legacyPropertyType") : undefined}
         >
-          <Textarea
-            rows={6}
-            value={values.description?.[lang] ?? ""}
-            onChange={(e) => form.setTranslated("description", lang, e.target.value)}
-          />
-        </FieldRow>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FieldRow label={t("admin.listings.fields.deal_type")}>
-            <Select
-              value={values.deal_type}
-              onValueChange={(v) =>
-                form.setField("deal_type", v as (typeof DEAL_TYPES)[number])
-              }
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {DEAL_TYPES.map((d) => (
-                  <SelectItem key={d} value={d}>
-                    {t(`admin.listings.deal.${d}`)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FieldRow>
-          <FieldRow label={t("admin.listings.fields.property_type")}>
-            <Select
-              value={values.property_type}
-              onValueChange={(v) =>
-                form.setField("property_type", v as (typeof PROPERTY_TYPES)[number])
-              }
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {PROPERTY_TYPES.map((p) => (
-                  <SelectItem key={p} value={p}>
-                    {t(`admin.listings.propertyType.${p}`)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FieldRow>
-        </div>
-        <FieldRow
-          label={t("admin.listings.fields.reference_code")}
-          help={t("admin.listings.help.reference_code")}
-          className="max-w-sm"
-        >
-          <Input
-            value={values.reference_code ?? ""}
-            onChange={(e) => form.setField("reference_code", e.target.value || null)}
-          />
+          <Select
+            value={current}
+            onValueChange={(v) =>
+              form.setField("property_type", v as (typeof PROPERTY_TYPES)[number])
+            }
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {legacy ? (
+                <SelectItem value={current}>
+                  {t(`admin.listings.propertyType.${current}`)}
+                </SelectItem>
+              ) : null}
+              {SELECTABLE_PROPERTY_TYPES.map((p) => (
+                <SelectItem key={p} value={p}>
+                  {t(`admin.listings.propertyType.${p}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </FieldRow>
       </div>
-
     </FormSection>
   );
 }

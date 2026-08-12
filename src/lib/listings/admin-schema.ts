@@ -9,15 +9,29 @@ import { HEATING_TYPES, LISTING_CONDITIONS } from "./vocabularies";
 
 export const DEAL_TYPES = ["sale", "rent"] as const;
 
-export const PROPERTY_TYPES = [
+/**
+ * Types offered in the picker — the aruodas.lt convention. `land` is the stored
+ * key for a plot; the label says "Plot".
+ */
+export const SELECTABLE_PROPERTY_TYPES = [
   "apartment",
   "house",
-  "villa",
-  "townhouse",
-  "penthouse",
   "land",
   "commercial",
   "garage",
+  "country_house",
+] as const;
+
+/**
+ * Everything the database accepts. Legacy keys stay valid so existing rows keep
+ * working, but they are not offered for new listings.
+ */
+export const PROPERTY_TYPES = [
+  ...SELECTABLE_PROPERTY_TYPES,
+  "villa",
+  "townhouse",
+  "penthouse",
+  "other",
 ] as const;
 
 export const LISTING_STATUSES = [
@@ -68,6 +82,13 @@ export const CONTENT_SECTION_KEYS = [
 ] as const;
 
 export type ContentSectionKey = (typeof CONTENT_SECTION_KEYS)[number];
+
+/**
+ * Written sections that are still edited and rendered. `property_info` and
+ * `building_info` were retired: those facts come from structured fields now, so
+ * nobody types them twice. Existing data stays in the database, unrendered.
+ */
+export const EDITABLE_CONTENT_SECTIONS = ["highlights", "surroundings"] as const;
 
 /** jsonb translation map, e.g. { en: "Title", de: "Titel" }. */
 const Translated = z.record(z.string(), z.string());
