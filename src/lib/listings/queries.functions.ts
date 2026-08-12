@@ -200,27 +200,35 @@ export const getListingBySlug = createServerFn({ method: "GET" })
     return normalizeRow(row, images.get(row.id as string) ?? []);
   });
 
+const featuredBase = {
+  deal: "",
+  type: "",
+  city: "",
+  rooms_min: 0,
+  price_min: 0,
+  price_max: 0,
+  area_min: 0,
+  sort: "newest",
+  page: 1,
+  onlyStatus: [...PublicSaleStatuses],
+  limit: 6,
+};
+
 export const featuredListingsQueryOptions = queryOptions({
   queryKey: ["listings", "featured"],
-  queryFn: () =>
-    listPublicListings({
-      data: {
-        deal: "",
-        type: "",
-        city: "",
-        rooms_min: 0,
-        price_min: 0,
-        price_max: 0,
-        area_min: 0,
-        sort: "newest",
-        page: 1,
-        onlyStatus: [...PublicSaleStatuses],
-        featured: true,
-        limit: 6,
-      },
-    } as any),
+  queryFn: async () => {
+    const flagged = await listPublicListings({
+      data: { ...featuredBase, featured: true },
+    } as any);
+    // A young portfolio may have nothing flagged yet. Falling back to the
+    // newest public listings keeps the homepage section honest instead of
+    // silently disappearing while properties exist.
+    if (flagged.items.length > 0) return flagged;
+    return listPublicListings({ data: { ...featuredBase } } as any);
+  },
   staleTime: 30_000,
 });
+
 
 export const recentSoldQueryOptions = queryOptions({
   queryKey: ["listings", "recent-sold"],
