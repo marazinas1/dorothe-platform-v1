@@ -31,14 +31,13 @@ export function ImageManager({
   listingId,
   images,
   refresh,
-  onSaveDraft,
-  savingDraft,
+  ensureListingId,
 }: {
   listingId: string | null;
   images: ImageRecord[];
   refresh: () => void;
-  onSaveDraft: () => void;
-  savingDraft: boolean;
+  /** Creates the draft row on demand; uploads wait for it before attaching. */
+  ensureListingId: () => Promise<string>;
 }) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
@@ -57,38 +56,18 @@ export function ImageManager({
     onError: (message) => toast.error(message),
   });
 
-  if (!listingId) {
-    return (
-      <FormSection title={t("admin.listings.sections.images")}>
-        <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center">
-          <ImagePlus className="mx-auto h-6 w-6 text-muted-foreground" />
-          <p className="mt-3 font-heading text-base">
-            {t("admin.listings.images.saveFirstTitle")}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {t("admin.listings.images.saveFirstHelp")}
-          </p>
-          <Button type="button" className="mt-4" onClick={onSaveDraft} disabled={savingDraft}>
-            {savingDraft ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-            {t("admin.listings.saveDraft")}
-          </Button>
-        </div>
-      </FormSection>
-    );
-  }
-
   /**
    * One photo, start to finish, in the browser: resize + WebP encode, upload
    * the variants to the public bucket, the untouched original to the private
    * one, then write the row. Nothing is persisted before the files exist.
    */
-  async function processOne(jobId: string, file: File) {
+  async function processOne(listingId: string, jobId: string, file: File) {
     const imageId = jobId;
     const processed = await processImageFile(file);
 
     const variants: VariantsJson = {};
     for (const variant of processed.variants) {
-      const path = variantPath(listingId!, imageId, variant.key);
+      const path = variantPath(listingId, imageId, variant.key);
       const { error } = await supabase.storage
         .from(IMAGES_BUCKET)
         .upload(path, variant.blob, { contentType: "image/webp", upsert: true });
@@ -105,7 +84,7 @@ export function ImageManager({
     // The raw original is kept privately so variants can be regenerated.
     const contentType = file.type || "image/jpeg";
     const original = originalPath(
-      listingId!,
+      listingId,
       imageId,
       fileExtension(file.name, contentType),
     );
@@ -116,7 +95,7 @@ export function ImageManager({
 
     await recordListingImage({
       data: {
-        listingId: listingId!,
+        listingId: listingId,
         imageId,
         originalStoragePath: original,
         contentType,
@@ -130,14 +109,14 @@ export function ImageManager({
     });
   }
 
-  async function runJob(jobId: string, file: File) {
+  async function runJob(listingId: string, jobId: string, file: File) {
     filesRef.current.set(jobId, file);
     setJobs((prev) => [
       ...prev.filter((j) => j.id !== jobId),
       { id: jobId, name: file.name, error: null },
     ]);
     try {
-      await processOne(jobId, file);
+      await processOne(listingId, jobId, file);
       filesRef.current.delete(jobId);
       setJobs((prev) => prev.filter((j) => j.id !== jobId));
       refresh();
@@ -152,9 +131,14 @@ export function ImageManager({
   async function uploadFiles(files: FileList | File[]) {
     setBusy(true);
     try {
+      // Dropping photos is a meaningful action: the row is created here if the
+      // listing does not exist yet, so the pipeline itself stays unchanged.
+      const id = listingId ?? (await ensureListingId());
       for (const file of Array.from(files)) {
-        await runJob(crypto.randomUUID(), file);
+        await runJob(id, crypto.randomUUID(), file);
       }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : String(error));
     } finally {
       setBusy(false);
     }

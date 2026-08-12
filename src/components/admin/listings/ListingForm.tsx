@@ -185,8 +185,7 @@ export function ListingForm({
             listingId={listingId}
             images={images}
             refresh={refreshListing}
-            onSaveDraft={() => void save()}
-            savingDraft={saving}
+            ensureListingId={ensureListingId}
           />
           <FiguresSection form={form} />
           <LocationSection form={form} />
