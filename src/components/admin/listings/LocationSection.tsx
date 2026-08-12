@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { GEO_PRECISIONS } from "@/lib/listings/admin-schema";
 import { GERMAN_STATES, isGermany } from "@/lib/listings/vocabularies";
-import { COUNTRIES } from "@/lib/validation/energy";
+import { listingCountryOptions } from "@/lib/listings/countries";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow, FormSection } from "./FieldRow";
@@ -36,12 +36,10 @@ export function LocationSection({ form }: { form: ListingFormApi }) {
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const { values } = form;
 
+  // Stored as an ISO code and defaulted to the site's own country, which is what
+  // drives the energy certificate validation.
   const country = values.address_country ?? settings.country;
-  // Existing rows may hold a country name rather than a code; keep it selectable
-  // so autosave never silently discards it.
-  const countryOptions = (COUNTRIES as readonly string[]).includes(country)
-    ? (COUNTRIES as readonly string[])
-    : [country, ...COUNTRIES];
+  const countryOptions = listingCountryOptions(settings.country, country);
   const regionOptions = isGermany(country) ? GERMAN_STATES : null;
   const region = values.address_region ?? "";
 
@@ -69,9 +67,7 @@ export function LocationSection({ form }: { form: ListingFormApi }) {
               <SelectContent>
                 {countryOptions.map((code) => (
                   <SelectItem key={code} value={code}>
-                    {(COUNTRIES as readonly string[]).includes(code)
-                      ? t(`countries.${code}`)
-                      : code}
+                    {t(`countries.${code}`, { defaultValue: code })}
                   </SelectItem>
                 ))}
               </SelectContent>

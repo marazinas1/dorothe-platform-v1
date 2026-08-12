@@ -21,6 +21,7 @@ import {
 import { FormSection } from "./FieldRow";
 import { ImageCard, type ImageRecord } from "./ImageCard";
 import { fileExtension } from "./listing-image-url";
+import { usePhotoReorder } from "@/lib/listings/use-photo-reorder";
 import { useImageOrder } from "./use-image-order";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
@@ -55,6 +56,9 @@ export function ImageManager({
     refresh,
     onError: (message) => toast.error(message),
   });
+
+  // The gesture only reports the final position; moveTo owns the reordering.
+  const reorder = usePhotoReorder({ onDrop: moveTo });
 
   /**
    * One photo, start to finish, in the browser: resize + WebP encode, upload
@@ -279,8 +283,11 @@ export function ImageManager({
                 total={ordered.length}
                 busy={busy}
                 savingOrder={savingOrder}
+                dragging={reorder.dragging}
+                isDragged={reorder.fromIndex === index}
+                isTarget={reorder.dragging && reorder.overIndex === index && reorder.fromIndex !== index}
+                onPointerDown={reorder.start}
                 onMove={move}
-                onMoveTo={moveTo}
                 onMakeCover={makeCover}
                 onDelete={remove}
               />

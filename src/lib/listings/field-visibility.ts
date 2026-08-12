@@ -89,8 +89,10 @@ const BY_PROPERTY_TYPE: Matrix = {
     // In the German market Hausgeld is asked immediately after the price.
     service_charge: "open",
   },
-  house: { plot_area: "open", floor: "hidden" },
-  country_house: { plot_area: "open", floor: "hidden" },
+  // Etagenanzahl is stated for German houses as a matter of course; `floor`
+  // (which storey the unit is on) stays apartment-only.
+  house: { plot_area: "open", floor: "hidden", total_floors: "open" },
+  country_house: { plot_area: "open", floor: "hidden", total_floors: "open" },
   land: {
     living_area: "hidden",
     usable_area: "hidden",
@@ -127,8 +129,12 @@ const BY_PROPERTY_TYPE: Matrix = {
     service_charge: "hidden",
   },
   // Legacy types kept for existing rows behave like their closest modern type.
-  villa: { plot_area: "open", floor: "hidden" },
-  townhouse: { plot_area: "open", floor: "hidden" },
+  // Etagenanzahl is stated for German houses as a matter of course; `floor`
+  // (which storey the unit is on) stays apartment-only.
+  villa: { plot_area: "open", floor: "hidden", total_floors: "open" },
+  // Etagenanzahl is stated for German houses as a matter of course; `floor`
+  // (which storey the unit is on) stays apartment-only.
+  townhouse: { plot_area: "open", floor: "hidden", total_floors: "open" },
   penthouse: { plot_area: "hidden", floor: "open", total_floors: "open", service_charge: "open" },
   other: {},
 };

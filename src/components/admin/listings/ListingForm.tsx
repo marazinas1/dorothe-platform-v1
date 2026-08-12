@@ -17,6 +17,7 @@ import { FALLBACK_LOCALE } from "@/i18n/config";
 import type { Country } from "@/lib/validation/energy";
 import { useListingForm, type ListingFormApi } from "./listing-form-state";
 import { useListingAutosave } from "./use-listing-autosave";
+import { SectionStep } from "./FieldRow";
 import { BasicsSection } from "./BasicsSection";
 import { FiguresSection } from "./FiguresSection";
 import { EquipmentSection } from "./EquipmentSection";
@@ -179,28 +180,40 @@ export function ListingForm({
           photo grid never pushes the rest of the form off the screen. */}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
         <div className="space-y-6">
-          <BasicsSection form={form} />
-          <FiguresSection form={form} />
-          <LocationSection form={form} />
-          <EquipmentSection form={form} />
-          <TranslatableBlock
-            form={form}
-            lang={lang}
-            locales={locales}
-            primaryLocale={primaryLocale}
-            onLangChange={setLang}
-            listingId={listingId}
-            publicLocale={navLocale}
-            onError={(message) => toast.error(message)}
-          />
-          {applies(shape, "energy") ? <EnergySection form={form} /> : null}
-          <MoreDetailsSection form={form} lang={lang} />
-          <ImageManager
-            listingId={listingId}
-            images={images}
-            refresh={refreshListing}
-            ensureListingId={ensureListingId}
-          />
+          {/* Step numbers follow the rendered order, so a section hidden by
+              property type leaves no gap in the sequence. */}
+          {[
+            <BasicsSection key="basics" form={form} />,
+            <FiguresSection key="figures" form={form} />,
+            <LocationSection key="location" form={form} />,
+            <EquipmentSection key="equipment" form={form} />,
+            <TranslatableBlock
+              key="texts"
+              form={form}
+              lang={lang}
+              locales={locales}
+              primaryLocale={primaryLocale}
+              onLangChange={setLang}
+              listingId={listingId}
+              publicLocale={navLocale}
+              onError={(message) => toast.error(message)}
+            />,
+            applies(shape, "energy") ? <EnergySection key="energy" form={form} /> : null,
+            <MoreDetailsSection key="more" form={form} lang={lang} />,
+            <ImageManager
+              key="images"
+              listingId={listingId}
+              images={images}
+              refresh={refreshListing}
+              ensureListingId={ensureListingId}
+            />,
+          ]
+            .filter((node): node is React.ReactElement => node !== null)
+            .map((node, index) => (
+              <SectionStep key={node.key} value={index + 1}>
+                {node}
+              </SectionStep>
+            ))}
         </div>
 
         <ChecklistRail checklist={checklist} />

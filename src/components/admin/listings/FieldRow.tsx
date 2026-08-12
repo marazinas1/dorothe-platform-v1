@@ -1,3 +1,5 @@
+import { createContext, useContext } from "react";
+
 import { Label } from "@/components/ui/label";
 
 import { fieldAnchorId } from "@/lib/listings/scroll-to-field";
@@ -37,6 +39,25 @@ export function FieldRow({
   );
 }
 
+/**
+ * Step number of the section, provided by the form so numbering follows the
+ * rendered order. Sections hidden by property type simply do not consume a
+ * number, so the visible ones always read 1..n without gaps.
+ */
+const SectionStepContext = createContext<number | null>(null);
+
+export function SectionStep({
+  value,
+  children,
+}: {
+  value: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <SectionStepContext.Provider value={value}>{children}</SectionStepContext.Provider>
+  );
+}
+
 /** Section container: hairline border, no shadow, Fraunces heading. */
 export function FormSection({
   title,
@@ -49,12 +70,19 @@ export function FormSection({
   children: React.ReactNode;
   anchor?: string;
 }) {
+  const step = useContext(SectionStepContext);
+
   return (
     <section
       id={anchor ? fieldAnchorId(anchor) : undefined}
       className="scroll-mt-28 rounded-lg border border-border bg-card p-4 sm:p-6"
     >
-      <h2 className="font-heading text-lg">{title}</h2>
+      <h2 className="flex items-baseline gap-2 font-heading text-lg">
+        {step !== null ? (
+          <span className="text-sm font-medium text-muted-foreground">{step}</span>
+        ) : null}
+        <span>{title}</span>
+      </h2>
       {description ? (
         <p className="mt-1 text-sm text-muted-foreground">{description}</p>
       ) : null}

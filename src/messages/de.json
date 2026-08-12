@@ -663,6 +663,7 @@
         "archived": "Archivieren"
       },
       "images": {
+        "dropHere": "Auf Position {{position}}",
         "help": "Das erste Foto ist das Titelbild. Zum Sortieren ziehen oder die Pfeile nutzen.",
         "dropHint": "Fotos hier ablegen oder vom Gerät auswählen.",
         "select": "Fotos auswählen",
@@ -848,7 +849,8 @@
           "highlights": "Highlights",
           "surroundings": "Lage & Umgebung",
           "rest": "Energie, Karte, Kontakt (automatisch)"
-        }
+        },
+        "legend": "Punkte markieren Texte, die Sie selbst schreiben. Graue Zeilen entstehen automatisch aus den Feldern."
       }
     },
     "inquiries": {

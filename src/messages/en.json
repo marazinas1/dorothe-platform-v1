@@ -663,6 +663,7 @@
         "archived": "Archive"
       },
       "images": {
+        "dropHere": "To position {{position}}",
         "help": "The first photo is the hero image. Drag or use the arrows to reorder.",
         "dropHint": "Drop photos here or select them from your device.",
         "select": "Select photos",
@@ -848,7 +849,8 @@
           "highlights": "Highlights",
           "surroundings": "Location & surroundings",
           "rest": "Energy, map, contact (automatic)"
-        }
+        },
+        "legend": "Dots mark texts you write yourself. Grey rows are generated from the structured fields."
       }
     },
     "inquiries": {
