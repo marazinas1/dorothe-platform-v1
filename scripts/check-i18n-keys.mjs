@@ -48,21 +48,69 @@ const LABEL_PREFIXES = recordFrom("src/lib/listings/field-labels.ts", "PREFIX");
 
 /**
  * Helper functions whose return value is handed straight to `t()`.
- * Each entry lists every key the helper can produce.
+ * The keys are not listed by hand: they are expanded from the helper's own
+ * `return` templates, so changing the helper to return a key that does not
+ * exist fails this check.
  */
-const HELPERS = {
-  moneyLabelKey: Object.values(LABEL_PREFIXES).flatMap((prefix) =>
-    ENUMS.moneyFields.flatMap((field) =>
-      field === "price"
-        ? [`${prefix}.price_sale`, `${prefix}.price_rent`]
-        : [`${prefix}.${field}`],
-    ),
-  ),
-  areaLabelKey: [
-    ...ENUMS.numericFields.map((field) => `${LABEL_PREFIXES.admin}.${field}`),
-    `${LABEL_PREFIXES.admin}.usable_area_commercial`,
-  ],
+const HELPER_SOURCES = {
+  moneyLabelKey: {
+    file: "src/lib/listings/field-labels.ts",
+    sets: { prefix: Object.values(LABEL_PREFIXES), field: ENUMS.moneyFields },
+  },
+  areaLabelKey: {
+    file: "src/lib/listings/field-labels.ts",
+    sets: {
+      prefix: [LABEL_PREFIXES.admin],
+      field: [...ENUMS.numericFields, "usable_area_commercial"],
+    },
+  },
 };
+
+/** Body of `function NAME(...)` up to the first column-0 closing brace. */
+function functionBody(source, name) {
+  const at = source.indexOf(`function ${name}(`);
+  if (at < 0) fail(`cannot find function ${name}`);
+  const close = source.indexOf("\n}", at);
+  return source.slice(at, close < 0 ? source.length : close);
+}
+
+/** Every key a helper can return, expanded from its return templates. */
+function helperKeys(name, { file, sets }) {
+  const body = functionBody(readFileSync(file, "utf8"), name);
+  const keys = [];
+  for (const match of body.matchAll(/return\s+(`[^`]*`|"[^"]*")\s*;/g)) {
+    const raw = match[1];
+    if (raw.startsWith('"')) {
+      keys.push(raw.slice(1, -1));
+      continue;
+    }
+    let variants = [""];
+    const template = raw.slice(1, -1);
+    const parts = template.split(/(\$\{[^}]*\})/);
+    for (const part of parts) {
+      const placeholder = /^\$\{([^}]*)\}$/.exec(part);
+      if (!placeholder) {
+        variants = variants.map((v) => v + part);
+        continue;
+      }
+      const expression = placeholder[1];
+      const literals = [...expression.matchAll(/"([^"]*)"/g)].map((m) => m[1]);
+      const token = Object.keys(sets).find((key) =>
+        new RegExp(`\\b${key}\\b`).test(expression),
+      );
+      const values = literals.length > 0 ? literals : token ? sets[token] : null;
+      if (!values) {
+        problems.push(`${file}: cannot expand \`${expression}\` in ${name}`);
+        variants = [];
+        break;
+      }
+      variants = variants.flatMap((v) => values.map((value) => v + value));
+    }
+    keys.push(...variants);
+  }
+  if (keys.length === 0) problems.push(`${file}: ${name} returns no resolvable key`);
+  return keys;
+}
 
 /**
  * Identifiers / member expressions passed to `t()`, with the keys they hold.
@@ -212,8 +260,8 @@ for (const file of walk("src")) {
 
     // 3. registered helper call
     const call = /^([A-Za-z_$][\w$]*)\s*\(/.exec(arg);
-    if (call && HELPERS[call[1]]) {
-      for (const key of HELPERS[call[1]]) requireKey(key, file);
+    if (call && HELPER_SOURCES[call[1]]) {
+      for (const key of helperKeys(call[1], HELPER_SOURCES[call[1]])) requireKey(key, file);
       continue;
     }
 
