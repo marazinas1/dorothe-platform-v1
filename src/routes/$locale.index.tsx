@@ -103,7 +103,7 @@ function HomePage() {
   };
 
   return (
-    <PublicChrome locale={l} settings={settings}>
+    <PublicChrome locale={l} settings={settings} heroOverlay>
       {sections
         .filter((s) => s.enabled)
         .map((s, i) => {
