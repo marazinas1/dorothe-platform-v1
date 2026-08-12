@@ -577,7 +577,15 @@
         "features": "Features",
         "condition": "Condition",
         "heating_type": "Heating",
-        "usable_area_commercial": "Commercial area (m²)"
+        "usable_area_commercial": "Commercial area (m²)",
+        "price_sale": "Purchase price",
+        "price_rent": "Rent, excluding costs",
+        "utilities_cost": "Additional costs per month",
+        "total_rent": "Total rent per month",
+        "deposit": "Deposit",
+        "heating_costs_included": "Heating costs included in the additional costs",
+        "commission_free": "No commission for the buyer",
+        "commission_value_percent": "Commission (%)"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -603,7 +611,13 @@
         "reference_code": "Optional. Your own internal number, shown on the public page.",
         "more": "Optional — not required to publish.",
         "translated": "Only these fields need a language. If one language is empty, the other one is shown.",
-        "legacyPropertyType": "This property type is no longer offered. Please pick a current one."
+        "legacyPropertyType": "This property type is no longer offered. Please pick a current one.",
+        "utilities_cost": "Nebenkosten — running costs the tenant pays on top of the rent.",
+        "total_rent": "Warmmiete — calculated from rent plus additional costs.",
+        "deposit": "Usually up to three months of rent, excluding costs.",
+        "commission_free": "Turn this on for a commission-free listing. Otherwise state the commission.",
+        "title": "What a visitor sees first, e.g. “Bright three-room flat with balcony”.",
+        "titleOptional": "Optional. If empty, the {{locale}} title is shown."
       },
       "energy": {
         "intro": "Required fields for {{country}}. Publishing is blocked until they are complete.",
@@ -660,7 +674,6 @@
           "done": "Ready",
           "failed": "Failed"
         },
-        "pipelineNote": "Drag files here or click to select — up to 50 photos at once. Each photo is processed in your browser before upload: rotated upright, resized to 1600 px for the detail page, 800 px for cards and a 1200×630 social preview, saved as WebP, and all EXIF and GPS data removed. Your untouched original is kept privately and is never published. Mark one photo as the cover.",
         "dropHintLong": "Drag files here, or click to select them from your device.",
         "coverHint": "Mark one photo as the cover image — the first one is used by default.",
         "makeCover": "Make cover image",
@@ -669,7 +682,9 @@
         "dropzoneTitle": "Drag photos here or click to select",
         "dropzoneMeta": "JPG, PNG or WebP · converted to WebP · max 50",
         "empty": "No photos yet.",
-        "addMore": "Add more photos"
+        "addMore": "Add more photos",
+        "uploadHint": "Drag photos here or click to select — up to 50 at once.",
+        "technicalNote": "Photos are prepared in your browser: turned upright, resized for the detail page and cards, converted to WebP, and all EXIF and GPS data removed. Your original is kept privately and never published."
       },
       "preview": "Preview",
       "publish": "Publish",
@@ -774,7 +789,8 @@
           "photo": "At least one photo",
           "price": "Price or “price on request”",
           "city": "Town",
-          "energy": "Energy certificate fields"
+          "energy": "Energy certificate fields",
+          "commission": "Commission or “commission-free”"
         },
         "energyExempt": "No Energieausweis required for this listing."
       },
