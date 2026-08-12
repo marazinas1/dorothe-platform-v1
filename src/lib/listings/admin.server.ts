@@ -35,6 +35,17 @@ export async function assertCanEditListing(
 
 /** Map validated form values onto the listings table shape. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+/** Mirror the listing's construction year into the energy certificate block. */
+function withCertificateYear(
+  energy: Record<string, unknown>,
+  yearBuilt: number | null,
+): Record<string, unknown> {
+  if (yearBuilt == null) return energy;
+  const current = energy["year_built"];
+  if (typeof current === "number" && Number.isFinite(current)) return energy;
+  return { ...energy, year_built: yearBuilt };
+}
+
 export function toListingRow(data: ListingFormParsed): Record<string, any> {
   const sections = data.content_sections
     .map((section) => ({
@@ -90,7 +101,9 @@ export function toListingRow(data: ListingFormParsed): Record<string, any> {
     rental_status: data.rental_status,
     availability_date: data.availability_date,
     energy_exemption: data.energy_exemption,
-    energy: data.energy ?? {},
+    // The DE energy certificate needs its own construction year. When the
+    // broker filled the listing's year built, reuse it instead of asking twice.
+    energy: withCertificateYear(data.energy ?? {}, data.year_built ?? null),
     content_sections: sections,
   };
 }
