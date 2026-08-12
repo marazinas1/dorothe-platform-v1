@@ -22,8 +22,11 @@ UPDATE public.site_settings SET
   site_name        = 'Immobilienberatung Dorothe Waltner',
   legal_name       = 'Dorothe Waltner — Immobilienberatung',
   country          = 'DE',
-  default_locale   = 'en',
-  enabled_locales  = ARRAY['en','de'],
+  -- German is the primary language; English exists so a non-German visitor can
+  -- still navigate the site. The panel interface language is per user and lives
+  -- on profiles.admin_locale, unrelated to these.
+  default_locale   = 'de',
+  enabled_locales  = ARRAY['de','en'],
   service_region   = '{"de":"Saarland","en":"the Saarland"}'::jsonb,
   currency         = 'EUR',
   area_unit        = 'sqm',
