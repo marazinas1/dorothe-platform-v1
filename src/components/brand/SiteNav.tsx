@@ -58,7 +58,7 @@ export function SiteNav({ locale, settings, overlay = false }: Props) {
       className={cn(
         "fixed inset-x-0 top-0 z-40 transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-out",
         onPhoto
-          ? "bg-transparent"
+          ? "bg-gradient-to-b from-background/85 via-background/45 to-transparent"
           : "border-b border-border/60 bg-background/90 backdrop-blur-md",
       )}
     >
@@ -85,13 +85,9 @@ export function SiteNav({ locale, settings, overlay = false }: Props) {
                 params={{ locale }}
                 className={cn(
                   "whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.15em] transition-colors duration-300",
-                  onPhoto
-                    ? "text-primary-foreground/85 hover:text-primary-foreground drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]"
-                    : "text-muted-foreground hover:text-foreground",
+                  "text-muted-foreground hover:text-foreground",
                 )}
-                activeProps={{
-                  className: onPhoto ? "text-primary-foreground" : "text-foreground",
-                }}
+                activeProps={{ className: "text-foreground" }}
               >
                 {n.label}
               </Link>
@@ -100,7 +96,6 @@ export function SiteNav({ locale, settings, overlay = false }: Props) {
             <LocaleSwitcher
               currentLocale={locale}
               enabledLocales={settings.enabled_locales}
-              invert={onPhoto}
             />
 
             <Link
@@ -116,16 +111,12 @@ export function SiteNav({ locale, settings, overlay = false }: Props) {
             <LocaleSwitcher
               currentLocale={locale}
               enabledLocales={settings.enabled_locales}
-              invert={onPhoto}
             />
             <button
               type="button"
               onClick={() => setOpen(true)}
               aria-label={t("nav.menu")}
-              className={cn(
-                "inline-flex h-10 w-10 items-center justify-center transition-colors duration-300",
-                onPhoto ? "text-primary-foreground" : "text-foreground",
-              )}
+              className="inline-flex h-10 w-10 items-center justify-center text-foreground"
             >
               <span className="sr-only">{t("nav.menu")}</span>
               <span aria-hidden="true" className="flex flex-col gap-[6px]">
