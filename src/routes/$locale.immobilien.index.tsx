@@ -106,8 +106,9 @@ function ListingsIndex() {
       <section className="mx-auto max-w-[1400px] px-6 pt-24 lg:px-10">
         <h1 className="font-heading text-5xl md:text-6xl">{t("listings.title")}</h1>
         <p className="mt-4 max-w-xl text-base text-muted-foreground">
-          {t("listings.description")}
+          {t("listings.description", copyVars(settings, locale as Locale))}
         </p>
+
 
         <div className="mt-14">
           <FiltersBar locale={locale as Locale} search={search} total={data.total} />

@@ -39,6 +39,7 @@
     "description": "Current offerings across {{region}}.",
     "sold_title": "Sold & completed",
     "sold_description": "A record of recently completed transactions.",
+    "sold_empty": "No completed sales published yet.",
     "empty": "No properties match these criteria.",
     "on_request": "Price on request",
     "coming_soon": "Coming soon",
