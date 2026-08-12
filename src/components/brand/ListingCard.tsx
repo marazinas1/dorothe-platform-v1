@@ -6,6 +6,7 @@ import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import { pickImageUrl } from "@/lib/listings/image";
 import { formatDate, formatPrice, pickLocalized } from "@/lib/listings/format";
+import { moneyLabelKey } from "@/lib/listings/field-labels";
 import type { SiteSettings } from "@/types/site-settings";
 
 type Props = {
@@ -36,6 +37,11 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
     onRequestLabel: t("listings.on_request"),
   });
   const status = statusLabel(listing, t);
+  // Kaufpreis vs Kaltmiete: the same resolver the admin form uses, so the label
+  // never has to be decided twice.
+  const priceLabel = t(
+    moneyLabelKey({ property_type: listing.property_type, deal_type: listing.deal_type }, "price", "public"),
+  );
 
   return (
     <Link
@@ -100,7 +106,10 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
         ) : null}
 
         <div className="mt-5 flex items-baseline justify-between gap-6 border-t border-border/70 pt-4 text-sm">
-          <span className="font-body tabular-figures text-foreground">{price}</span>
+          <span className="font-body text-foreground">
+            <span className="text-muted-foreground">{priceLabel}</span>{" "}
+            <span className="tabular-figures">{price}</span>
+          </span>
           {listing.status === "sold" && listing.sold_at ? (
             <span className="text-xs text-muted-foreground">
               {t("listings.sold_on").replace("{{date}}", formatDate(listing.sold_at, locale))}

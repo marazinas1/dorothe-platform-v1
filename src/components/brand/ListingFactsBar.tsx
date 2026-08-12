@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import { formatArea, formatPrice } from "@/lib/listings/format";
+import { moneyLabelKey } from "@/lib/listings/field-labels";
 import type { SiteSettings } from "@/types/site-settings";
 
 type Props = {
@@ -21,6 +22,7 @@ type Fact = { label: string; value: string };
 export function ListingFactsBar({ listing, locale, settings }: Props) {
   const { t } = useTranslation();
   const facts: Fact[] = [];
+  const shape = { property_type: listing.property_type, deal_type: listing.deal_type };
   // A sale listing that is currently let is an investment property: the tenancy
   // passes to the buyer. Independent of deal_type, never derived from it.
   const investment = listing.deal_type === "sale" && listing.rental_status === "let";
@@ -79,7 +81,7 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
 
   if (listing.service_charge != null) {
     facts.push({
-      label: t("listings.detail.service_charge"),
+      label: t(moneyLabelKey(shape, "service_charge", "public")),
       value: formatPrice(listing.service_charge, settings.currency, locale, { onRequestLabel: "" }),
     });
   }
@@ -132,7 +134,7 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20">
       <div className="border-t border-border pt-6">
         <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-          {t(listing.deal_type === "rent" ? "listings.for_rent" : "listings.for_sale")}
+          {t(moneyLabelKey(shape, "price", "public"))}
         </div>
         <div className="mt-4 font-heading text-4xl leading-none tabular-figures md:text-5xl">
           {price}
