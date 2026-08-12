@@ -72,7 +72,11 @@ UPDATE public.site_settings SET
     {"key":"areas","enabled":true},
     {"key":"contact","enabled":true}
   ]'::jsonb,
-  logo_url         = 'https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/brand/logo-4-waende-saar.avif',
+  logo_url         = 'https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/brand/logo-4-waende-saar.png',
+  seals = '[
+    {"url":"https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/brand/seal-sprengnetter-immo-erbrecht.png",
+     "label":{"de":"Sprengnetter Immo-Erbrechts-Expertin","en":"Sprengnetter certified property inheritance expert"}}
+  ]'::jsonb,
   qualifications = '[
     "Dipl. Betriebswirtin (BA)",
     "Versicherungsfachwirtin (IHK)",

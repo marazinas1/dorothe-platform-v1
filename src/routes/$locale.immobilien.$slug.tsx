@@ -176,7 +176,7 @@ function ListingDetail() {
       : [l.address_street, l.address_zip, l.address_city].filter(Boolean).join(" · ");
 
   return (
-    <PublicChrome locale={locale as Locale} settings={settings}>
+    <PublicChrome locale={locale as Locale} settings={settings} heroOverlay>
       <article className="pb-40">
         {preview ? (
           <div className="bg-secondary px-6 py-2 text-center text-[11px] uppercase tracking-[0.16em] text-secondary-foreground">

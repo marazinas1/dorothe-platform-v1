@@ -10,15 +10,18 @@ import type { SiteSettings } from "@/types/site-settings";
 type Props = {
   locale: Locale;
   settings: SiteSettings;
+  /** Page opens with a full-bleed hero the header can sit on top of. */
+  heroOverlay?: boolean;
   children: ReactNode;
 };
 
 /** Site header + footer wrapper for public pages. */
-export function PublicChrome({ locale, settings, children }: Props) {
+export function PublicChrome({ locale, settings, heroOverlay = false, children }: Props) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <SiteNav locale={locale} settings={settings} />
-      <main className="flex-1">{children}</main>
+      <SiteNav locale={locale} settings={settings} overlay={heroOverlay} />
+      {/* The header is fixed, so pages without a hero need the height back. */}
+      <main className={heroOverlay ? "flex-1" : "flex-1 pt-24 md:pt-28"}>{children}</main>
       <Footer locale={locale} settings={settings} />
     </div>
   );
