@@ -18,7 +18,9 @@ export const verifyAdminAccess = createServerFn({ method: "GET" })
 
     const { data: profile, error } = await supabase
       .from("profiles")
-      .select("id, email, full_name, role, is_active, avatar_url, public_photo_url")
+      .select(
+        "id, email, full_name, role, is_active, avatar_url, public_photo_url, admin_locale",
+      )
       .eq("id", userId)
       .maybeSingle();
 

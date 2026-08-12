@@ -20,7 +20,10 @@
     "contact_headline_solo": "Kaufen oder verkaufen — sagen Sie mir, worum es geht.",
     "view_all": "Alle Objekte ansehen",
     "view_all_sold": "Zum Verkauft-Archiv",
-    "hero_cta": "View properties"
+    "hero_cta": "View properties",
+    "credibility_kicker": "Warum {{agent}}",
+    "team_kicker": "Team",
+    "team_title": "Die Menschen hinter den Objekten"
   },
   "nav": {
     "listings": "Angebote",
@@ -301,7 +304,9 @@
       "signOut": "Abmelden",
       "toggleSidebar": "Navigation umschalten",
       "unknownUser": "Unbekannter Nutzer",
-      "interfaceLanguage": "Oberfläche"
+      "interfaceLanguage": "Sprache der Oberfläche",
+      "interfaceLanguageHint": "Ändert nur die Sprache dieses Panels, nicht die der Website.",
+      "interfaceLanguageFailed": "Die Sprache der Oberfläche konnte nicht gespeichert werden."
     },
     "role": {
       "owner": "Inhaber",
@@ -501,6 +506,11 @@
             "description": "Anfragen an das CRM übermitteln."
           }
         }
+      },
+      "analytics": {
+        "google_analytics_id": "Google-Analytics-ID",
+        "google_site_verification": "Google-Site-Verification-Code",
+        "plausible_domain": "Plausible-Domain"
       }
     },
     "listings": {
@@ -546,7 +556,7 @@
         "bathrooms": "Badezimmer",
         "floor": "Etage",
         "total_floors": "Etagen im Haus",
-        "year_built": "Baujahr",
+        "year_built": "Baujahr (Objekt)",
         "year_renovated": "Sanierung",
         "address_street": "Straße",
         "address_number": "Nummer",
@@ -577,12 +587,14 @@
         "certificate_type": "Ausweisart",
         "final_energy": "Endenergie (kWh/m²a)",
         "energy_source": "Energieträger",
-        "year_built": "Baujahr (Ausweis)"
+        "year_built": "Baujahr (Energieausweis)"
       },
       "help": {
         "price_on_request": "Preis ausblenden und „Preis auf Anfrage“ zeigen.",
         "price_period": "Mietzeitraum, z. B. Monat.",
         "content": "Ein Stichpunkt pro Zeile, je Sprache.",
+        "highlights": "Ein Highlight pro Zeile — die drei bis vier Punkte, die im Gedächtnis bleiben sollen.",
+        "surroundings": "Eine Zeile pro Punkt: Einkauf, Schulen, Verkehr, Entfernungen.",
         "meta": "Optional. Bleibt das Feld leer, werden Titel und Beschreibung verwendet.",
         "service_charge": "Monatliche Nebenkosten für Eigentümer — danach fragen Käufer zuerst.",
         "commission": "Die Angabe der Provision ist in Deutschland gesetzlich vorgeschrieben.",
@@ -677,7 +689,8 @@
         "deleteBody": "Das Objekt und seine Fotos werden endgültig entfernt. Das kann nicht rückgängig gemacht werden.",
         "cancel": "Abbrechen",
         "confirmDelete": "Endgültig löschen",
-        "deleted": "Objekt gelöscht"
+        "deleted": "Objekt gelöscht",
+        "header": "Aktionen"
       },
       "toolbar": {
         "search": "Suche",
@@ -719,8 +732,18 @@
         "country_house": "Landhaus",
         "other": "Sonstiges"
       },
-      "contentLanguage": "Inhalt bearbeiten in",
+      "contentLanguage": "Sprache dieses Textes",
       "contentLanguageHint": "Das ändert nur, welche Übersetzung Sie schreiben — nicht die Sprache der Oberfläche.",
+      "localeOptional": "optional",
+      "localePrimary": "Hauptsprache",
+      "localeFallbackNote": "{{locale}} ist die Sprache der Website. Eine andere Sprache leer zu lassen ist in Ordnung — Besucher sehen dann den {{locale}}-Text.",
+      "publishBlocked": "Zum Veröffentlichen fehlt noch:",
+      "publishNeedsEnergy": "Energieausweis: {{fields}}",
+      "errors": {
+        "permission": "Ihr Konto darf das nicht.",
+        "transition": "Dieser Statuswechsel ist aus dem aktuellen Status nicht möglich.",
+        "generic": "Das hat nicht funktioniert. Bitte Eingaben prüfen und erneut versuchen."
+      },
       "commissionType": {
         "percent": "Prozent (%)",
         "amount": "Festbetrag"

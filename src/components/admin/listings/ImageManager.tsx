@@ -18,10 +18,10 @@ import {
   deleteListingImage,
   recordListingImage,
 } from "@/lib/listings/media.functions";
-import { reorderListingImages } from "@/lib/listings/admin.functions";
 import { FormSection } from "./FieldRow";
 import { ImageCard, type ImageRecord } from "./ImageCard";
 import { fileExtension } from "./listing-image-url";
+import { useImageOrder } from "./use-image-order";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 
@@ -47,6 +47,15 @@ export function ImageManager({
   const [jobs, setJobs] = useState<Job[]>([]);
   const filesRef = useRef(new Map<string, File>());
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Order is held locally while arranging and persisted with a debounce, so a
+  // refresh arriving mid-save cannot snap the tiles back.
+  const { ordered, move, moveTo, makeCover, savingOrder } = useImageOrder({
+    listingId,
+    images,
+    refresh,
+    onError: (message) => toast.error(message),
+  });
 
   if (!listingId) {
     return (
@@ -163,39 +172,6 @@ export function ImageManager({
     }
   }
 
-  /** Cover image = first in the gallery, which is what is_primary tracks. */
-  async function makeCover(image: ImageRecord) {
-    const rest = images.filter((i) => i.id !== image.id);
-    setBusy(true);
-    try {
-      await reorderListingImages({
-        data: { listingId: listingId!, order: [image.id, ...rest.map((i) => i.id)] },
-      });
-      refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : String(error));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function move(index: number, direction: -1 | 1) {
-    const next = [...images];
-    const target = index + direction;
-    if (target < 0 || target >= next.length) return;
-    [next[index], next[target]] = [next[target], next[index]];
-    setBusy(true);
-    try {
-      await reorderListingImages({
-        data: { listingId: listingId!, order: next.map((i) => i.id) },
-      });
-      refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : String(error));
-    } finally {
-      setBusy(false);
-    }
-  }
 
   return (
     <FormSection
@@ -298,20 +274,22 @@ export function ImageManager({
         </ul>
       ) : null}
 
-      {images.length > 0 ? (
+      {ordered.length > 0 ? (
         <>
           <p className="mt-4 text-xs text-muted-foreground">
             {t("admin.listings.images.coverHint")}
           </p>
           <div className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {images.map((image, index) => (
+            {ordered.map((image, index) => (
               <ImageCard
                 key={image.id}
                 image={image}
                 index={index}
-                total={images.length}
+                total={ordered.length}
                 busy={busy}
+                savingOrder={savingOrder}
                 onMove={move}
+                onMoveTo={moveTo}
                 onMakeCover={makeCover}
                 onDelete={remove}
               />

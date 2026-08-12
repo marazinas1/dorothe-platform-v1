@@ -23,7 +23,7 @@ export function CredibilityBar({ locale, stats, settings }: Props) {
     settings.credibility_heading?.[locale] ??
     settings.credibility_heading?.[settings.default_locale] ??
     Object.values(settings.credibility_heading ?? {})[0] ??
-    t("home.credibility_kicker", { defaultValue: `Warum ${settings.site_name}` });
+    t("home.credibility_kicker", { agent: settings.site_name });
 
   return (
     <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">

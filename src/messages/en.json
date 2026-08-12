@@ -20,7 +20,10 @@
     "contact_headline_solo": "Buying or selling — tell me where to start.",
     "view_all": "View all properties",
     "view_all_sold": "Browse sold archive",
-    "hero_cta": "View properties"
+    "hero_cta": "View properties",
+    "credibility_kicker": "Why {{agent}}",
+    "team_kicker": "Team",
+    "team_title": "The people behind the properties"
   },
   "nav": {
     "listings": "Properties",
@@ -301,7 +304,9 @@
       "signOut": "Sign out",
       "toggleSidebar": "Toggle navigation",
       "unknownUser": "Unknown user",
-      "interfaceLanguage": "Interface"
+      "interfaceLanguage": "Panel language",
+      "interfaceLanguageHint": "Only changes the language of this panel, not the website.",
+      "interfaceLanguageFailed": "Could not save the panel language."
     },
     "role": {
       "owner": "Owner",
@@ -501,6 +506,11 @@
             "description": "Forward inquiries to the CRM."
           }
         }
+      },
+      "analytics": {
+        "google_analytics_id": "Google Analytics ID",
+        "google_site_verification": "Google site verification code",
+        "plausible_domain": "Plausible domain"
       }
     },
     "listings": {
@@ -546,7 +556,7 @@
         "bathrooms": "Bathrooms",
         "floor": "Floor",
         "total_floors": "Floors in building",
-        "year_built": "Year built",
+        "year_built": "Year built (property)",
         "year_renovated": "Year renovated",
         "address_street": "Street",
         "address_number": "Number",
@@ -577,12 +587,14 @@
         "certificate_type": "Certificate type",
         "final_energy": "Final energy (kWh/m²a)",
         "energy_source": "Energy source",
-        "year_built": "Year built (certificate)"
+        "year_built": "Year built (energy certificate)"
       },
       "help": {
         "price_on_request": "Hide the price and show “Price on request” instead.",
         "price_period": "Rental period, e.g. month.",
         "content": "One bullet point per line, per language.",
+        "highlights": "One highlight per line — the three or four things a buyer should remember.",
+        "surroundings": "One line per point: shops, schools, transport, distances.",
         "meta": "Optional. Leave empty and the title and description are used instead.",
         "service_charge": "Monthly running costs for the owner — buyers ask for this first.",
         "commission": "Stating the commission is legally required in Germany.",
@@ -677,7 +689,8 @@
         "deleteBody": "The listing and its photos are permanently removed. This cannot be undone.",
         "cancel": "Cancel",
         "confirmDelete": "Delete permanently",
-        "deleted": "Listing deleted"
+        "deleted": "Listing deleted",
+        "header": "Actions"
       },
       "toolbar": {
         "search": "Search",
@@ -719,8 +732,18 @@
         "country_house": "Country house",
         "other": "Other"
       },
-      "contentLanguage": "Editing content in",
+      "contentLanguage": "Language of this text",
       "contentLanguageHint": "This only changes which translation you are writing, not the interface language.",
+      "localeOptional": "optional",
+      "localePrimary": "primary",
+      "localeFallbackNote": "{{locale}} is the language of the site. Leaving another language empty is fine — visitors then see the {{locale}} text.",
+      "publishBlocked": "Publishing needs a few things first:",
+      "publishNeedsEnergy": "Energy certificate: {{fields}}",
+      "errors": {
+        "permission": "Your account is not allowed to do this.",
+        "transition": "This status change is not possible from the current status.",
+        "generic": "That did not work. Please check the entries and try again."
+      },
       "commissionType": {
         "percent": "Percent (%)",
         "amount": "Fixed amount"

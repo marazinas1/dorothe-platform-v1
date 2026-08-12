@@ -5,13 +5,15 @@ import { AlertTriangle, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { allowedTransitions, type ListingStatus } from "@/lib/listings/admin-schema";
+import type { Checklist } from "@/lib/listings/publish-checklist";
 import { PreviewButton } from "./PreviewButton";
 import { useStatusChange } from "./use-status-change";
 
 /**
- * Status bar with explicit publish / unpublish actions. The remaining allowed
- * transitions stay available as secondary buttons; the database has the final
- * say and its reason is shown inline.
+ * Status bar with explicit publish / unpublish actions. Publishing is only
+ * offered when the checklist says the database would accept it — a call that is
+ * known to fail is never made. The database still has the final say and its
+ * reason is shown inline.
  */
 export function StatusBar({
   listingId,
@@ -19,6 +21,8 @@ export function StatusBar({
   slug,
   dirty,
   hasImages,
+  checklist,
+  publicLocale,
   onChanged,
 }: {
   listingId: string;
@@ -26,9 +30,12 @@ export function StatusBar({
   slug: string | null;
   dirty: boolean;
   hasImages: boolean;
+  checklist: Checklist;
+  /** Locale for public links — the site's language, not the panel language. */
+  publicLocale: string;
   onChanged: () => void;
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { apply, busy, error, setError } = useStatusChange(onChanged);
   const targets = allowedTransitions(status);
   const isPublic = status === "active" || status === "coming_soon";
@@ -36,6 +43,8 @@ export function StatusBar({
   const canUnpublish = targets.includes("draft");
   const secondary = targets.filter((s) => s !== "active" && s !== "draft");
   const locked = dirty || busy !== null;
+  const blocking = checklist.items.filter((item) => !item.done);
+  const publishBlocked = blocking.length > 0;
 
   return (
     <div className="rounded-lg border border-border bg-card">
@@ -50,7 +59,7 @@ export function StatusBar({
         {isPublic && slug ? (
           <Link
             to="/$locale/immobilien/$slug"
-            params={{ locale: i18n.language, slug }}
+            params={{ locale: publicLocale, slug }}
             target="_blank"
             className="inline-flex items-center gap-1 text-sm text-primary underline-offset-4 hover:underline"
           >
@@ -68,7 +77,7 @@ export function StatusBar({
 
           <PreviewButton
             listingId={listingId}
-            locale={i18n.language}
+            locale={publicLocale}
             disabled={dirty}
             onError={setError}
           />
@@ -102,7 +111,8 @@ export function StatusBar({
             <Button
               type="button"
               size="sm"
-              disabled={locked}
+              disabled={locked || publishBlocked}
+              title={publishBlocked ? t("admin.listings.publishBlocked") : undefined}
               onClick={() => void apply(listingId, "active")}
             >
               {t("admin.listings.publish")}
@@ -111,7 +121,23 @@ export function StatusBar({
         </div>
       </div>
 
-      {canPublish && !hasImages ? (
+      {canPublish && publishBlocked ? (
+        <p className="flex items-start gap-2 border-t border-border px-4 py-2 text-xs text-muted-foreground">
+          <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span>
+            {t("admin.listings.publishBlocked")}{" "}
+            {blocking
+              .map((item) =>
+                item.missing?.length
+                  ? `${t(`admin.listings.checklist.items.${item.key}`)} (${item.missing
+                      .map((key) => t(`admin.listings.energyFields.${key}`))
+                      .join(", ")})`
+                  : t(`admin.listings.checklist.items.${item.key}`),
+              )
+              .join(" · ")}
+          </span>
+        </p>
+      ) : canPublish && !hasImages ? (
         <p className="flex items-start gap-2 border-t border-border px-4 py-2 text-xs text-muted-foreground">
           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           {t("admin.listings.noImagesWarning")}

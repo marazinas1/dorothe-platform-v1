@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useParams } from "@tanstack/react-router";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { ListingFormSchema, type ListingFormValues } from "@/lib/listings/admin-schema";
@@ -11,6 +11,10 @@ import {
   saveListing,
 } from "@/lib/listings/admin.functions";
 import { applies } from "@/lib/listings/field-visibility";
+import { buildPublishChecklist } from "@/lib/listings/publish-checklist";
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
+import { FALLBACK_LOCALE } from "@/i18n/config";
+import type { Country } from "@/lib/validation/energy";
 import { useListingForm, type ListingFormApi } from "./listing-form-state";
 import { useListingAutosave } from "./use-listing-autosave";
 import { BasicsSection } from "./BasicsSection";
@@ -39,14 +43,27 @@ export function ListingForm({
   slug: string | null;
   images: ImageRecord[];
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  // URL locale, kept separate from the interface language of the panel.
+  const { locale: routeLocale } = useParams({ strict: false }) as { locale?: string };
   const queryClient = useQueryClient();
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const form: ListingFormApi = useListingForm(initial);
-  const [lang, setLang] = useState(locales[0] ?? i18n.language);
+  // Content language: starts on the site's primary language, never on the
+  // language the panel happens to be displayed in.
+  const primaryLocale = locales[0] ?? settings.default_locale ?? FALLBACK_LOCALE;
+  const [lang, setLang] = useState(primaryLocale);
   const [saving, setSaving] = useState(false);
 
   const listingId = (form.values.id as string | undefined) ?? null;
+  const navLocale = routeLocale ?? primaryLocale;
+
+  const checklist = buildPublishChecklist({
+    values: form.values,
+    imageCount: images.length,
+    country: settings.country as Country,
+  });
 
   /** Content-only save. Status is never touched here — publishing is explicit. */
   async function save({ silent = false }: { silent?: boolean } = {}): Promise<boolean> {
@@ -60,7 +77,7 @@ export function ListingForm({
       if (!listingId) {
         await navigate({
           to: "/$locale/admin/listings/$id",
-          params: { locale: i18n.language, id: result.id },
+          params: { locale: navLocale, id: result.id },
         });
       } else {
         await queryClient.invalidateQueries(adminListingQueryOptions(listingId));
@@ -94,7 +111,7 @@ export function ListingForm({
       }}
     >
       <h1 className="font-heading text-2xl">
-        {form.values.title?.[i18n.language]?.trim() ||
+        {form.values.title?.[lang]?.trim() ||
           Object.values(form.values.title ?? {}).find((v) => v.trim())?.trim() ||
           t("admin.listings.untitled")}
       </h1>
@@ -106,11 +123,13 @@ export function ListingForm({
           slug={slug}
           dirty={form.dirty}
           hasImages={images.length > 0}
+          checklist={checklist}
+          publicLocale={navLocale}
           onChanged={refreshListing}
         />
       ) : null}
 
-      <PublishChecklist values={form.values} imageCount={images.length} />
+      <PublishChecklist checklist={checklist} />
 
       <BasicsSection form={form} />
       <ImageManager
@@ -124,7 +143,13 @@ export function ListingForm({
       <LocationSection form={form} />
       <EquipmentSection form={form} />
       {applies(form.values.property_type, "energy") ? <EnergySection form={form} /> : null}
-      <TranslatableBlock form={form} lang={lang} locales={locales} onLangChange={setLang} />
+      <TranslatableBlock
+        form={form}
+        lang={lang}
+        locales={locales}
+        primaryLocale={primaryLocale}
+        onLangChange={setLang}
+      />
       <MoreDetailsSection form={form} lang={lang} />
 
       <SaveBar

@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-import { useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import type { Locale } from "@/i18n/config";
-import { getI18n } from "@/i18n/config";
 import type { VerifiedAdminProfile } from "@/lib/auth/admin-gate.server";
 
 import { AdminSidebar } from "./AdminSidebar";
@@ -13,16 +10,13 @@ import { AdminLocaleToggle } from "./AdminLocaleToggle";
 export function AdminShell({
   children,
   profile,
+  interfaceLocale,
 }: {
   children: React.ReactNode;
   profile: VerifiedAdminProfile;
+  interfaceLocale: Locale;
 }) {
-  const { locale } = useParams({ strict: false }) as { locale: Locale };
   const { t } = useTranslation();
-
-  useEffect(() => {
-    if (locale) getI18n(locale);
-  }, [locale]);
 
   const displayName = profile.full_name || profile.email || t("admin.topbar.unknownUser");
   const roleLabel = t(`admin.role.${profile.role}`);
@@ -42,7 +36,7 @@ export function AdminShell({
               />
             </div>
             <div className="flex min-w-0 items-center gap-3">
-              <AdminLocaleToggle />
+              <AdminLocaleToggle current={interfaceLocale} />
               <div className="hidden min-w-0 text-right sm:block">
                 <div className="truncate text-sm font-medium">{displayName}</div>
                 <div className="truncate text-xs text-muted-foreground">{roleLabel}</div>

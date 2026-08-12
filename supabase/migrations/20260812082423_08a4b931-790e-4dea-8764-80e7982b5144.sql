@@ -1,0 +1,1 @@
+GRANT SELECT (admin_locale), UPDATE (admin_locale) ON public.profiles TO authenticated;

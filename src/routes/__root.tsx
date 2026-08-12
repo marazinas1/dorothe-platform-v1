@@ -19,7 +19,7 @@ import { ThemeStyleTag } from "@/components/shared/ThemeStyleTag";
 import { Toaster } from "@/components/ui/sonner";
 
 import { extractLocale } from "@/lib/seo/hreflang";
-import { translate, DEFAULT_LOCALE, isLocale, type Locale } from "@/i18n/config";
+import { translate, FALLBACK_LOCALE, isLocale, type Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
 
 /** Resolve the active locale from URL, falling back to site default. */
@@ -29,7 +29,7 @@ function useActiveLocale(): Locale {
   const { data } = useSuspenseQuery(siteSettingsQueryOptions);
   const fromUrl = extractLocale(pathname, data.enabled_locales);
   if (fromUrl && isLocale(fromUrl)) return fromUrl;
-  return isLocale(data.default_locale) ? (data.default_locale as Locale) : DEFAULT_LOCALE;
+  return isLocale(data.default_locale) ? (data.default_locale as Locale) : FALLBACK_LOCALE;
 }
 
 function NotFoundComponent() {
@@ -141,7 +141,7 @@ function RootShell({ children }: { children: ReactNode }) {
   const urlLocale = settings
     ? extractLocale(pathname, settings.enabled_locales)
     : null;
-  const lang = urlLocale ?? settings?.default_locale ?? DEFAULT_LOCALE;
+  const lang = urlLocale ?? settings?.default_locale ?? FALLBACK_LOCALE;
 
   return (
     <html lang={lang}>

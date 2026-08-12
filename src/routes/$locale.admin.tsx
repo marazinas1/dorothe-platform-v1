@@ -1,8 +1,12 @@
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
 import { verifyAdminAccess } from "@/lib/auth/admin-gate.functions";
 import { permissionMatrixQueryOptions } from "@/lib/auth/permission-matrix.functions";
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
+import { resolveMessageLocale } from "@/i18n/config";
+import { AdminI18nProvider } from "@/i18n/admin-provider";
 import { AdminShell } from "@/components/admin/AdminShell";
 
 export const Route = createFileRoute("/$locale/admin")({
@@ -42,9 +46,19 @@ export const Route = createFileRoute("/$locale/admin")({
 
 function AdminLayout() {
   const { adminProfile } = Route.useRouteContext();
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
+  // Interface language: per-user preference first, then the site's default.
+  // A stored value we ship no message file for is ignored, not erased.
+  const interfaceLocale = resolveMessageLocale(
+    adminProfile.admin_locale,
+    settings.default_locale,
+  );
+
   return (
-    <AdminShell profile={adminProfile}>
-      <Outlet />
-    </AdminShell>
+    <AdminI18nProvider locale={interfaceLocale}>
+      <AdminShell profile={adminProfile} interfaceLocale={interfaceLocale}>
+        <Outlet />
+      </AdminShell>
+    </AdminI18nProvider>
   );
 }
