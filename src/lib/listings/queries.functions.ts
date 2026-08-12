@@ -29,6 +29,7 @@ export type PublicListing = {
   price_period: string | null;
   living_area: number | null;
   plot_area: number | null;
+  usable_area: number | null;
   rooms: number | null;
   bedrooms: number | null;
   bathrooms: number | null;

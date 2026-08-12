@@ -69,7 +69,10 @@ export function ListingSpecs({ listing, locale, settings }: Props) {
     t("listings.detail.service_charge"),
     listing.service_charge == null
       ? null
-      : formatPrice(listing.service_charge, settings.currency, locale, "month"),
+      : formatPrice(listing.service_charge, settings.currency, locale, {
+          period: "month",
+          onRequestLabel: "",
+        }),
   );
   push(
     "availability_date",
