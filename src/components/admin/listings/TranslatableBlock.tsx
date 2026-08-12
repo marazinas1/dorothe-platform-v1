@@ -29,18 +29,21 @@ function fallbackItems(items: Record<string, string[]> | undefined, lang: string
 /**
  * Every field that needs a language, grouped in one clearly marked block with
  * the language tabs on it — so it is obvious that everything outside this block
- * is entered once. When a language is empty the other one is shown as the
- * placeholder, and publishing in a single language stays a supported path.
+ * is entered once. The site's primary language is marked as such and the others
+ * as optional: when a language is empty the primary text is shown to visitors,
+ * so publishing in one language stays a supported path.
  */
 export function TranslatableBlock({
   form,
   lang,
   locales,
+  primaryLocale,
   onLangChange,
 }: {
   form: ListingFormApi;
   lang: string;
   locales: string[];
+  primaryLocale: string;
   onLangChange: (lang: string) => void;
 }) {
   const { t } = useTranslation();
@@ -64,15 +67,31 @@ export function TranslatableBlock({
       description={t("admin.listings.help.translated")}
     >
       <div className="grid gap-4">
-        <Tabs value={lang} onValueChange={onLangChange}>
-          <TabsList>
-            {locales.map((code) => (
-              <TabsTrigger key={code} value={code}>
-                {code.toUpperCase()}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        <div className="grid gap-1.5">
+          <span className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+            {t("admin.listings.contentLanguage")}
+          </span>
+          <Tabs value={lang} onValueChange={onLangChange}>
+            <TabsList>
+              {locales.map((code) => (
+                <TabsTrigger key={code} value={code}>
+                  {code.toUpperCase()}
+                  <span className="ml-1.5 text-[10px] font-normal normal-case text-muted-foreground">
+                    {code === primaryLocale
+                      ? t("admin.listings.localePrimary")
+                      : t("admin.listings.localeOptional")}
+                  </span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+          <p className="text-xs text-muted-foreground">
+            {t("admin.listings.localeFallbackNote", {
+              locale: primaryLocale.toUpperCase(),
+            })}
+          </p>
+        </div>
+
 
         <FieldRow
           label={t("admin.listings.fields.title")}

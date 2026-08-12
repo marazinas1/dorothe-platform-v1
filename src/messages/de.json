@@ -730,6 +730,11 @@
       "localeFallbackNote": "{{locale}} ist die Sprache der Website. Eine andere Sprache leer zu lassen ist in Ordnung — Besucher sehen dann den {{locale}}-Text.",
       "publishBlocked": "Zum Veröffentlichen fehlt noch:",
       "publishNeedsEnergy": "Energieausweis: {{fields}}",
+      "errors": {
+        "permission": "Ihr Konto darf das nicht.",
+        "transition": "Dieser Statuswechsel ist aus dem aktuellen Status nicht möglich.",
+        "generic": "Das hat nicht funktioniert. Bitte Eingaben prüfen und erneut versuchen."
+      },
       "commissionType": {
         "percent": "Prozent (%)",
         "amount": "Festbetrag"

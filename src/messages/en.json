@@ -730,6 +730,11 @@
       "localeFallbackNote": "{{locale}} is the language of the site. Leaving another language empty is fine — visitors then see the {{locale}} text.",
       "publishBlocked": "Publishing needs a few things first:",
       "publishNeedsEnergy": "Energy certificate: {{fields}}",
+      "errors": {
+        "permission": "Your account is not allowed to do this.",
+        "transition": "This status change is not possible from the current status.",
+        "generic": "That did not work. Please check the entries and try again."
+      },
       "commissionType": {
         "percent": "Percent (%)",
         "amount": "Fixed amount"
