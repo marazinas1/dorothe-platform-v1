@@ -10,7 +10,7 @@ export function fieldAnchorId(anchor: string): string {
 function openCollapsedAncestors(element: HTMLElement): void {
   let node: HTMLElement | null = element;
   while (node) {
-    const details = node.closest("details");
+    const details: HTMLDetailsElement | null = node.closest("details");
     if (!details) break;
     if (!details.open) details.open = true;
     node = details.parentElement;
