@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 import { AlertTriangle, ExternalLink } from "lucide-react";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { allowedTransitions, type ListingStatus } from "@/lib/listings/admin-schema";
 import type { Checklist } from "@/lib/listings/publish-checklist";
+import { scrollToField } from "@/lib/listings/scroll-to-field";
 import { PreviewButton } from "./PreviewButton";
 import { useStatusChange } from "./use-status-change";
 
@@ -37,6 +39,9 @@ export function StatusBar({
 }) {
   const { t } = useTranslation();
   const { apply, busy, error, setError } = useStatusChange(onChanged);
+  // The blocker list is only revealed once the broker asks to publish, so an
+  // untouched draft is not covered in warnings.
+  const [showBlockers, setShowBlockers] = useState(false);
   const targets = allowedTransitions(status);
   const isPublic = status === "active" || status === "coming_soon";
   const canPublish = targets.includes("active");
@@ -111,9 +116,17 @@ export function StatusBar({
             <Button
               type="button"
               size="sm"
-              disabled={locked || publishBlocked}
-              title={publishBlocked ? t("admin.listings.publishBlocked") : undefined}
-              onClick={() => void apply(listingId, "active")}
+              disabled={locked}
+              onClick={() => {
+                // Never make a call the checklist knows the database rejects —
+                // show what is missing instead.
+                if (publishBlocked) {
+                  setShowBlockers(true);
+                  scrollToField(blocking[0].anchor);
+                  return;
+                }
+                void apply(listingId, "active");
+              }}
             >
               {t("admin.listings.publish")}
             </Button>
@@ -121,7 +134,7 @@ export function StatusBar({
         </div>
       </div>
 
-      {canPublish && publishBlocked ? (
+      {canPublish && publishBlocked && showBlockers ? (
         <p className="flex items-start gap-2 border-t border-border px-4 py-2 text-xs text-muted-foreground">
           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span>

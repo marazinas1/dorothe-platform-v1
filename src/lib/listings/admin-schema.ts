@@ -162,8 +162,14 @@ export const ListingFormSchema = z.object({
   geo_lng: nullableNumber,
   geo_precision: z.enum(GEO_PRECISIONS).default("approximate"),
 
-  // Market fields (costs, commission, tenancy)
+  // Market fields (costs, commission, tenancy). Which of them apply is decided
+  // by field-visibility from deal_type + property_type; the database clears the
+  // ones that stop applying when deal_type changes.
   service_charge: nullableNumber,
+  utilities_cost: nullableNumber,
+  heating_costs_included: z.boolean().default(false),
+  deposit: nullableNumber,
+  commission_free: z.boolean().default(false),
   commission_value: nullableNumber,
   commission_type: nullableEnum(COMMISSION_TYPES),
   commission_payer: nullableEnum(COMMISSION_PAYERS),

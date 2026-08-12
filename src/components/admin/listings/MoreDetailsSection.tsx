@@ -5,7 +5,7 @@ import { applies, fieldsAtLevel } from "@/lib/listings/field-visibility";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow } from "./FieldRow";
 import { NUMERIC_KEYS, NumberFields } from "./NumberFields";
-import { MarketSection } from "./MarketSection";
+import { TenancyFields } from "./TenancyFields";
 import { SeoSection } from "./SeoSection";
 
 /**
@@ -21,7 +21,11 @@ export function MoreDetailsSection({
   lang: string;
 }) {
   const { t } = useTranslation();
-  const detailNumbers = fieldsAtLevel(form.values.property_type, NUMERIC_KEYS, "details");
+  const shape = {
+    property_type: form.values.property_type,
+    deal_type: form.values.deal_type,
+  };
+  const detailNumbers = fieldsAtLevel(shape, NUMERIC_KEYS, "details");
 
   return (
     <details className="rounded-lg border border-border bg-card">
@@ -32,7 +36,7 @@ export function MoreDetailsSection({
         </span>
       </summary>
       <div className="grid gap-6 border-t border-border px-4 py-5 sm:px-6">
-        {applies(form.values.property_type, "reference_code") ? (
+        {applies(shape, "reference_code") ? (
           <FieldRow
             label={t("admin.listings.fields.reference_code")}
             help={t("admin.listings.help.reference_code")}
@@ -49,7 +53,7 @@ export function MoreDetailsSection({
         {detailNumbers.length > 0 ? (
           <NumberFields form={form} keys={detailNumbers} />
         ) : null}
-        <MarketSection form={form} />
+        <TenancyFields form={form} level="details" />
         <SeoSection form={form} lang={lang} />
       </div>
     </details>

@@ -135,7 +135,10 @@
       "usable_area_commercial": "Gewerbefläche",
       "usable_area": "Nutzfläche",
       "total_floors": "Etagen im Haus",
-      "available_from": "Verfügbar ab"
+      "available_from": "Verfügbar ab",
+      "utilities_cost": "Nebenkosten",
+      "total_rent": "Warmmiete",
+      "deposit": "Kaution"
     },
     "pager": {
       "prev": "Zurück",
@@ -577,7 +580,16 @@
         "features": "Merkmale",
         "condition": "Zustand",
         "heating_type": "Heizung",
-        "usable_area_commercial": "Gewerbefläche (m²)"
+        "usable_area_commercial": "Gewerbefläche (m²)",
+        "price_sale": "Kaufpreis",
+        "price_rent": "Kaltmiete",
+        "utilities_cost": "Nebenkosten pro Monat",
+        "total_rent": "Warmmiete pro Monat",
+        "deposit": "Kaution",
+        "heating_costs_included": "Heizkosten in den Nebenkosten enthalten",
+        "commission_free": "Provisionsfrei für Käufer",
+        "commission_value_percent": "Provision (%)",
+        "commission_free_rent": "Provisionsfrei für Mieter"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -603,7 +615,13 @@
         "reference_code": "Optional. Ihre eigene Objektnummer, wird auf der öffentlichen Seite angezeigt.",
         "more": "Optional – zum Veröffentlichen nicht erforderlich.",
         "translated": "Nur diese Felder brauchen eine Sprache. Bleibt eine Sprache leer, wird die andere angezeigt.",
-        "legacyPropertyType": "Dieser Objekttyp wird nicht mehr angeboten. Bitte einen aktuellen Typ wählen."
+        "legacyPropertyType": "Dieser Objekttyp wird nicht mehr angeboten. Bitte einen aktuellen Typ wählen.",
+        "utilities_cost": "Laufende Kosten, die Mieter zusätzlich zur Kaltmiete zahlen.",
+        "total_rent": "Ergibt sich aus Kaltmiete plus Nebenkosten.",
+        "deposit": "In der Regel höchstens drei Kaltmieten.",
+        "commission_free": "Einschalten für ein provisionsfreies Angebot. Sonst Provision angeben.",
+        "title": "Das Erste, was Interessenten sehen, z. B. „Helle 3-Zimmer-Wohnung mit Balkon“.",
+        "titleOptional": "Optional. Ist das Feld leer, wird der Titel auf {{locale}} gezeigt."
       },
       "energy": {
         "intro": "Pflichtfelder für {{country}}. Ohne sie ist eine Veröffentlichung nicht möglich.",
@@ -660,7 +678,6 @@
           "done": "Fertig",
           "failed": "Fehlgeschlagen"
         },
-        "pipelineNote": "Dateien hierher ziehen oder klicken zum Auswählen — bis zu 50 Fotos gleichzeitig. Jedes Foto wird vor dem Upload direkt im Browser verarbeitet: aufrecht gedreht, auf 1600 px für die Detailseite, 800 px für Karten und eine Social-Vorschau mit 1200×630 skaliert, als WebP gespeichert, alle EXIF- und GPS-Daten entfernt. Ihr unverändertes Original wird privat aufbewahrt und niemals veröffentlicht. Markieren Sie ein Foto als Titelbild.",
         "dropHintLong": "Dateien hierher ziehen oder klicken, um sie auszuwählen.",
         "coverHint": "Markieren Sie ein Foto als Titelbild — standardmäßig ist es das erste.",
         "makeCover": "Als Titelbild",
@@ -669,7 +686,10 @@
         "dropzoneTitle": "Fotos hierher ziehen oder klicken zum Auswählen",
         "dropzoneMeta": "JPG, PNG oder WebP · Umwandlung in WebP · max. 50",
         "empty": "Noch keine Fotos.",
-        "addMore": "Weitere Fotos hinzufügen"
+        "addMore": "Weitere Fotos hinzufügen",
+        "uploadHint": "Fotos hierher ziehen oder klicken – bis zu 50 auf einmal.",
+        "technicalNote": "Fotos werden im Browser vorbereitet: aufrecht gedreht, für Detailseite und Karten verkleinert, in WebP umgewandelt, EXIF- und GPS-Daten entfernt. Das Original bleibt privat und wird nie veröffentlicht.",
+        "technicalTitle": "Was mit den Fotos passiert"
       },
       "preview": "Vorschau",
       "publish": "Veröffentlichen",
@@ -774,7 +794,8 @@
           "photo": "Mindestens ein Foto",
           "price": "Preis oder ‚Preis auf Anfrage‘",
           "city": "Ort",
-          "energy": "Angaben zum Energieausweis"
+          "energy": "Angaben zum Energieausweis",
+          "commission": "Provision oder „provisionsfrei“"
         },
         "energyExempt": "Für dieses Objekt ist kein Energieausweis erforderlich."
       },

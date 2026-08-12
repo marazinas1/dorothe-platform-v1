@@ -1,12 +1,16 @@
-// Single source of truth for "which fields does this property type have, and
-// is the field part of the short path to publish or of the details level?".
-// The admin form, the publish checklist and the public specification block all
-// read this map, so a per-type rule is defined exactly once.
+// Single source of truth for "which fields does this listing have, and is the
+// field part of the short path to publish or of the details level?". The admin
+// form, the publish checklist and the public specification block all read this
+// map, so a rule is defined exactly once.
 //
-// Principle for the split: a field is `open` when a buyer would ask about it
-// before arranging a viewing. Everything else is `details`. `hidden` means the
-// field does not apply to that property type at all — the stored value is left
-// untouched, it is simply not edited or rendered.
+// Two axes: property type (a plot has no rooms) and deal type (a sale has a
+// Hausgeld, a rental has Nebenkosten and a Kaution). Components never test
+// `deal_type === "rent"` themselves.
+//
+// Principle for the split: a field is `open` when a buyer or tenant would ask
+// about it before arranging a viewing. Everything else is `details`. `hidden`
+// means the field does not apply at all — the stored value is left untouched,
+// it is simply not edited or rendered.
 
 export type FieldLevel = "open" | "details" | "hidden";
 
@@ -25,12 +29,23 @@ export type VisibleField =
   | "heating_type"
   | "features"
   | "energy"
+  | "price_period"
   | "service_charge"
+  | "utilities_cost"
+  | "heating_costs_included"
+  | "total_rent"
+  | "deposit"
   | "commission"
   | "rental_status"
   | "availability_date"
   | "reference_code"
   | "seo";
+
+/** Everything the matrix needs to answer a question about a listing. */
+export type ListingShape = {
+  property_type: string;
+  deal_type: string;
+};
 
 type Matrix = Record<string, Partial<Record<VisibleField, FieldLevel>>>;
 
@@ -50,15 +65,22 @@ const BASE: Record<VisibleField, FieldLevel> = {
   heating_type: "open",
   features: "open",
   energy: "open",
+  price_period: "hidden",
   service_charge: "details",
-  commission: "details",
+  utilities_cost: "hidden",
+  heating_costs_included: "hidden",
+  total_rent: "hidden",
+  deposit: "hidden",
+  // Commission disclosure is legally expected in the German market, so it sits
+  // next to the price rather than in the details level.
+  commission: "open",
   rental_status: "details",
   availability_date: "details",
   reference_code: "details",
   seo: "details",
 };
 
-const OVERRIDES: Matrix = {
+const BY_PROPERTY_TYPE: Matrix = {
   apartment: {
     plot_area: "hidden",
     // Third floor without a lift and ground floor are different propositions.
@@ -67,14 +89,8 @@ const OVERRIDES: Matrix = {
     // In the German market Hausgeld is asked immediately after the price.
     service_charge: "open",
   },
-  house: {
-    plot_area: "open",
-    floor: "hidden",
-  },
-  country_house: {
-    plot_area: "open",
-    floor: "hidden",
-  },
+  house: { plot_area: "open", floor: "hidden" },
+  country_house: { plot_area: "open", floor: "hidden" },
   land: {
     living_area: "hidden",
     usable_area: "hidden",
@@ -117,36 +133,61 @@ const OVERRIDES: Matrix = {
   other: {},
 };
 
-export function fieldLevel(propertyType: string, field: VisibleField): FieldLevel {
-  return OVERRIDES[propertyType]?.[field] ?? BASE[field];
+/**
+ * Applied after the property-type rules. A rental's monthly figures replace the
+ * sale's one-off ones; the database clears the values that no longer apply when
+ * deal_type changes, so nothing stays populated but hidden.
+ */
+const BY_DEAL_TYPE: Matrix = {
+  sale: {
+    utilities_cost: "hidden",
+    heating_costs_included: "hidden",
+    total_rent: "hidden",
+    deposit: "hidden",
+    price_period: "hidden",
+  },
+  rent: {
+    service_charge: "hidden",
+    utilities_cost: "open",
+    heating_costs_included: "open",
+    total_rent: "open",
+    deposit: "open",
+    price_period: "open",
+    // When a tenant can move in is a headline fact, not a detail.
+    availability_date: "open",
+    rental_status: "hidden",
+  },
+};
+
+export function fieldLevel(shape: ListingShape, field: VisibleField): FieldLevel {
+  const byProperty = BY_PROPERTY_TYPE[shape.property_type]?.[field];
+  // Property type is structural: a plot has no rooms whatever the deal is, so a
+  // hidden rule there always wins. The deal type then decides between the sale
+  // and rental figures, which is why it may reveal a field the base hides.
+  if (byProperty === "hidden") return "hidden";
+  const byDeal = BY_DEAL_TYPE[shape.deal_type]?.[field];
+  if (byDeal) return byDeal;
+  return byProperty ?? BASE[field];
 }
 
-export function isOpen(propertyType: string, field: VisibleField): boolean {
-  return fieldLevel(propertyType, field) === "open";
+export function isOpen(shape: ListingShape, field: VisibleField): boolean {
+  return fieldLevel(shape, field) === "open";
 }
 
-export function isDetail(propertyType: string, field: VisibleField): boolean {
-  return fieldLevel(propertyType, field) === "details";
+export function isDetail(shape: ListingShape, field: VisibleField): boolean {
+  return fieldLevel(shape, field) === "details";
 }
 
 /** Visible at either level — used by the public specification block. */
-export function applies(propertyType: string, field: VisibleField): boolean {
-  return fieldLevel(propertyType, field) !== "hidden";
+export function applies(shape: ListingShape, field: VisibleField): boolean {
+  return fieldLevel(shape, field) !== "hidden";
 }
 
-/** Keep only the fields of `keys` that sit at the given level for this type. */
+/** Keep only the fields of `keys` that sit at the given level for this listing. */
 export function fieldsAtLevel<T extends VisibleField>(
-  propertyType: string,
+  shape: ListingShape,
   keys: readonly T[],
   level: FieldLevel,
 ): T[] {
-  return keys.filter((key) => fieldLevel(propertyType, key) === level);
-}
-
-/** Label key for the area field, so commercial reads "commercial area". */
-export function areaLabelKey(propertyType: string, field: VisibleField): string {
-  if (field === "usable_area" && propertyType === "commercial") {
-    return "admin.listings.fields.usable_area_commercial";
-  }
-  return `admin.listings.fields.${field}`;
+  return keys.filter((key) => fieldLevel(shape, key) === level);
 }

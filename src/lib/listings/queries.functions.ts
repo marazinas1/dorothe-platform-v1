@@ -54,6 +54,11 @@ export type PublicListing = {
   title: any;
   description: any;
   service_charge: number | null;
+  utilities_cost: number | null;
+  total_rent: number | null;
+  deposit: number | null;
+  heating_costs_included: boolean | null;
+  commission_free: boolean | null;
   commission_value: number | null;
   commission_type: string | null;
   commission_payer: string | null;

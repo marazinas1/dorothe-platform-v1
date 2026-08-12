@@ -175,9 +175,16 @@ export function ImageManager({
 
   return (
     <FormSection
+      anchor="photos"
       title={t("admin.listings.sections.images")}
-      description={t("admin.listings.images.pipelineNote")}
+      description={t("admin.listings.images.uploadHint")}
     >
+      {/* The technical detail is demoted: brokers need one line, not a paragraph. */}
+      <details className="mb-4 text-xs text-muted-foreground">
+        <summary className="cursor-pointer">{t("admin.listings.images.technicalTitle")}</summary>
+        <p className="mt-1 leading-relaxed">{t("admin.listings.images.technicalNote")}</p>
+      </details>
+
       <input
         ref={inputRef}
         type="file"
