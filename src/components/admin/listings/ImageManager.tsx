@@ -299,21 +299,31 @@ export function ImageManager({
       ) : null}
 
       {images.length > 0 ? (
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {images.map((image, index) => (
-            <ImageCard
-              key={image.id}
-              image={image}
-              index={index}
-              total={images.length}
-              busy={busy}
-              onMove={move}
-              onMakeCover={makeCover}
-              onDelete={remove}
-            />
-          ))}
+        <>
+          <p className="mt-4 text-xs text-muted-foreground">
+            {t("admin.listings.images.coverHint")}
+          </p>
+          <div className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {images.map((image, index) => (
+              <ImageCard
+                key={image.id}
+                image={image}
+                index={index}
+                total={images.length}
+                busy={busy}
+                onMove={move}
+                onMakeCover={makeCover}
+                onDelete={remove}
+              />
+            ))}
+          </div>
+        </>
+      ) : jobs.length === 0 ? (
+        <div className="mt-3 rounded-xl border border-dashed border-border px-6 py-8 text-center text-sm text-muted-foreground">
+          {t("admin.listings.images.empty")}
         </div>
       ) : null}
+
     </FormSection>
   );
 }
