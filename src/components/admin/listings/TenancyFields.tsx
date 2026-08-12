@@ -28,7 +28,11 @@ export function TenancyFields({
   form: ListingFormApi;
   level: FieldLevel;
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
+  // The echoed date is listing content — it previews what a visitor reads — so
+  // it follows the site locale, not the operator's interface language.
+  const contentLocale = settings.default_locale ?? FALLBACK_LOCALE;
   const { values } = form;
   const shape: ListingShape = {
     property_type: values.property_type,
