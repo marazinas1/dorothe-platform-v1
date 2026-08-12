@@ -7,6 +7,7 @@ import { AgentIntro } from "@/components/brand/AgentIntro";
 import { AgentListings } from "@/components/brand/AgentListings";
 import { CredibilityBar } from "@/components/brand/CredibilityBar";
 import { QualificationsList } from "@/components/brand/QualificationsList";
+import { TrustSeals } from "@/components/brand/TrustSeals";
 import { ContactSection } from "@/components/brand/ContactSection";
 import { SoldStrip } from "@/components/brand/SoldStrip";
 import { TeamSection } from "@/components/brand/TeamSection";
@@ -97,6 +98,14 @@ function AboutPage() {
         title={t("pages.about.solo.qualifications_title")}
         items={qualifications}
       />
+
+      <TrustSeals
+        className="mt-16"
+        locale={l}
+        items={settings.seals ?? []}
+        title={t("pages.about.seals_title")}
+      />
+
 
       {showTeamGrid ? <TeamSection members={team} /> : null}
 
