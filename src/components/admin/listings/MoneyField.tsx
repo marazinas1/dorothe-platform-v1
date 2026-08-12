@@ -36,7 +36,8 @@ export function MoneyField({
   disabled?: boolean;
   readOnly?: boolean;
 }) {
-  const { i18n } = useTranslation();
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
+  const moneyLocale = settings.default_locale ?? FALLBACK_LOCALE;
   const [raw, setRaw] = useState("");
 
   return (
