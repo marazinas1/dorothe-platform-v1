@@ -684,7 +684,8 @@
         "empty": "Noch keine Fotos.",
         "addMore": "Weitere Fotos hinzufügen",
         "uploadHint": "Fotos hierher ziehen oder klicken – bis zu 50 auf einmal.",
-        "technicalNote": "Fotos werden im Browser vorbereitet: aufrecht gedreht, für Detailseite und Karten verkleinert, in WebP umgewandelt, EXIF- und GPS-Daten entfernt. Das Original bleibt privat und wird nie veröffentlicht."
+        "technicalNote": "Fotos werden im Browser vorbereitet: aufrecht gedreht, für Detailseite und Karten verkleinert, in WebP umgewandelt, EXIF- und GPS-Daten entfernt. Das Original bleibt privat und wird nie veröffentlicht.",
+        "technicalTitle": "Was mit den Fotos passiert"
       },
       "preview": "Vorschau",
       "publish": "Veröffentlichen",

@@ -684,7 +684,8 @@
         "empty": "No photos yet.",
         "addMore": "Add more photos",
         "uploadHint": "Drag photos here or click to select — up to 50 at once.",
-        "technicalNote": "Photos are prepared in your browser: turned upright, resized for the detail page and cards, converted to WebP, and all EXIF and GPS data removed. Your original is kept privately and never published."
+        "technicalNote": "Photos are prepared in your browser: turned upright, resized for the detail page and cards, converted to WebP, and all EXIF and GPS data removed. Your original is kept privately and never published.",
+        "technicalTitle": "What happens to your photos"
       },
       "preview": "Preview",
       "publish": "Publish",
