@@ -50,7 +50,7 @@ export const updateFeatureFlag = createServerFn({ method: "POST" })
       .update({ enabled: data.enabled })
       .eq("key", data.key);
     if (error) {
-      throw new Response(`Update failed: ${error.message}`, { status: 500 });
+      throw new Error(`Update failed: ${error.message}`);
     }
     return { ok: true as const };
   });

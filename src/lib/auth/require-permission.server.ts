@@ -19,6 +19,6 @@ export async function assertPermission(
   });
 
   if (error || data !== true) {
-    throw new Response("Forbidden", { status: 403 });
+    throw new Error("Forbidden");
   }
 }

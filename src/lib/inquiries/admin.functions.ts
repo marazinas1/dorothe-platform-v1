@@ -29,7 +29,7 @@ export const listInquiries = createServerFn({ method: "GET" })
       .from("inquiries")
       .select(COLUMNS)
       .order("created_at", { ascending: false });
-    if (error) throw new Response(error.message, { status: 400 });
+    if (error) throw new Error(error.message);
     return (data ?? []).map(shape);
   });
 
@@ -74,8 +74,8 @@ export const getInquiry = createServerFn({ method: "GET" })
       .select(COLUMNS)
       .eq("id", data.id)
       .maybeSingle();
-    if (error) throw new Response(error.message, { status: 400 });
-    if (!row) throw new Response("Not found", { status: 404 });
+    if (error) throw new Error(error.message);
+    if (!row) throw new Error("Not found");
 
     const inquiry = shape(row);
 
@@ -124,7 +124,7 @@ export const setInquiryStatus = createServerFn({ method: "POST" })
       .select("id, status, handled_at")
       .maybeSingle();
     if (error || !updated) {
-      throw new Response(error?.message ?? "Status change failed", { status: 400 });
+      throw new Error(error?.message ?? "Status change failed");
     }
     return updated as { id: string; status: string; handled_at: string | null };
   });

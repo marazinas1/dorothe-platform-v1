@@ -40,8 +40,8 @@ export const duplicateListing = createServerFn({ method: "POST" })
       .select("*")
       .eq("id", data.id)
       .maybeSingle();
-    if (error) throw new Response(error.message, { status: 400 });
-    if (!row) throw new Response("Not found", { status: 404 });
+    if (error) throw new Error(error.message);
+    if (!row) throw new Error("Not found");
 
     const copy: Record<string, unknown> = { ...(row as Record<string, unknown>) };
     for (const key of DROPPED) delete copy[key];
@@ -53,7 +53,7 @@ export const duplicateListing = createServerFn({ method: "POST" })
       .select("id")
       .maybeSingle();
     if (insertError || !created) {
-      throw new Response(insertError?.message ?? "Duplicate failed", { status: 400 });
+      throw new Error(insertError?.message ?? "Duplicate failed");
     }
     return created as { id: string };
   });
@@ -69,6 +69,6 @@ export const deleteListing = createServerFn({ method: "POST" })
     await assertPermission(supabase, userId, "listing.delete");
 
     const { error } = await supabase.from("listings").delete().eq("id", data.id);
-    if (error) throw new Response(error.message, { status: 400 });
+    if (error) throw new Error(error.message);
     return { ok: true as const };
   });

@@ -71,7 +71,7 @@ export const recordListingImage = createServerFn({ method: "POST" })
         },
         { onConflict: "id" },
       );
-    if (insertError) throw new Response(insertError.message, { status: 400 });
+    if (insertError) throw new Error(insertError.message);
 
     return { imageId: data.imageId, status: "done" as const };
   });
@@ -89,8 +89,8 @@ export const deleteListingImage = createServerFn({ method: "POST" })
       .select("id, listing_id, original_storage_path")
       .eq("id", data.imageId)
       .maybeSingle();
-    if (fetchError) throw new Response(fetchError.message, { status: 400 });
-    if (!row) throw new Response("Not found", { status: 404 });
+    if (fetchError) throw new Error(fetchError.message);
+    if (!row) throw new Error("Not found");
 
     await assertEditListing(supabase, userId, row.listing_id);
 
@@ -125,7 +125,7 @@ export const deleteListingImage = createServerFn({ method: "POST" })
       .from("listing_images")
       .delete()
       .eq("id", row.id);
-    if (deleteError) throw new Response(deleteError.message, { status: 400 });
+    if (deleteError) throw new Error(deleteError.message);
 
     return { ok: true as const };
   });
@@ -147,8 +147,8 @@ export const signListingDocument = createServerFn({ method: "POST" })
       .select("id, listing_id, storage_path, requires_lead, filename")
       .eq("id", data.documentId)
       .maybeSingle();
-    if (docError) throw new Response(docError.message, { status: 400 });
-    if (!doc) throw new Response("Not found", { status: 404 });
+    if (docError) throw new Error(docError.message);
+    if (!doc) throw new Error("Not found");
 
     // Caller with edit rights on the listing may always download.
     const { data: canEdit } = await supabase.rpc("current_user_has_permission", {
@@ -161,18 +161,18 @@ export const signListingDocument = createServerFn({ method: "POST" })
       if (!doc.requires_lead) {
         allowed = true;
       } else {
-        if (!data.email) throw new Response("Email required", { status: 400 });
+        if (!data.email) throw new Error("Email required");
         const { count, error: inqError } = await supabase
           .from("inquiries")
           .select("id", { count: "exact", head: true })
           .eq("listing_id", doc.listing_id)
           .ilike("email", data.email);
-        if (inqError) throw new Response(inqError.message, { status: 400 });
+        if (inqError) throw new Error(inqError.message);
         allowed = (count ?? 0) > 0;
       }
     }
 
-    if (!allowed) throw new Response("Forbidden", { status: 403 });
+    if (!allowed) throw new Error("Forbidden");
 
     const { data: signed, error: signError } = await supabase.storage
       .from(DOCUMENTS_BUCKET)
@@ -180,7 +180,7 @@ export const signListingDocument = createServerFn({ method: "POST" })
         download: doc.filename ?? true,
       });
     if (signError || !signed) {
-      throw new Response(signError?.message ?? "Signing failed", { status: 500 });
+      throw new Error(signError?.message ?? "Signing failed");
     }
 
     return { url: signed.signedUrl, expiresIn: data.expiresIn ?? 300 };
@@ -206,9 +206,9 @@ async function assertEditListing(
     .select("id, agent_id, created_by")
     .eq("id", listingId)
     .maybeSingle();
-  if (error) throw new Response(error.message, { status: 400 });
-  if (!listing) throw new Response("Not found", { status: 404 });
+  if (error) throw new Error(error.message);
+  if (!listing) throw new Error("Not found");
   if (listing.agent_id !== userId && listing.created_by !== userId) {
-    throw new Response("Forbidden", { status: 403 });
+    throw new Error("Forbidden");
   }
 }
