@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/ui/input";
-import { areaLabelKey, type VisibleField } from "@/lib/listings/field-visibility";
+import type { VisibleField } from "@/lib/listings/field-visibility";
+import { areaLabelKey } from "@/lib/listings/field-labels";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow } from "./FieldRow";
 
@@ -41,7 +42,7 @@ export function NumberFields({
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {keys.map((key) => (
-        <FieldRow key={key} label={t(areaLabelKey(values.property_type, key))}>
+        <FieldRow key={key} anchor={key} label={t(areaLabelKey(values.property_type, key))}>
           <Input
             type="number"
             inputMode="decimal"

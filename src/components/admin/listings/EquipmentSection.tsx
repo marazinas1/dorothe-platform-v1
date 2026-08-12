@@ -27,8 +27,9 @@ export function EquipmentSection({ form }: { form: ListingFormApi }) {
   const { values } = form;
   const selected = values.features ?? [];
   const available = featuresForType(values.property_type);
-  const showCondition = applies(values.property_type, "condition");
-  const showHeating = applies(values.property_type, "heating_type");
+  const shape = { property_type: values.property_type, deal_type: values.deal_type };
+  const showCondition = applies(shape, "condition");
+  const showHeating = applies(shape, "heating_type");
   // A plot has neither condition nor heating and no equipment worth listing.
   if (!showCondition && !showHeating && available.length === 0) return null;
 

@@ -59,6 +59,11 @@ export function ListingForm({
   const listingId = (form.values.id as string | undefined) ?? null;
   const navLocale = routeLocale ?? primaryLocale;
 
+  const shape = {
+    property_type: form.values.property_type,
+    deal_type: form.values.deal_type,
+  };
+
   const checklist = buildPublishChecklist({
     values: form.values,
     imageCount: images.length,
@@ -142,7 +147,7 @@ export function ListingForm({
       <FiguresSection form={form} />
       <LocationSection form={form} />
       <EquipmentSection form={form} />
-      {applies(form.values.property_type, "energy") ? <EnergySection form={form} /> : null}
+      {applies(shape, "energy") ? <EnergySection form={form} /> : null}
       <TranslatableBlock
         form={form}
         lang={lang}

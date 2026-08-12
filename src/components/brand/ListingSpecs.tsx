@@ -22,13 +22,14 @@ export function ListingSpecs({ listing, locale, settings }: Props) {
   const { t, i18n } = useTranslation();
   const rows: { label: string; value: string }[] = [];
   const type = listing.property_type;
+  const shape = { property_type: listing.property_type, deal_type: listing.deal_type };
 
   const area = (value: number | null | undefined) =>
     value == null ? null : formatArea(value, settings.area_unit, locale);
   const num = (value: number | null | undefined) => (value == null ? null : String(value));
 
   function push(field: Parameters<typeof applies>[1], label: string, value: string | null) {
-    if (!value || !applies(type, field)) return;
+    if (!value || !applies(shape, field)) return;
     rows.push({ label, value });
   }
 

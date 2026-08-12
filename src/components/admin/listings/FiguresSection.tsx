@@ -1,10 +1,11 @@
 import { useTranslation } from "react-i18next";
 
-import { fieldsAtLevel, isOpen } from "@/lib/listings/field-visibility";
+import { fieldsAtLevel } from "@/lib/listings/field-visibility";
 import type { ListingFormApi } from "./listing-form-state";
 import { FormSection } from "./FieldRow";
 import { PriceGroup } from "./PriceGroup";
 import { NUMERIC_KEYS, NumberFields } from "./NumberFields";
+import { TenancyFields } from "./TenancyFields";
 
 /**
  * The figures a buyer asks about before arranging a viewing: money on top,
@@ -14,17 +15,20 @@ import { NUMERIC_KEYS, NumberFields } from "./NumberFields";
  */
 export function FiguresSection({ form }: { form: ListingFormApi }) {
   const { t } = useTranslation();
-  const type = form.values.property_type;
-  const openNumbers = fieldsAtLevel(type, NUMERIC_KEYS, "open");
+  const shape = {
+    property_type: form.values.property_type,
+    deal_type: form.values.deal_type,
+  };
+  const openNumbers = fieldsAtLevel(shape, NUMERIC_KEYS, "open");
 
   return (
-    <FormSection title={t("admin.listings.sections.figures")}>
+    <FormSection anchor="price" title={t("admin.listings.sections.figures")}>
       <div className="grid gap-8">
         <div className="grid gap-4">
           <h3 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {t("admin.listings.groups.price")}
           </h3>
-          <PriceGroup form={form} showServiceCharge={isOpen(type, "service_charge")} />
+          <PriceGroup form={form} />
         </div>
         {openNumbers.length > 0 ? (
           <div className="grid gap-4 border-t border-border pt-6">
@@ -34,6 +38,7 @@ export function FiguresSection({ form }: { form: ListingFormApi }) {
             <NumberFields form={form} keys={openNumbers} />
           </div>
         ) : null}
+        <TenancyFields form={form} level="open" />
       </div>
     </FormSection>
   );
