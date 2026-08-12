@@ -301,7 +301,9 @@
       "signOut": "Abmelden",
       "toggleSidebar": "Navigation umschalten",
       "unknownUser": "Unbekannter Nutzer",
-      "interfaceLanguage": "Oberfläche"
+      "interfaceLanguage": "Sprache der Oberfläche",
+      "interfaceLanguageHint": "Ändert nur die Sprache dieses Panels, nicht die der Website.",
+      "interfaceLanguageFailed": "Die Sprache der Oberfläche konnte nicht gespeichert werden."
     },
     "role": {
       "owner": "Inhaber",
