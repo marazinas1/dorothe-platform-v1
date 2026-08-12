@@ -21,6 +21,8 @@ export function SaveBar({
 }) {
   const { t, i18n } = useTranslation();
 
+  // The autosave timestamp is operator feedback, not listing content, so it
+  // correctly follows the interface language.
   const time = autosave.at
     ? new Intl.DateTimeFormat(i18n.language, {
         hour: "2-digit",

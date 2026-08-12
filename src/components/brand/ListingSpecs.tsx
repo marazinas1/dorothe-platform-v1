@@ -4,6 +4,7 @@ import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import { formatArea, formatPrice } from "@/lib/listings/format";
 import { applies } from "@/lib/listings/field-visibility";
+import { moneyLabelKey } from "@/lib/listings/field-labels";
 import type { SiteSettings } from "@/types/site-settings";
 
 type Props = {
@@ -67,7 +68,7 @@ export function ListingSpecs({ listing, locale, settings }: Props) {
   );
   push(
     "service_charge",
-    t("listings.detail.service_charge"),
+    t(moneyLabelKey(shape, "service_charge", "public")),
     listing.service_charge == null
       ? null
       : formatPrice(listing.service_charge, settings.currency, locale, {
@@ -77,7 +78,7 @@ export function ListingSpecs({ listing, locale, settings }: Props) {
   );
   push(
     "utilities_cost",
-    t("listings.detail.utilities_cost"),
+    t(moneyLabelKey(shape, "utilities_cost", "public")),
     listing.utilities_cost == null
       ? null
       : formatPrice(listing.utilities_cost, settings.currency, locale, {
@@ -87,7 +88,7 @@ export function ListingSpecs({ listing, locale, settings }: Props) {
   );
   push(
     "total_rent",
-    t("listings.detail.total_rent"),
+    t(moneyLabelKey(shape, "total_rent", "public")),
     listing.total_rent == null
       ? null
       : formatPrice(listing.total_rent, settings.currency, locale, {
@@ -97,7 +98,7 @@ export function ListingSpecs({ listing, locale, settings }: Props) {
   );
   push(
     "deposit",
-    t("listings.detail.deposit"),
+    t(moneyLabelKey(shape, "deposit", "public")),
     listing.deposit == null
       ? null
       : formatPrice(listing.deposit, settings.currency, locale, { onRequestLabel: "" }),
