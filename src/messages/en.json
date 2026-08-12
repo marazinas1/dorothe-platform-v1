@@ -20,7 +20,10 @@
     "contact_headline_solo": "Buying or selling — tell me where to start.",
     "view_all": "View all properties",
     "view_all_sold": "Browse sold archive",
-    "hero_cta": "View properties"
+    "hero_cta": "View properties",
+    "credibility_kicker": "Why {{agent}}",
+    "team_kicker": "Team",
+    "team_title": "The people behind the properties"
   },
   "nav": {
     "listings": "Properties",
@@ -503,6 +506,11 @@
             "description": "Forward inquiries to the CRM."
           }
         }
+      },
+      "analytics": {
+        "google_analytics_id": "Google Analytics ID",
+        "google_site_verification": "Google site verification code",
+        "plausible_domain": "Plausible domain"
       }
     },
     "listings": {
@@ -681,7 +689,8 @@
         "deleteBody": "The listing and its photos are permanently removed. This cannot be undone.",
         "cancel": "Cancel",
         "confirmDelete": "Delete permanently",
-        "deleted": "Listing deleted"
+        "deleted": "Listing deleted",
+        "header": "Actions"
       },
       "toolbar": {
         "search": "Search",

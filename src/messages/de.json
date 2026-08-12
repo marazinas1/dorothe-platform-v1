@@ -20,7 +20,10 @@
     "contact_headline_solo": "Kaufen oder verkaufen — sagen Sie mir, worum es geht.",
     "view_all": "Alle Objekte ansehen",
     "view_all_sold": "Zum Verkauft-Archiv",
-    "hero_cta": "View properties"
+    "hero_cta": "View properties",
+    "credibility_kicker": "Warum {{agent}}",
+    "team_kicker": "Team",
+    "team_title": "Die Menschen hinter den Objekten"
   },
   "nav": {
     "listings": "Angebote",
@@ -503,6 +506,11 @@
             "description": "Anfragen an das CRM übermitteln."
           }
         }
+      },
+      "analytics": {
+        "google_analytics_id": "Google-Analytics-ID",
+        "google_site_verification": "Google-Site-Verification-Code",
+        "plausible_domain": "Plausible-Domain"
       }
     },
     "listings": {
@@ -681,7 +689,8 @@
         "deleteBody": "Das Objekt und seine Fotos werden endgültig entfernt. Das kann nicht rückgängig gemacht werden.",
         "cancel": "Abbrechen",
         "confirmDelete": "Endgültig löschen",
-        "deleted": "Objekt gelöscht"
+        "deleted": "Objekt gelöscht",
+        "header": "Aktionen"
       },
       "toolbar": {
         "search": "Suche",

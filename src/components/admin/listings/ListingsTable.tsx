@@ -51,7 +51,7 @@ export function ListingsTable({
               {t("admin.listings.fields.price")}
             </TableHead>
             <TableHead>{t("admin.listings.fields.status")}</TableHead>
-            <TableHead className="text-right">{t("admin.listings.actions")}</TableHead>
+            <TableHead className="text-right">{t("admin.listings.actions.header")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
