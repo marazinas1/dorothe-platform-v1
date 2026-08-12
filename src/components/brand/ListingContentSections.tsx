@@ -28,7 +28,8 @@ function pickItems(items: unknown, locale: string): string[] {
 
 /**
  * Hand-written content blocks (highlights, surroundings).
- * Sections without items are skipped. Order comes from the DB.
+ * Sections without items are skipped. The order is fixed by KNOWN_KEYS, not by
+ * the stored array, so the admin form can promise where each text appears.
  */
 export function ListingContentSections({ sections, locale }: Props) {
   const { t } = useTranslation();
@@ -36,7 +37,12 @@ export function ListingContentSections({ sections, locale }: Props) {
 
   const rendered = (sections as Section[])
     .map((s) => ({ key: s.key, items: pickItems(s?.items, locale) }))
-    .filter((s) => KNOWN_KEYS.includes(s.key as (typeof KNOWN_KEYS)[number]) && s.items.length > 0);
+    .filter((s) => KNOWN_KEYS.includes(s.key as (typeof KNOWN_KEYS)[number]) && s.items.length > 0)
+    .sort(
+      (a, b) =>
+        KNOWN_KEYS.indexOf(a.key as (typeof KNOWN_KEYS)[number]) -
+        KNOWN_KEYS.indexOf(b.key as (typeof KNOWN_KEYS)[number]),
+    );
 
   if (rendered.length === 0) return null;
 

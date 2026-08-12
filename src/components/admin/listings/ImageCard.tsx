@@ -15,10 +15,10 @@ export type ImageRecord = {
 };
 
 /**
- * A compact tile: the photograph, its position in the order, a drag handle, and
- * actions that appear on hover or keyboard focus instead of taking permanent
- * space. Upload, reorder and persistence behaviour is unchanged — this is
- * layout only.
+ * A compact tile: the photograph, its position in the order, a grab affordance,
+ * and actions that appear on hover or keyboard focus. Reordering is a pointer
+ * gesture owned by the grid, so this component only renders the drag states it
+ * is told about.
  */
 export function ImageCard({
   image,
@@ -26,8 +26,11 @@ export function ImageCard({
   total,
   busy,
   savingOrder,
+  dragging,
+  isDragged,
+  isTarget,
+  onPointerDown,
   onMove,
-  onMoveTo,
   onMakeCover,
   onDelete,
 }: {
@@ -36,9 +39,12 @@ export function ImageCard({
   total: number;
   busy: boolean;
   savingOrder?: boolean;
+  /** A reorder gesture is in progress somewhere in the grid. */
+  dragging?: boolean;
+  isDragged?: boolean;
+  isTarget?: boolean;
+  onPointerDown: (index: number, event: React.PointerEvent) => void;
   onMove: (index: number, direction: -1 | 1) => void;
-  /** Drop target: move the dragged photo to exactly this position. */
-  onMoveTo: (from: number, to: number) => void;
   onMakeCover: (image: ImageRecord) => void;
   onDelete: (image: ImageRecord) => void;
 }) {
@@ -49,21 +55,27 @@ export function ImageCard({
 
   return (
     <div
-      className="group relative overflow-hidden rounded-md border border-border bg-card focus-within:ring-2 focus-within:ring-ring"
-      draggable
-      onDragStart={(e) => e.dataTransfer.setData("text/plain", String(index))}
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        const from = Number(e.dataTransfer.getData("text/plain"));
-        if (Number.isNaN(from) || from === index) return;
-        onMoveTo(from, index);
-      }}
+      data-photo-index={index}
+      onPointerDown={(e) => onPointerDown(index, e)}
+      className={`group relative select-none overflow-hidden rounded-md border bg-card transition-[transform,opacity,box-shadow] focus-within:ring-2 focus-within:ring-ring ${
+        isDragged
+          ? "z-10 scale-[1.03] border-primary opacity-70 shadow-lg"
+          : isTarget
+            ? "border-primary ring-2 ring-primary"
+            : "border-border"
+      } ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
+      style={dragging ? { touchAction: "none" } : undefined}
       aria-busy={savingOrder ? true : undefined}
     >
       <div className="relative aspect-[4/3] bg-muted">
         {url ? (
-          <img src={url} alt="" className="h-full w-full object-cover" loading="lazy" />
+          <img
+            src={url}
+            alt=""
+            draggable={false}
+            className="pointer-events-none h-full w-full object-cover"
+            loading="lazy"
+          />
         ) : (
           <div className="flex h-full items-center justify-center px-2 text-center text-[11px] text-muted-foreground">
             {t(`admin.listings.images.status.${image.processing_status}`)}
@@ -72,21 +84,34 @@ export function ImageCard({
 
         {/* Position and grab point: the order is what is being edited. */}
         <span
-          className="absolute left-1 top-1 flex cursor-grab items-center gap-0.5 rounded bg-background/85 px-1 py-0.5 text-[10px] font-medium text-foreground"
+          className="absolute left-1 top-1 flex items-center gap-0.5 rounded bg-background/85 px-1 py-0.5 text-[10px] font-medium text-foreground"
           title={t("admin.listings.images.dragHandle")}
         >
           <GripVertical className="h-3 w-3" aria-hidden />
           {index + 1}
         </span>
 
-        {index === 0 ? (
+        {index === 0 && !isTarget ? (
           <span className="absolute right-1 top-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground">
             {t("admin.listings.images.cover")}
           </span>
         ) : null}
 
+        {/* Where the photo will land, shown before releasing. */}
+        {isTarget ? (
+          <span className="absolute inset-x-1 top-1 flex justify-end">
+            <span className="rounded bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground">
+              {t("admin.listings.images.dropHere", { position: index + 1 })}
+            </span>
+          </span>
+        ) : null}
+
         {/* Actions: hidden until hover or keyboard focus, always reachable. */}
-        <div className="absolute inset-x-1 bottom-1 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+        <div
+          className={`absolute inset-x-1 bottom-1 flex items-center gap-1 transition-opacity group-focus-within:opacity-100 ${
+            dragging ? "opacity-0" : "opacity-0 group-hover:opacity-100"
+          }`}
+        >
           <Button
             type="button"
             size="icon"
