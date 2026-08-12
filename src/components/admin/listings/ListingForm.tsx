@@ -134,35 +134,36 @@ export function ListingForm({
         />
       ) : null}
 
-      <PublishChecklist checklist={checklist} />
+      {/* The checklist is the navigation: sticky rail on the right, form on the
+          left, sections in the order a broker fills them. */}
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+        <div className="space-y-6">
+          <TitleFields form={form} locales={locales} primaryLocale={primaryLocale} />
+          <BasicsSection form={form} />
+          <ImageManager
+            listingId={listingId}
+            images={images}
+            refresh={refreshListing}
+            onSaveDraft={() => void save()}
+            savingDraft={saving}
+          />
+          <FiguresSection form={form} />
+          <LocationSection form={form} />
+          <EquipmentSection form={form} />
+          <TranslatableBlock
+            form={form}
+            lang={lang}
+            locales={locales}
+            primaryLocale={primaryLocale}
+            onLangChange={setLang}
+          />
+          {applies(shape, "energy") ? <EnergySection form={form} /> : null}
+          <MoreDetailsSection form={form} lang={lang} />
+        </div>
 
-      <BasicsSection form={form} />
-      <ImageManager
-        listingId={listingId}
-        images={images}
-        refresh={refreshListing}
-        onSaveDraft={() => void save()}
-        savingDraft={saving}
-      />
-      <FiguresSection form={form} />
-      <LocationSection form={form} />
-      <EquipmentSection form={form} />
-      {applies(shape, "energy") ? <EnergySection form={form} /> : null}
-      <TranslatableBlock
-        form={form}
-        lang={lang}
-        locales={locales}
-        primaryLocale={primaryLocale}
-        onLangChange={setLang}
-      />
-      <MoreDetailsSection form={form} lang={lang} />
+        <ChecklistRail checklist={checklist} />
+      </div>
 
-      <SaveBar
-        dirty={form.dirty}
-        saving={saving}
-        autosave={autosave.state}
-        onSave={() => void save()}
-      />
     </form>
   );
 }
