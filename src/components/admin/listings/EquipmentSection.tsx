@@ -13,6 +13,7 @@ import {
   LISTING_CONDITIONS,
   featuresForType,
 } from "@/lib/listings/vocabularies";
+import { applies } from "@/lib/listings/field-visibility";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow, FormSection } from "./FieldRow";
 
@@ -26,6 +27,10 @@ export function EquipmentSection({ form }: { form: ListingFormApi }) {
   const { values } = form;
   const selected = values.features ?? [];
   const available = featuresForType(values.property_type);
+  const showCondition = applies(values.property_type, "condition");
+  const showHeating = applies(values.property_type, "heating_type");
+  // A plot has neither condition nor heating and no equipment worth listing.
+  if (!showCondition && !showHeating && available.length === 0) return null;
 
   function toggle(key: string, checked: boolean) {
     const next = checked
@@ -38,6 +43,7 @@ export function EquipmentSection({ form }: { form: ListingFormApi }) {
     <FormSection title={t("admin.listings.sections.equipment")}>
       <div className="grid gap-6">
         <div className="grid gap-4 sm:grid-cols-2">
+          {showCondition ? (
           <FieldRow label={t("admin.listings.fields.condition")}>
             <Select
               value={values.condition ?? "none"}
@@ -61,7 +67,9 @@ export function EquipmentSection({ form }: { form: ListingFormApi }) {
               </SelectContent>
             </Select>
           </FieldRow>
+          ) : null}
 
+          {showHeating ? (
           <FieldRow label={t("admin.listings.fields.heating_type")}>
             <Select
               value={values.heating_type ?? "none"}
@@ -85,6 +93,7 @@ export function EquipmentSection({ form }: { form: ListingFormApi }) {
               </SelectContent>
             </Select>
           </FieldRow>
+          ) : null}
         </div>
 
         {available.length > 0 ? (
