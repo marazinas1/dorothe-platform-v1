@@ -680,6 +680,7 @@ export type Database = {
           primary_color: string | null
           qualifications: Json
           radius_scale: string | null
+          seals: Json
           secondary_color: string | null
           service_region: Json
           site_name: string
@@ -733,6 +734,7 @@ export type Database = {
           primary_color?: string | null
           qualifications?: Json
           radius_scale?: string | null
+          seals?: Json
           secondary_color?: string | null
           service_region?: Json
           site_name: string
@@ -786,6 +788,7 @@ export type Database = {
           primary_color?: string | null
           qualifications?: Json
           radius_scale?: string | null
+          seals?: Json
           secondary_color?: string | null
           service_region?: Json
           site_name?: string
