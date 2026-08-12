@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ImagePlus, Loader2, RotateCcw, X } from "lucide-react";
+import { ImagePlus, Loader2, RotateCcw, Upload, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
