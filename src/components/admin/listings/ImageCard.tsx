@@ -19,7 +19,9 @@ export function ImageCard({
   index,
   total,
   busy,
+  savingOrder,
   onMove,
+  onMoveTo,
   onMakeCover,
   onDelete,
 }: {
@@ -27,12 +29,17 @@ export function ImageCard({
   index: number;
   total: number;
   busy: boolean;
+  savingOrder?: boolean;
   onMove: (index: number, direction: -1 | 1) => void;
+  /** Drop target: move the dragged photo to exactly this position. */
+  onMoveTo: (from: number, to: number) => void;
   onMakeCover: (image: ImageRecord) => void;
   onDelete: (image: ImageRecord) => void;
 }) {
   const { t } = useTranslation();
   const url = variantUrl(image.variants, "card");
+  // Reordering is local and debounced, so the arrows stay usable while saving.
+  const disabled = busy;
 
   return (
     <div
@@ -44,9 +51,11 @@ export function ImageCard({
         e.preventDefault();
         const from = Number(e.dataTransfer.getData("text/plain"));
         if (Number.isNaN(from) || from === index) return;
-        onMove(from, from < index ? 1 : -1);
+        onMoveTo(from, index);
       }}
+      aria-busy={savingOrder ? true : undefined}
     >
+
       <div className="relative aspect-[4/3] bg-muted">
         {url ? (
           <img
