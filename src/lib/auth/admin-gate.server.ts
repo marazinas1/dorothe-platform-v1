@@ -13,6 +13,8 @@ export interface VerifiedAdminProfile {
   is_active: boolean;
   avatar_url: string | null;
   public_photo_url: string | null;
+  /** Per-user interface language of the admin panel; null = follow site default. */
+  admin_locale: string | null;
 }
 
 const AUTH_COOKIE_RE = /sb-[^=;\s]+-auth-token(?:\.(\d+))?/;
