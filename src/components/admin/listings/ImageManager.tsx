@@ -163,39 +163,6 @@ export function ImageManager({
     }
   }
 
-  /** Cover image = first in the gallery, which is what is_primary tracks. */
-  async function makeCover(image: ImageRecord) {
-    const rest = images.filter((i) => i.id !== image.id);
-    setBusy(true);
-    try {
-      await reorderListingImages({
-        data: { listingId: listingId!, order: [image.id, ...rest.map((i) => i.id)] },
-      });
-      refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : String(error));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function move(index: number, direction: -1 | 1) {
-    const next = [...images];
-    const target = index + direction;
-    if (target < 0 || target >= next.length) return;
-    [next[index], next[target]] = [next[target], next[index]];
-    setBusy(true);
-    try {
-      await reorderListingImages({
-        data: { listingId: listingId!, order: next.map((i) => i.id) },
-      });
-      refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : String(error));
-    } finally {
-      setBusy(false);
-    }
-  }
 
   return (
     <FormSection
