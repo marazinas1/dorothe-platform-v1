@@ -559,6 +559,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          admin_locale: string | null
           avatar_url: string | null
           created_at: string
           email: string
@@ -578,6 +579,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          admin_locale?: string | null
           avatar_url?: string | null
           created_at?: string
           email: string
@@ -597,6 +599,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          admin_locale?: string | null
           avatar_url?: string | null
           created_at?: string
           email?: string
