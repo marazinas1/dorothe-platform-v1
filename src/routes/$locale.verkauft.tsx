@@ -76,7 +76,7 @@ function SoldArchive() {
 
         {data.items.length === 0 ? (
           <div className="py-24 text-center text-sm text-muted-foreground">
-            {t("listings.empty")}
+            {t("listings.sold_empty")}
           </div>
         ) : (
           <div className="mt-16 grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
