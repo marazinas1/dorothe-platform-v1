@@ -71,23 +71,62 @@ export function ListingForm({
     country: settings.country as Country,
   });
 
-  /** Content-only save. Status is never touched here — publishing is explicit. */
-  async function save({ silent = false }: { silent?: boolean } = {}): Promise<boolean> {
-    setSaving(true);
-    try {
+  /** Guards against two changes in the same tick creating two rows. */
+  const creating = useRef<Promise<string> | null>(null);
+
+  /**
+   * Insert the row the first time it is actually needed, then hand over to the
+   * editor route under the real id so a refresh lands on the saved draft.
+   */
+  async function ensureListingId(): Promise<string> {
+    if (listingId) return listingId;
+    if (creating.current) return creating.current;
+    const pending = (async () => {
       const parsed = ListingFormSchema.parse(form.values);
       const result = await saveListing({ data: parsed });
       form.markClean();
       queryClient.invalidateQueries(adminListingsQueryOptions);
-      if (!silent) toast.success(t("admin.listings.saved"));
+      await navigate({
+        to: "/$locale/admin/listings/$id",
+        params: { locale: navLocale, id: result.id },
+        replace: true,
+      });
+      return result.id;
+    })();
+    creating.current = pending;
+    try {
+      return await pending;
+    } catch (error) {
+      creating.current = null;
+      throw error;
+    }
+  }
+
+  // First meaningful edit creates the row. `dirty` only flips on a real value
+  // change, so focusing a field or opening a select changes nothing.
+  useEffect(() => {
+    if (listingId || !form.dirty) return;
+    void ensureListingId().catch((error) => {
+      toast.error(error instanceof Error ? error.message : String(error));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingId, form.dirty]);
+
+  /** Content-only save. Status is never touched here — publishing is explicit. */
+  async function save({ silent = false }: { silent?: boolean } = {}): Promise<boolean> {
+    setSaving(true);
+    try {
       if (!listingId) {
-        await navigate({
-          to: "/$locale/admin/listings/$id",
-          params: { locale: navLocale, id: result.id },
-        });
-      } else {
-        await queryClient.invalidateQueries(adminListingQueryOptions(listingId));
+        await ensureListingId();
+        if (!silent) toast.success(t("admin.listings.saved"));
+        return true;
       }
+      const parsed = ListingFormSchema.parse(form.values);
+      await saveListing({ data: parsed });
+      form.markClean();
+      queryClient.invalidateQueries(adminListingsQueryOptions);
+      if (!silent) toast.success(t("admin.listings.saved"));
+      await queryClient.invalidateQueries(adminListingQueryOptions(listingId));
       return true;
     } catch (error) {
       if (!silent) toast.error(error instanceof Error ? error.message : String(error));
@@ -102,6 +141,7 @@ export function ListingForm({
     enabled: !!listingId,
     save: () => save({ silent: true }),
   });
+
 
   function refreshListing() {
     if (listingId) void queryClient.invalidateQueries(adminListingQueryOptions(listingId));
