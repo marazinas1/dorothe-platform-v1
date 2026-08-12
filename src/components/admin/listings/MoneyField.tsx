@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Input } from "@/components/ui/input";
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
+import { FALLBACK_LOCALE } from "@/i18n/config";
 import { formatMoneyInput, parseMoneyInput } from "@/lib/listings/money";
 import { FieldRow } from "./FieldRow";
 
 /**
- * One money input. Digits are grouped as the broker types (549.000 in German,
- * 549,000 in English) while the stored value stays a plain number, so nothing in
- * the database ever depends on the interface language.
+ * One money input. Grouping and parsing follow the SITE's locale
+ * (site_settings.default_locale), never the operator's interface language:
+ * money conventions belong to the market the listing is sold in. Otherwise a
+ * figure copied from a German portal ("549.000") would parse as 549 while the
+ * panel is in English.
  */
 export function MoneyField({
   label,
