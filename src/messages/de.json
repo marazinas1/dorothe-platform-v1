@@ -636,7 +636,11 @@
         "coverHint": "Markieren Sie ein Foto als Titelbild — standardmäßig ist es das erste.",
         "makeCover": "Als Titelbild",
         "cover": "Titelbild",
-        "dismiss": "Ausblenden"
+        "dismiss": "Ausblenden",
+        "dropzoneTitle": "Fotos hierher ziehen oder klicken zum Auswählen",
+        "dropzoneMeta": "JPG, PNG oder WebP · Umwandlung in WebP · max. 50",
+        "empty": "Noch keine Fotos.",
+        "addMore": "Weitere Fotos hinzufügen"
       },
       "preview": "Vorschau",
       "publish": "Veröffentlichen",

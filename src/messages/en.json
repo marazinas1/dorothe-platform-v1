@@ -636,7 +636,11 @@
         "coverHint": "Mark one photo as the cover image — the first one is used by default.",
         "makeCover": "Make cover image",
         "cover": "Cover",
-        "dismiss": "Dismiss"
+        "dismiss": "Dismiss",
+        "dropzoneTitle": "Drag photos here or click to select",
+        "dropzoneMeta": "JPG, PNG or WebP · converted to WebP · max 50",
+        "empty": "No photos yet.",
+        "addMore": "Add more photos"
       },
       "preview": "Preview",
       "publish": "Publish",
