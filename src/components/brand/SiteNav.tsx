@@ -77,7 +77,7 @@ export function SiteNav({ locale, settings, overlay = false }: Props) {
             <SiteLogo settings={settings} size={scrolled ? "sm" : "md"} />
           </Link>
 
-          <div className="hidden items-center gap-8 lg:flex">
+          <div className="hidden items-center gap-8 md:flex">
             {nav.map((n) => (
               <Link
                 key={n.to}
@@ -107,7 +107,7 @@ export function SiteNav({ locale, settings, overlay = false }: Props) {
             </Link>
           </div>
 
-          <div className="flex items-center gap-4 lg:hidden">
+          <div className="flex items-center gap-4 md:hidden">
             <LocaleSwitcher
               currentLocale={locale}
               enabledLocales={settings.enabled_locales}
