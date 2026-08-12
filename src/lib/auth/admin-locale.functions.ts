@@ -21,7 +21,7 @@ export const setAdminLocale = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
     const { error } = await supabase
       .from("profiles")
-      .update({ admin_locale: data.locale } as never)
+      .update({ admin_locale: data.locale })
       .eq("id", userId);
     if (error) throw new Error(error.message);
     return { locale: data.locale };
