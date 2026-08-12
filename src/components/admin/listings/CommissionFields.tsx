@@ -30,12 +30,17 @@ export function CommissionFields({
   const { t } = useTranslation();
   const { values } = form;
   const free = !!values.commission_free;
+  // Wording follows the deal: a buyer pays commission, a tenant a Maklercourtage.
+  const freeKey =
+    values.deal_type === "rent"
+      ? "admin.listings.fields.commission_free_rent"
+      : "admin.listings.fields.commission_free";
 
   return (
     <div className="grid gap-4 rounded-md border border-border p-3" >
       <label className="flex items-center justify-between gap-4 text-sm">
         <span>
-          <span className="font-medium">{t("admin.listings.fields.commission_free")}</span>
+          <span className="font-medium">{t(freeKey)}</span>
           <span className="block text-xs text-muted-foreground">
             {t("admin.listings.help.commission_free")}
           </span>

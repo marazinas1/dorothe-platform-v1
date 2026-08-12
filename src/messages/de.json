@@ -588,7 +588,8 @@
         "deposit": "Kaution",
         "heating_costs_included": "Heizkosten in den Nebenkosten enthalten",
         "commission_free": "Provisionsfrei für Käufer",
-        "commission_value_percent": "Provision (%)"
+        "commission_value_percent": "Provision (%)",
+        "commission_free_rent": "Provisionsfrei für Mieter"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",

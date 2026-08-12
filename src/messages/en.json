@@ -588,7 +588,8 @@
         "deposit": "Deposit",
         "heating_costs_included": "Heating costs included in the additional costs",
         "commission_free": "No commission for the buyer",
-        "commission_value_percent": "Commission (%)"
+        "commission_value_percent": "Commission (%)",
+        "commission_free_rent": "No commission for the tenant"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
