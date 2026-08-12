@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ArrowRight, Star, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, GripVertical, Star, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { variantUrl } from "./listing-image-url";
@@ -14,6 +14,12 @@ export type ImageRecord = {
   content_type: string | null;
 };
 
+/**
+ * A compact tile: the photograph, its position in the order, a drag handle, and
+ * actions that appear on hover or keyboard focus instead of taking permanent
+ * space. Upload, reorder and persistence behaviour is unchanged — this is
+ * layout only.
+ */
 export function ImageCard({
   image,
   index,
@@ -43,7 +49,7 @@ export function ImageCard({
 
   return (
     <div
-      className="flex flex-col overflow-hidden rounded-lg border border-border bg-card"
+      className="group relative overflow-hidden rounded-md border border-border bg-card focus-within:ring-2 focus-within:ring-ring"
       draggable
       onDragStart={(e) => e.dataTransfer.setData("text/plain", String(index))}
       onDragOver={(e) => e.preventDefault()}
@@ -55,72 +61,78 @@ export function ImageCard({
       }}
       aria-busy={savingOrder ? true : undefined}
     >
-
       <div className="relative aspect-[4/3] bg-muted">
         {url ? (
-          <img
-            src={url}
-            alt=""
-            className="h-full w-full object-cover"
-            loading="lazy"
-          />
+          <img src={url} alt="" className="h-full w-full object-cover" loading="lazy" />
         ) : (
-          <div className="flex h-full items-center justify-center px-3 text-center text-xs text-muted-foreground">
+          <div className="flex h-full items-center justify-center px-2 text-center text-[11px] text-muted-foreground">
             {t(`admin.listings.images.status.${image.processing_status}`)}
           </div>
         )}
+
+        {/* Position and grab point: the order is what is being edited. */}
+        <span
+          className="absolute left-1 top-1 flex cursor-grab items-center gap-0.5 rounded bg-background/85 px-1 py-0.5 text-[10px] font-medium text-foreground"
+          title={t("admin.listings.images.dragHandle")}
+        >
+          <GripVertical className="h-3 w-3" aria-hidden />
+          {index + 1}
+        </span>
+
         {index === 0 ? (
-          <span className="absolute left-2 top-2 rounded bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground">
+          <span className="absolute right-1 top-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground">
             {t("admin.listings.images.cover")}
           </span>
         ) : null}
-      </div>
 
-      <div className="flex flex-1 flex-col gap-2 p-3">
-        <div className="mt-auto flex items-center gap-1">
+        {/* Actions: hidden until hover or keyboard focus, always reachable. */}
+        <div className="absolute inset-x-1 bottom-1 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
           <Button
             type="button"
             size="icon"
-            variant="outline"
+            variant="secondary"
+            className="h-7 w-7"
             disabled={disabled || index === 0}
             onClick={() => onMove(index, -1)}
             aria-label={t("admin.listings.images.moveLeft")}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-3.5 w-3.5" />
           </Button>
           <Button
             type="button"
             size="icon"
-            variant="outline"
+            variant="secondary"
+            className="h-7 w-7"
             disabled={disabled || index === total - 1}
             onClick={() => onMove(index, 1)}
             aria-label={t("admin.listings.images.moveRight")}
           >
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-3.5 w-3.5" />
           </Button>
           {index !== 0 ? (
             <Button
               type="button"
               size="icon"
-              variant="outline"
+              variant="secondary"
+              className="h-7 w-7"
               disabled={busy}
               onClick={() => onMakeCover(image)}
               aria-label={t("admin.listings.images.makeCover")}
               title={t("admin.listings.images.makeCover")}
             >
-              <Star className="h-4 w-4" />
+              <Star className="h-3.5 w-3.5" />
             </Button>
           ) : null}
           <Button
             type="button"
             size="icon"
-            variant="outline"
-            className="ml-auto text-destructive"
+            variant="secondary"
+            className="ml-auto h-7 w-7 text-destructive"
             disabled={busy}
             onClick={() => onDelete(image)}
             aria-label={t("admin.listings.images.delete")}
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
