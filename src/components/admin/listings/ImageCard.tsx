@@ -82,7 +82,7 @@ export function ImageCard({
             type="button"
             size="icon"
             variant="outline"
-            disabled={busy || index === 0}
+            disabled={disabled || index === 0}
             onClick={() => onMove(index, -1)}
             aria-label={t("admin.listings.images.moveLeft")}
           >
@@ -92,7 +92,7 @@ export function ImageCard({
             type="button"
             size="icon"
             variant="outline"
-            disabled={busy || index === total - 1}
+            disabled={disabled || index === total - 1}
             onClick={() => onMove(index, 1)}
             aria-label={t("admin.listings.images.moveRight")}
           >
