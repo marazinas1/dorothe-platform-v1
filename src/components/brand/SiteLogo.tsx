@@ -13,10 +13,9 @@ type Props = {
 
 /**
  * Renders site_settings.logo_url when a client has uploaded a logo, otherwise
- * falls back to the typographic BrandMark. The uploaded file is displayed
- * neutralised (desaturated + tinted toward ink) so a client logo in foreign
- * brand colours does not fight the current palette; the stored file itself is
- * untouched, so removing the treatment later is a one-line change.
+ * falls back to the typographic BrandMark. The file is shown in its own
+ * colours; a client that needs a light variant over photography uploads it as
+ * logo_dark_url.
  */
 export function SiteLogo({ settings, tone = "dark", className, size = "md" }: Props) {
   const src = tone === "light" ? (settings.logo_dark_url ?? settings.logo_url) : settings.logo_url;
@@ -27,13 +26,8 @@ export function SiteLogo({ settings, tone = "dark", className, size = "md" }: Pr
       src={src}
       alt={settings.site_name}
       className={cn(
-        size === "sm" ? "h-10 md:h-11" : "h-14 md:h-16",
-        "w-auto object-contain",
-        // Neutralising display treatment — no palette clash while the brand
-        // decision is still open.
-        tone === "light"
-          ? "opacity-90 brightness-0 invert"
-          : "grayscale contrast-[1.1] brightness-[0.6]",
+        size === "sm" ? "h-12 md:h-14" : "h-16 md:h-20",
+        "w-auto object-contain transition-[height] duration-500 ease-out",
         className,
       )}
       loading="eager"
