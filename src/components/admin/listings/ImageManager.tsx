@@ -195,68 +195,56 @@ export function ImageManager({
     }
   }
 
-  const compact = images.length > 0;
-
   return (
     <FormSection
       title={t("admin.listings.sections.images")}
-      description={t("admin.listings.images.coverHint")}
+      description={t("admin.listings.images.pipelineNote")}
     >
-      <div
-        className={`rounded-lg border border-dashed border-border bg-muted/20 ${
-          compact
-            ? "flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-left"
-            : "px-4 py-4 text-left"
-        }`}
-        onDragOver={(e) => e.preventDefault()}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files?.length) void uploadFiles(e.target.files);
+          e.target.value = "";
+        }}
+      />
+
+      <button
+        type="button"
+        disabled={busy}
+        onClick={() => inputRef.current?.click()}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
         onDrop={(e) => {
           e.preventDefault();
+          setDragging(false);
           if (e.dataTransfer.files?.length) void uploadFiles(e.dataTransfer.files);
         }}
+        className={`flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-14 text-center transition-colors ${
+          dragging
+            ? "border-primary bg-primary/5"
+            : "border-border bg-muted/20 hover:border-primary/50 hover:bg-muted/40"
+        } disabled:cursor-progress`}
       >
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            if (e.target.files?.length) void uploadFiles(e.target.files);
-            e.target.value = "";
-          }}
-        />
-        <div className={compact ? "min-w-0" : "flex flex-wrap items-center justify-between gap-3"}>
-          <p className="text-sm text-muted-foreground">
-            {t("admin.listings.images.dropHintLong")}
-          </p>
-          {compact ? null : (
-            <Button
-              type="button"
-              variant="outline"
-              disabled={busy}
-              onClick={() => inputRef.current?.click()}
-            >
-              {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              {t("admin.listings.images.select")}
-            </Button>
-          )}
-        </div>
-        {compact ? (
-          <Button
-            type="button"
-            variant="outline"
-            disabled={busy}
-            onClick={() => inputRef.current?.click()}
-          >
-            {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-            {t("admin.listings.images.select")}
-          </Button>
+        {busy ? (
+          <Loader2 className="h-7 w-7 animate-spin text-muted-foreground" />
         ) : (
-          <p className="mt-3 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-            {t("admin.listings.images.pipelineNote")}
-          </p>
+          <Upload className="h-7 w-7 text-muted-foreground" />
         )}
-      </div>
+        <span className="mt-2 font-heading text-base text-foreground">
+          {t("admin.listings.images.dropzoneTitle")}
+        </span>
+        <span className="text-xs text-muted-foreground">
+          {t("admin.listings.images.dropzoneMeta")}
+        </span>
+      </button>
+
 
 
       {jobs.length > 0 ? (
