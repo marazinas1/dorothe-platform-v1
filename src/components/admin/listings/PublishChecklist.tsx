@@ -1,31 +1,17 @@
 import { useTranslation } from "react-i18next";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { Check, Minus } from "lucide-react";
 
-import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
-import { buildPublishChecklist } from "@/lib/listings/publish-checklist";
-import type { ListingFormValues } from "@/lib/listings/admin-schema";
-import type { Country } from "@/lib/validation/energy";
+import type { Checklist } from "@/lib/listings/publish-checklist";
 
 /**
  * Persistent, neutral publish checklist. A draft may be incomplete, so nothing
- * here is an error — it simply states what publishing still needs. The items
- * derive from the same rules the database enforces on publish.
+ * here is an error — it simply states what publishing still needs. The checklist
+ * is built once by the form, so the publish button and this list can never
+ * disagree.
  */
-export function PublishChecklist({
-  values,
-  imageCount,
-}: {
-  values: ListingFormValues;
-  imageCount: number;
-}) {
+export function PublishChecklist({ checklist }: { checklist: Checklist }) {
   const { t } = useTranslation();
-  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
-  const { items, outstanding, ready, energyExempt } = buildPublishChecklist({
-    values,
-    imageCount,
-    country: settings.country as Country,
-  });
+  const { items, outstanding, ready, energyExempt } = checklist;
 
   return (
     <section className="rounded-lg border border-border bg-muted/30 p-4">
@@ -54,7 +40,6 @@ export function PublishChecklist({
                     .join(", ")}`
                 : null}
             </span>
-
           </li>
         ))}
       </ul>
