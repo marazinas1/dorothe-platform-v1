@@ -23,6 +23,9 @@ export function useImageOrder({
   onError: (message: string) => void;
 }) {
   const [order, setOrder] = useState<string[] | null>(null);
+  // Refs so the unmount handler can flush without re-subscribing on every change.
+  const orderRef = useRef<string[] | null>(null);
+  const flushRef = useRef<() => void>(() => undefined);
   const dirtyRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [saving, setSaving] = useState(false);
@@ -51,6 +54,7 @@ export function useImageOrder({
       try {
         await reorderListingImages({ data: { listingId, order: ids } });
         dirtyRef.current = false;
+        orderRef.current = null;
         setOrder(null);
         refresh();
       } catch (error) {
@@ -65,6 +69,7 @@ export function useImageOrder({
   const schedule = useCallback(
     (ids: string[]) => {
       dirtyRef.current = true;
+      orderRef.current = ids;
       setOrder(ids);
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
@@ -75,12 +80,26 @@ export function useImageOrder({
     [persist],
   );
 
-  useEffect(
-    () => () => {
+  /** Send a pending order right away — used before leaving the page. */
+  const flush = useCallback(() => {
+    if (!timerRef.current) return;
+    clearTimeout(timerRef.current);
+    timerRef.current = null;
+    const ids = orderRef.current;
+    if (ids) void persist(ids);
+  }, [persist]);
+
+  // A pending reorder must survive navigation and tab closing, otherwise the
+  // arrangement the broker just made is silently lost.
+  useEffect(() => {
+    const onHide = () => flushRef.current();
+    window.addEventListener("pagehide", onHide);
+    return () => {
+      window.removeEventListener("pagehide", onHide);
       if (timerRef.current) clearTimeout(timerRef.current);
-    },
-    [],
-  );
+      flushRef.current();
+    };
+  }, []);
 
   /** Move the photo at `index` to `target`, keeping every other photo's order. */
   const moveTo = useCallback(
@@ -108,5 +127,7 @@ export function useImageOrder({
     [ordered, moveTo],
   );
 
-  return { ordered, move, moveTo, makeCover, savingOrder: saving };
+  flushRef.current = flush;
+
+  return { ordered, move, moveTo, makeCover, flushOrder: flush, savingOrder: saving };
 }

@@ -76,6 +76,33 @@ export function ListingSpecs({ listing, locale, settings }: Props) {
         }),
   );
   push(
+    "utilities_cost",
+    t("listings.detail.utilities_cost"),
+    listing.utilities_cost == null
+      ? null
+      : formatPrice(listing.utilities_cost, settings.currency, locale, {
+          period: "month",
+          onRequestLabel: "",
+        }),
+  );
+  push(
+    "total_rent",
+    t("listings.detail.total_rent"),
+    listing.total_rent == null
+      ? null
+      : formatPrice(listing.total_rent, settings.currency, locale, {
+          period: "month",
+          onRequestLabel: "",
+        }),
+  );
+  push(
+    "deposit",
+    t("listings.detail.deposit"),
+    listing.deposit == null
+      ? null
+      : formatPrice(listing.deposit, settings.currency, locale, { onRequestLabel: "" }),
+  );
+  push(
     "availability_date",
     t("listings.detail.available_from"),
     listing.availability_date

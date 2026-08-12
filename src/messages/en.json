@@ -135,7 +135,10 @@
       "usable_area_commercial": "Commercial area",
       "usable_area": "Usable area",
       "total_floors": "Floors in building",
-      "available_from": "Available from"
+      "available_from": "Available from",
+      "utilities_cost": "Additional costs",
+      "total_rent": "Total rent",
+      "deposit": "Deposit"
     },
     "pager": {
       "prev": "Previous",

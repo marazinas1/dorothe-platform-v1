@@ -135,7 +135,10 @@
       "usable_area_commercial": "Gewerbefläche",
       "usable_area": "Nutzfläche",
       "total_floors": "Etagen im Haus",
-      "available_from": "Verfügbar ab"
+      "available_from": "Verfügbar ab",
+      "utilities_cost": "Nebenkosten",
+      "total_rent": "Warmmiete",
+      "deposit": "Kaution"
     },
     "pager": {
       "prev": "Zurück",
