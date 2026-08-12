@@ -88,6 +88,7 @@ export function EnergySection({ form }: { form: ListingFormApi }) {
 
   return (
     <FormSection
+      anchor="energy"
       title={t("admin.listings.sections.energy")}
       description={t("admin.listings.energy.intro", { country })}
     >
@@ -134,6 +135,7 @@ export function EnergySection({ form }: { form: ListingFormApi }) {
           return (
             <FieldRow
               key={field.key}
+              anchor={`energy_${field.key}`}
               label={t(`admin.listings.energyFields.${field.key}`)}
               className={field.kind === "sources" ? "sm:col-span-2" : undefined}
             >

@@ -175,8 +175,9 @@ export function ImageManager({
 
   return (
     <FormSection
+      anchor="photos"
       title={t("admin.listings.sections.images")}
-      description={t("admin.listings.images.pipelineNote")}
+      description={t("admin.listings.images.uploadHint")}
     >
       <input
         ref={inputRef}

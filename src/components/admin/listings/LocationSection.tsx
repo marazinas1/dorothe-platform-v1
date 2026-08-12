@@ -50,7 +50,7 @@ export function LocationSection({ form }: { form: ListingFormApi }) {
       <div className="grid gap-4">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {TEXT_FIELDS.map((key) => (
-            <FieldRow key={key} label={t(`admin.listings.fields.${key}`)}>
+            <FieldRow key={key} anchor={key} label={t(`admin.listings.fields.${key}`)}>
               <Input
                 value={values[key] ?? ""}
                 onChange={(e) => form.setField(key, e.target.value || null)}
