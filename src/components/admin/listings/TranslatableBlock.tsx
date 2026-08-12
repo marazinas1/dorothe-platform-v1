@@ -49,7 +49,6 @@ export function TranslatableBlock({
   const { t } = useTranslation();
   const { values } = form;
 
-  const titleFb = fallback(values.title, lang);
   const descFb = fallback(values.description, lang);
 
   function itemsFor(key: string): string[] {
@@ -92,21 +91,6 @@ export function TranslatableBlock({
           </p>
         </div>
 
-
-        <FieldRow
-          label={t("admin.listings.fields.title")}
-          help={
-            titleFb && !values.title?.[lang]?.trim()
-              ? t("admin.listings.fallbackFrom", { lang: titleFb.code.toUpperCase() })
-              : undefined
-          }
-        >
-          <Input
-            value={values.title?.[lang] ?? ""}
-            placeholder={titleFb?.value ?? ""}
-            onChange={(e) => form.setTranslated("title", lang, e.target.value)}
-          />
-        </FieldRow>
 
         <FieldRow
           label={t("admin.listings.fields.description")}
