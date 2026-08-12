@@ -138,7 +138,9 @@
       "available_from": "Available from",
       "utilities_cost": "Additional costs",
       "total_rent": "Total rent",
-      "deposit": "Deposit"
+      "deposit": "Deposit",
+      "price_sale": "Purchase price",
+      "price_rent": "Base rent"
     },
     "pager": {
       "prev": "Previous",

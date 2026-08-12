@@ -5,7 +5,7 @@
   "home": {
     "title": "Immobilien in {{region}}",
     "description": "Sorgfältig ausgewählte Häuser und Wohnungen in {{region}}.",
-    "hero_line": "Your home in good hands",
+    "hero_line": "Ihr Zuhause in guten Händen",
     "featured": "Ausgewählte Objekte",
     "categories": "Objektarten",
     "count_suffix": "Objekte",
@@ -20,7 +20,7 @@
     "contact_headline_solo": "Kaufen oder verkaufen — sagen Sie mir, worum es geht.",
     "view_all": "Alle Objekte ansehen",
     "view_all_sold": "Zum Verkauft-Archiv",
-    "hero_cta": "View properties",
+    "hero_cta": "Immobilien ansehen",
     "credibility_kicker": "Warum {{agent}}",
     "team_kicker": "Team",
     "team_title": "Die Menschen hinter den Objekten"
@@ -138,7 +138,9 @@
       "available_from": "Verfügbar ab",
       "utilities_cost": "Nebenkosten",
       "total_rent": "Warmmiete",
-      "deposit": "Kaution"
+      "deposit": "Kaution",
+      "price_sale": "Kaufpreis",
+      "price_rent": "Kaltmiete"
     },
     "pager": {
       "prev": "Zurück",
