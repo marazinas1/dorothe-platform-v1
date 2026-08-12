@@ -210,18 +210,18 @@ for (const file of walk("src")) {
       continue;
     }
 
-    // 3. ternary (or ||) of string literals only
-    const literals = [...arg.matchAll(/"([A-Za-z0-9_.]+)"/g)].map((m) => m[1]);
-    const withoutLiterals = arg.replace(/"[^"]*"/g, "");
-    if (literals.length > 0 && /^[^"`]*[?:|&][^"`]*$/.test(withoutLiterals)) {
-      for (const key of literals) requireKey(key, file, { objectOk });
-      continue;
-    }
-
-    // 4. registered helper call
+    // 3. registered helper call
     const call = /^([A-Za-z_$][\w$]*)\s*\(/.exec(arg);
     if (call && HELPERS[call[1]]) {
       for (const key of HELPERS[call[1]]) requireKey(key, file);
+      continue;
+    }
+
+    // 4. ternary (or ||) of key-shaped string literals only
+    const literals = [...arg.matchAll(/"([A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+)"/g)].map((m) => m[1]);
+    const skeleton = arg.replace(/"[^"]*"/g, "");
+    if (literals.length > 0 && /^[^"`]*[?:|&][^"`]*$/.test(skeleton)) {
+      for (const key of literals) requireKey(key, file, { objectOk });
       continue;
     }
 
