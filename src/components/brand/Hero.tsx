@@ -35,7 +35,7 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
         <div className="grid items-center gap-14 md:grid-cols-12 md:gap-16">
           <div className="md:col-span-7">
             <div className="eyebrow text-muted-foreground">{settings.site_name}</div>
-            <h1 className="text-hero mt-6 max-w-[20ch] text-balance [font-size:clamp(2.25rem,3.4vw,3.5rem)] hyphens-auto">
+            <h1 className="text-hero-split mt-6 max-w-[20ch] text-balance hyphens-auto">
               {title}
             </h1>
             {subline ? (
