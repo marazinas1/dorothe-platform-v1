@@ -42,7 +42,7 @@
     "valuation_cta": "Wertermittlung anfragen"
   },
   "nav": {
-    "listings": "Angebote",
+    "listings": "Immobilien",
     "sold": "Verkauft",
     "valuation": "Immobilienbewertung",
     "selling": "Verkaufen",
@@ -51,7 +51,8 @@
     "contact": "Kontakt",
     "admin": "Verwaltung",
     "menu": "Menü",
-    "close": "Menü schließen"
+    "close": "Menü schließen",
+    "inheritance": "Erben & Immobilien"
   },
   "listings": {
     "title": "Immobilien",
@@ -1112,7 +1113,23 @@
       ],
       "cta_title": "Bereit für den ersten Schritt?",
       "cta_body": "Der Prozess beginnt mit einer ehrlichen Bewertung. Kostenfrei, vertraulich, ohne Verpflichtung.",
-      "cta_button": "Immobilie bewerten lassen"
+      "cta_button": "Immobilie bewerten lassen",
+      "steps_title": "[Platzhalter] So läuft ein Verkauf ab",
+      "services_title": "[Platzhalter] Was ich mitbringe",
+      "services_body": "[Platzhalter] Ein Satz dazu, was im Mandat enthalten ist. Echter Text folgt.",
+      "services": [
+        "[Platzhalter] Zertifizierte Wertermittlung",
+        "[Platzhalter] Professionelle Fotografie",
+        "[Platzhalter] Exposé",
+        "[Platzhalter] Portale und Käuferdatei"
+      ],
+      "costs_title": "[Platzhalter] Was es kostet",
+      "costs_body": "[Platzhalter] Ein Satz zur Provision, klar beantwortet. Echter Text folgt.",
+      "form_title": "[Platzhalter] Bewertung anfordern",
+      "form_intro": "[Platzhalter] Ein Satz zum Formular. Echter Text folgt.",
+      "proof_title": "[Platzhalter] Bereits verkauft",
+      "proof_body": "[Platzhalter] Ein Satz zu den Referenzen als Nachweis. Echter Text folgt.",
+      "proof_link": "[Platzhalter] Zum Verkauft-Archiv"
     },
     "about": {
       "meta_description_solo": "Über {{agent}} — Immobilienberatung in {{region}} mit persönlicher Betreuung von der Bewertung bis zur Übergabe.",
@@ -1180,6 +1197,22 @@
       "form_error": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
       "map_title": "Anfahrt",
       "map_missing": "Kartenansicht wird verfügbar, sobald die Bürokoordinaten hinterlegt sind."
+    },
+    "inheritance": {
+      "title": "Erben & Immobilien",
+      "meta_description": "[Platzhalter] Kurzbeschreibung für Suchmaschinen. Echter Text folgt.",
+      "kicker": "[Platzhalter] Erben & Immobilien",
+      "headline": "[Platzhalter] Eine geerbte Immobilie, in Ruhe geordnet.",
+      "intro": "[Platzhalter] Ein Satz zur Situation, sachlich und ohne Verkaufston. Echter Text folgt.",
+      "appraisal_title": "[Platzhalter] Verkehrswertgutachten",
+      "appraisal_body": "[Platzhalter] Ein Satz dazu, was das ist und wann das Finanzamt es braucht. Echter Text folgt.",
+      "community_title": "[Platzhalter] Erbengemeinschaft",
+      "community_body": "[Platzhalter] Ein Satz zum Verkauf, wenn mehrere Erben zustimmen müssen. Echter Text folgt.",
+      "credential_title": "[Platzhalter] Qualifikation",
+      "credential_body": "[Platzhalter] Ein Satz zur Sprengnetter-Qualifikation im Erbrecht, einmal und sachlich. Echter Text folgt.",
+      "contact_title": "[Platzhalter] Wenn Sie sprechen möchten",
+      "contact_body": "[Platzhalter] Ein ruhiger Satz zum Gesprächsangebot. Echter Text folgt.",
+      "contact_link": "[Platzhalter] Kontakt"
     }
   },
   "brand": {

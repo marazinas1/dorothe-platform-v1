@@ -51,7 +51,8 @@
     "contact": "Contact",
     "admin": "Admin",
     "menu": "Menu",
-    "close": "Close menu"
+    "close": "Close menu",
+    "inheritance": "Inheritance & property"
   },
   "listings": {
     "title": "Properties",
@@ -1112,7 +1113,23 @@
       ],
       "cta_title": "Ready for the first step?",
       "cta_body": "The process begins with an honest valuation. Free, confidential, no obligation.",
-      "cta_button": "Request a valuation"
+      "cta_button": "Request a valuation",
+      "steps_title": "[Placeholder] How a sale runs",
+      "services_title": "[Placeholder] What she brings",
+      "services_body": "[Placeholder] One line about what the mandate includes. Real copy to follow.",
+      "services": [
+        "[Placeholder] Certified valuation",
+        "[Placeholder] Professional photography",
+        "[Placeholder] Exposé",
+        "[Placeholder] Portals and buyer file"
+      ],
+      "costs_title": "[Placeholder] What it costs",
+      "costs_body": "[Placeholder] One line answering the commission question. Real copy to follow.",
+      "form_title": "[Placeholder] Request a valuation",
+      "form_intro": "[Placeholder] One line about the form. Real copy to follow.",
+      "proof_title": "[Placeholder] Already sold",
+      "proof_body": "[Placeholder] One line about sold work as proof. Real copy to follow.",
+      "proof_link": "[Placeholder] See the sold archive"
     },
     "about": {
       "meta_description_solo": "About {{agent}} — a solo real estate advisor in {{region}} with personal support from valuation to handover.",
@@ -1180,6 +1197,22 @@
       "form_error": "Could not send the message. Please try again.",
       "map_title": "Directions",
       "map_missing": "The map appears once office coordinates are set."
+    },
+    "inheritance": {
+      "title": "Inheritance & property",
+      "meta_description": "[Placeholder] Short description for search engines. Real copy to follow.",
+      "kicker": "[Placeholder] Inheritance & property",
+      "headline": "[Placeholder] An inherited property, sorted calmly.",
+      "intro": "[Placeholder] One line on the situation, plainly and without a sales tone. Real copy to follow.",
+      "appraisal_title": "[Placeholder] Market value appraisal",
+      "appraisal_body": "[Placeholder] One line on what it is and when the tax office needs one. Real copy to follow.",
+      "community_title": "[Placeholder] Community of heirs",
+      "community_body": "[Placeholder] One line on selling when several heirs must agree. Real copy to follow.",
+      "credential_title": "[Placeholder] Qualification",
+      "credential_body": "[Placeholder] One line on the Sprengnetter inheritance-law qualification, stated once. Real copy to follow.",
+      "contact_title": "[Placeholder] If you would like to talk",
+      "contact_body": "[Placeholder] One quiet line offering a conversation. Real copy to follow.",
+      "contact_link": "[Placeholder] Contact"
     }
   },
   "brand": {
