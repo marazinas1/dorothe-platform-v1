@@ -317,6 +317,13 @@
       "not_required": "Für dieses Objekt ist kein Energieausweis erforderlich.",
       "listed_building": "Denkmalgeschütztes Gebäude — nach GEG von der Ausweispflicht ausgenommen.",
       "new_build_pending": "Neubau — der Energieausweis wird bei Fertigstellung nachgereicht."
+    },
+    "documentType": {
+      "floorplan": "Grundriss",
+      "expose": "Exposé",
+      "energy_certificate": "Energieausweis",
+      "land_register": "Grundbuchauszug",
+      "other": "Unterlage"
     }
   },
   "inquiry": {

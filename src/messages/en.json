@@ -317,6 +317,13 @@
       "not_required": "No energy certificate is required for this property.",
       "listed_building": "Listed building — exempt from the certificate requirement.",
       "new_build_pending": "New build — the energy certificate follows on completion."
+    },
+    "documentType": {
+      "floorplan": "Floor plan",
+      "expose": "Brochure",
+      "energy_certificate": "Energy certificate",
+      "land_register": "Land register extract",
+      "other": "Document"
     }
   },
   "inquiry": {
