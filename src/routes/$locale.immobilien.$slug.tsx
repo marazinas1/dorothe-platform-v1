@@ -24,6 +24,8 @@ import {
   type PublicListing,
 } from "@/lib/listings/queries.functions";
 import { getListingPreview } from "@/lib/listings/preview.functions";
+import { countListingView } from "@/lib/listings/views.functions";
+import { useCountListingView } from "@/lib/listings/use-count-view";
 import { pickImageUrl } from "@/lib/listings/image";
 import { pickLocalized } from "@/lib/listings/format";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
@@ -65,12 +67,22 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
       }
       throw notFound();
     }
+    // One page view per render. On the server it is counted here; on a
+    // client-side navigation the component counts it after mounting, so a
+    // hover-preload of this route never counts. Admin previews never count and
+    // the call is fire-and-forget: a counting failure cannot fail the page.
+    const countedOnServer = import.meta.env.SSR && !deps.preview;
+    if (countedOnServer) {
+      void countListingView({ data: { listing_id: listing.id } }).catch(() => {});
+    }
+
     return {
       settings,
       origin,
       listing,
       locale: params.locale as Locale,
       isPreview: Boolean(deps.preview),
+      countedOnServer,
     };
   },
 
@@ -181,7 +193,10 @@ function ListingDetail() {
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const { preview } = Route.useSearch();
   const { data: listing } = useSuspenseQuery(slugQueryOptions(slug, preview));
-  const { origin } = Route.useLoaderData();
+  const { origin, countedOnServer } = Route.useLoaderData();
+  useCountListingView(listing?.id, {
+    skip: countedOnServer || Boolean(preview),
+  });
 
   if (!listing) return null;
   const l = listing as PublicListing;

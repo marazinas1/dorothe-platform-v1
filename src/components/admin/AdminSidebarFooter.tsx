@@ -8,6 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { LegalLinks } from "@/components/public/LegalLinks";
 import { useSignOut } from "@/lib/auth/use-sign-out";
 import type { Locale } from "@/i18n/config";
 
@@ -41,6 +42,11 @@ export function AdminSidebarFooter() {
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
+      {/* Legal pages must be reachable in one click from every page. */}
+      <LegalLinks
+        locale={locale}
+        className="flex flex-wrap gap-3 px-2 pb-1 text-[11px] text-muted-foreground group-data-[collapsible=icon]:hidden"
+      />
     </SidebarFooter>
   );
 }

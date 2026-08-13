@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { ReactNode } from "react";
 
 import { SiteNav } from "@/components/brand/SiteNav";
+import { LegalLinks } from "@/components/public/LegalLinks";
 import { SiteLogo } from "@/components/brand/SiteLogo";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
@@ -59,6 +60,10 @@ function Footer({ locale, settings }: { locale: Locale; settings: SiteSettings }
             © {new Date().getFullYear()} {settings.legal_name ?? settings.site_name}.{" "}
             {t("footer.rights")}.
           </div>
+          <LegalLinks
+            locale={locale}
+            className="mt-2 flex flex-wrap gap-4 md:justify-end"
+          />
           <div className="mt-2 flex gap-4 md:justify-end">
             <Link to="/$locale/admin" params={{ locale }} className="hover:text-foreground">
               {t("nav.admin")}

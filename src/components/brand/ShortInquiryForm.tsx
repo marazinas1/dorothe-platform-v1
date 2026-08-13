@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { ConsentCheckbox } from "@/components/public/ConsentCheckbox";
+import { useConsent } from "@/lib/inquiry/use-consent";
+
 import type { Locale } from "@/i18n/config";
 import { submitBuyerInquiry, submitSellerInquiry } from "@/lib/inquiry/submit.functions";
 
@@ -22,17 +25,21 @@ type Props = {
 export function ShortInquiryForm({ mode, locale }: Props) {
   const { t } = useTranslation();
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const consent = useConsent();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const form = e.currentTarget;
+    if (!consent.check()) return;
     setStatus("submitting");
     const base = {
       name: String(fd.get("name") ?? ""),
       email: String(fd.get("email") ?? ""),
       phone: String(fd.get("phone") ?? ""),
       message: String(fd.get("message") ?? ""),
+      consent: true as const,
+      locale: consent.locale,
     };
     const town = String(fd.get("town") ?? "");
     try {
@@ -97,6 +104,13 @@ export function ShortInquiryForm({ mode, locale }: Props) {
           />
         </div>
       </div>
+
+      <ConsentCheckbox
+        id={id("consent")}
+        checked={consent.given}
+        onChange={consent.set}
+        showError={consent.error}
+      />
 
       {status === "error" ? (
         <div className="text-sm text-destructive">{t("inquiry.error")}</div>

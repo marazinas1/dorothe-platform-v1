@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ConsentCheckbox } from "@/components/public/ConsentCheckbox";
+import { useConsent } from "@/lib/inquiry/use-consent";
+
 import { submitSellerInquiry } from "@/lib/inquiry/submit.functions";
 
 const inputCls =
@@ -17,6 +20,7 @@ export function SellerInquiryForm() {
     "idle" | "submitting" | "success" | "error" | "too_large"
   >("idle");
   const [files, setFiles] = useState<File[]>([]);
+  const consent = useConsent();
 
   const onFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = Array.from(e.target.files ?? []).slice(0, MAX_PHOTOS);
@@ -31,6 +35,7 @@ export function SellerInquiryForm() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    if (!consent.check()) return;
     setStatus("submitting");
     try {
       const photos = await Promise.all(
@@ -55,6 +60,8 @@ export function SellerInquiryForm() {
           year_built: numOrNull(fd.get("year_built")),
           condition: String(fd.get("condition") ?? ""),
           photos: photos.length ? photos : undefined,
+          consent: true,
+          locale: consent.locale,
         },
       });
       setStatus("success");
@@ -173,6 +180,13 @@ export function SellerInquiryForm() {
           <textarea id="seller-message" name="message" rows={3} className={`${inputCls} resize-none pt-3`} />
         </div>
       </div>
+
+      <ConsentCheckbox
+        id="seller-consent"
+        checked={consent.given}
+        onChange={consent.set}
+        showError={consent.error}
+      />
 
       {status === "error" ? (
         <div className="text-sm text-destructive">{t("inquiry.error")}</div>

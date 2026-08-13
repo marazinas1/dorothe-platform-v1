@@ -299,10 +299,34 @@
     "whatsapp": "WhatsApp",
     "facebook": "Facebook"
   },
+  "legal": {
+    "impressum": {
+      "title": "Imprint",
+      "meta_description": "Legal disclosure for {{site}} in accordance with §5 DDG."
+    },
+    "privacy": {
+      "title": "Privacy notice",
+      "meta_description": "How {{site}} handles your personal data under the GDPR."
+    },
+    "terms": {
+      "title": "Terms and conditions",
+      "meta_description": "General terms and conditions of {{site}}."
+    },
+    "missing": {
+      "title": "This content has not been filled in yet.",
+      "body": "The text for this page is missing in the site settings. Until it is added, this page is legally incomplete."
+    }
+  },
+  "consent": {
+    "text": "I have read the privacy notice and consent to my data being processed to handle my enquiry.",
+    "link": "Privacy notice",
+    "required": "Please confirm the data-protection notice to send your enquiry."
+  },
   "footer": {
     "rights": "All rights reserved",
     "imprint": "Imprint",
     "privacy": "Privacy",
+    "terms": "Terms",
     "contact": "Contact"
   },
   "locale": {

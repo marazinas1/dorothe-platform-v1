@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ConsentCheckbox } from "@/components/public/ConsentCheckbox";
+import { useConsent } from "@/lib/inquiry/use-consent";
+
 import { submitBuyerInquiry } from "@/lib/inquiry/submit.functions";
 
 const inputCls =
@@ -13,10 +16,12 @@ export function BuyerInquiryForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
     "idle",
   );
+  const consent = useConsent();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    if (!consent.check()) return;
     setStatus("submitting");
     try {
       await submitBuyerInquiry({
@@ -30,6 +35,8 @@ export function BuyerInquiryForm() {
           rooms_min: numOrNull(fd.get("rooms_min")),
           area_min: numOrNull(fd.get("area_min")),
           price_max: numOrNull(fd.get("price_max")),
+          consent: true,
+          locale: consent.locale,
         },
       });
       setStatus("success");
@@ -106,6 +113,13 @@ export function BuyerInquiryForm() {
           <textarea id="buyer-message" name="message" rows={3} className={`${inputCls} resize-none pt-3`} />
         </div>
       </div>
+
+      <ConsentCheckbox
+        id="buyer-consent"
+        checked={consent.given}
+        onChange={consent.set}
+        showError={consent.error}
+      />
 
       {status === "error" ? (
         <div className="text-sm text-destructive">{t("inquiry.error")}</div>

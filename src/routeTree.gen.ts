@@ -16,8 +16,11 @@ import { Route as LocaleVerkauftRouteImport } from './routes/$locale.verkauft'
 import { Route as LocaleVerkaufenRouteImport } from './routes/$locale.verkaufen'
 import { Route as LocaleUeberMichRouteImport } from './routes/$locale.ueber-mich'
 import { Route as LocaleKontaktRouteImport } from './routes/$locale.kontakt'
+import { Route as LocaleImpressumRouteImport } from './routes/$locale.impressum'
 import { Route as LocaleImmobilienbewertungRouteImport } from './routes/$locale.immobilienbewertung'
+import { Route as LocaleDatenschutzRouteImport } from './routes/$locale.datenschutz'
 import { Route as LocaleAuthRouteImport } from './routes/$locale.auth'
+import { Route as LocaleAgbRouteImport } from './routes/$locale.agb'
 import { Route as LocaleAdminRouteImport } from './routes/$locale.admin'
 import { Route as LocaleImmobilienIndexRouteImport } from './routes/$locale.immobilien.index'
 import { Route as LocaleAdminIndexRouteImport } from './routes/$locale.admin.index'
@@ -74,15 +77,30 @@ const LocaleKontaktRoute = LocaleKontaktRouteImport.update({
   path: '/kontakt',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleImpressumRoute = LocaleImpressumRouteImport.update({
+  id: '/impressum',
+  path: '/impressum',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleImmobilienbewertungRoute =
   LocaleImmobilienbewertungRouteImport.update({
     id: '/immobilienbewertung',
     path: '/immobilienbewertung',
     getParentRoute: () => LocaleRoute,
   } as any)
+const LocaleDatenschutzRoute = LocaleDatenschutzRouteImport.update({
+  id: '/datenschutz',
+  path: '/datenschutz',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleAuthRoute = LocaleAuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleAgbRoute = LocaleAgbRouteImport.update({
+  id: '/agb',
+  path: '/agb',
   getParentRoute: () => LocaleRoute,
 } as any)
 const LocaleAdminRoute = LocaleAdminRouteImport.update({
@@ -194,8 +212,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
   '/$locale/admin': typeof LocaleAdminRouteWithChildren
+  '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
+  '/$locale/datenschutz': typeof LocaleDatenschutzRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
+  '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
   '/$locale/ueber-mich': typeof LocaleUeberMichRoute
   '/$locale/verkaufen': typeof LocaleVerkaufenRoute
@@ -223,8 +244,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
+  '/$locale/datenschutz': typeof LocaleDatenschutzRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
+  '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
   '/$locale/ueber-mich': typeof LocaleUeberMichRoute
   '/$locale/verkaufen': typeof LocaleVerkaufenRoute
@@ -252,8 +276,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
   '/$locale/admin': typeof LocaleAdminRouteWithChildren
+  '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
+  '/$locale/datenschutz': typeof LocaleDatenschutzRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
+  '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
   '/$locale/ueber-mich': typeof LocaleUeberMichRoute
   '/$locale/verkaufen': typeof LocaleVerkaufenRoute
@@ -285,8 +312,11 @@ export interface FileRouteTypes {
     | '/'
     | '/$locale'
     | '/$locale/admin'
+    | '/$locale/agb'
     | '/$locale/auth'
+    | '/$locale/datenschutz'
     | '/$locale/immobilienbewertung'
+    | '/$locale/impressum'
     | '/$locale/kontakt'
     | '/$locale/ueber-mich'
     | '/$locale/verkaufen'
@@ -314,8 +344,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$locale/agb'
     | '/$locale/auth'
+    | '/$locale/datenschutz'
     | '/$locale/immobilienbewertung'
+    | '/$locale/impressum'
     | '/$locale/kontakt'
     | '/$locale/ueber-mich'
     | '/$locale/verkaufen'
@@ -342,8 +375,11 @@ export interface FileRouteTypes {
     | '/'
     | '/$locale'
     | '/$locale/admin'
+    | '/$locale/agb'
     | '/$locale/auth'
+    | '/$locale/datenschutz'
     | '/$locale/immobilienbewertung'
+    | '/$locale/impressum'
     | '/$locale/kontakt'
     | '/$locale/ueber-mich'
     | '/$locale/verkaufen'
@@ -426,6 +462,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleKontaktRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/impressum': {
+      id: '/$locale/impressum'
+      path: '/impressum'
+      fullPath: '/$locale/impressum'
+      preLoaderRoute: typeof LocaleImpressumRouteImport
+      parentRoute: typeof LocaleRoute
+    }
     '/$locale/immobilienbewertung': {
       id: '/$locale/immobilienbewertung'
       path: '/immobilienbewertung'
@@ -433,11 +476,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleImmobilienbewertungRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/datenschutz': {
+      id: '/$locale/datenschutz'
+      path: '/datenschutz'
+      fullPath: '/$locale/datenschutz'
+      preLoaderRoute: typeof LocaleDatenschutzRouteImport
+      parentRoute: typeof LocaleRoute
+    }
     '/$locale/auth': {
       id: '/$locale/auth'
       path: '/auth'
       fullPath: '/$locale/auth'
       preLoaderRoute: typeof LocaleAuthRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/agb': {
+      id: '/$locale/agb'
+      path: '/agb'
+      fullPath: '/$locale/agb'
+      preLoaderRoute: typeof LocaleAgbRouteImport
       parentRoute: typeof LocaleRoute
     }
     '/$locale/admin': {
@@ -666,8 +723,11 @@ const LocaleAuthRouteWithChildren = LocaleAuthRoute._addFileChildren(
 
 interface LocaleRouteChildren {
   LocaleAdminRoute: typeof LocaleAdminRouteWithChildren
+  LocaleAgbRoute: typeof LocaleAgbRoute
   LocaleAuthRoute: typeof LocaleAuthRouteWithChildren
+  LocaleDatenschutzRoute: typeof LocaleDatenschutzRoute
   LocaleImmobilienbewertungRoute: typeof LocaleImmobilienbewertungRoute
+  LocaleImpressumRoute: typeof LocaleImpressumRoute
   LocaleKontaktRoute: typeof LocaleKontaktRoute
   LocaleUeberMichRoute: typeof LocaleUeberMichRoute
   LocaleVerkaufenRoute: typeof LocaleVerkaufenRoute
@@ -679,8 +739,11 @@ interface LocaleRouteChildren {
 
 const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleAdminRoute: LocaleAdminRouteWithChildren,
+  LocaleAgbRoute: LocaleAgbRoute,
   LocaleAuthRoute: LocaleAuthRouteWithChildren,
+  LocaleDatenschutzRoute: LocaleDatenschutzRoute,
   LocaleImmobilienbewertungRoute: LocaleImmobilienbewertungRoute,
+  LocaleImpressumRoute: LocaleImpressumRoute,
   LocaleKontaktRoute: LocaleKontaktRoute,
   LocaleUeberMichRoute: LocaleUeberMichRoute,
   LocaleVerkaufenRoute: LocaleVerkaufenRoute,

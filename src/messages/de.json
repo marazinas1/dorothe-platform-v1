@@ -299,10 +299,34 @@
     "whatsapp": "WhatsApp",
     "facebook": "Facebook"
   },
+  "legal": {
+    "impressum": {
+      "title": "Impressum",
+      "meta_description": "Anbieterkennzeichnung von {{site}} gemäß §5 DDG."
+    },
+    "privacy": {
+      "title": "Datenschutzerklärung",
+      "meta_description": "Wie {{site}} personenbezogene Daten nach der DSGVO verarbeitet."
+    },
+    "terms": {
+      "title": "Allgemeine Geschäftsbedingungen",
+      "meta_description": "Allgemeine Geschäftsbedingungen von {{site}}."
+    },
+    "missing": {
+      "title": "Dieser Inhalt ist noch nicht hinterlegt.",
+      "body": "Der Text für diese Seite fehlt in den Website-Einstellungen. Solange er fehlt, ist diese Seite rechtlich unvollständig."
+    }
+  },
+  "consent": {
+    "text": "Ich habe die Datenschutzerklärung gelesen und willige in die Verarbeitung meiner Daten zur Bearbeitung meiner Anfrage ein.",
+    "link": "Datenschutzerklärung",
+    "required": "Bitte bestätigen Sie den Datenschutzhinweis, um Ihre Anfrage zu senden."
+  },
   "footer": {
     "rights": "Alle Rechte vorbehalten",
     "imprint": "Impressum",
     "privacy": "Datenschutz",
+    "terms": "AGB",
     "contact": "Kontakt"
   },
   "locale": {
