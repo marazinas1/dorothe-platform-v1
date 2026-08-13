@@ -5,8 +5,10 @@ import { AlertTriangle, ExternalLink } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { allowedTransitions, type ListingStatus } from "@/lib/listings/admin-schema";
+import type { ListingStatus } from "@/lib/listings/admin-schema";
+import { statusOptionsFor } from "@/lib/listings/status-options";
 import type { Checklist } from "@/lib/listings/publish-checklist";
+import { blockerSummary } from "@/lib/listings/blocker-summary";
 import { scrollToField } from "@/lib/listings/scroll-to-field";
 import { PreviewButton } from "./PreviewButton";
 import { useStatusChange } from "./use-status-change";
@@ -23,6 +25,7 @@ export function StatusBar({
   slug,
   dirty,
   hasImages,
+  dealType,
   checklist,
   publicLocale,
   onChanged,
@@ -32,6 +35,7 @@ export function StatusBar({
   slug: string | null;
   dirty: boolean;
   hasImages: boolean;
+  dealType: string;
   checklist: Checklist;
   /** Locale for public links — the site's language, not the panel language. */
   publicLocale: string;
@@ -42,7 +46,7 @@ export function StatusBar({
   // The blocker list is only revealed once the broker asks to publish, so an
   // untouched draft is not covered in warnings.
   const [showBlockers, setShowBlockers] = useState(false);
-  const targets = allowedTransitions(status);
+  const targets = statusOptionsFor(status, dealType);
   const isPublic = status === "active" || status === "coming_soon";
   const canPublish = targets.includes("active");
   const canUnpublish = targets.includes("draft");
@@ -138,16 +142,7 @@ export function StatusBar({
         <p className="flex items-start gap-2 border-t border-border px-4 py-2 text-xs text-muted-foreground">
           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span>
-            {t("admin.listings.publishBlocked")}{" "}
-            {blocking
-              .map((item) =>
-                item.missing?.length
-                  ? `${t(`admin.listings.checklist.items.${item.key}`)} (${item.missing
-                      .map((key) => t(`admin.listings.energyFields.${key}`))
-                      .join(", ")})`
-                  : t(`admin.listings.checklist.items.${item.key}`),
-              )
-              .join(" · ")}
+            {t("admin.listings.publishBlocked")} {blockerSummary(t, blocking)}
           </span>
         </p>
       ) : canPublish && !hasImages ? (

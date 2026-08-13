@@ -6,8 +6,10 @@ import {
   filterAndSortListings,
   type ListingFilters,
 } from "@/lib/listings/admin-list-filters";
+import { shouldGroup } from "@/lib/listings/admin-list-groups";
 import { ListingsToolbar, type ListingsView } from "./ListingsToolbar";
 import { ListingsGrid } from "./ListingsGrid";
+import { ListingsGroups } from "./ListingsGroups";
 import { ListingsTable } from "./ListingsTable";
 
 const VIEW_KEY = "admin.listings.view";
@@ -38,6 +40,13 @@ export function ListingsBrowser({
     [rows, filters, locale],
   );
 
+  const renderList = (list: AdminListingRow[]) =>
+    view === "grid" ? (
+      <ListingsGrid rows={list} locale={locale} />
+    ) : (
+      <ListingsTable rows={list} locale={locale} />
+    );
+
   return (
     <div className="space-y-4">
       <ListingsToolbar
@@ -47,10 +56,10 @@ export function ListingsBrowser({
         onViewChange={changeView}
         count={visible.length}
       />
-      {view === "grid" ? (
-        <ListingsGrid rows={visible} locale={locale} />
+      {shouldGroup(filters) ? (
+        <ListingsGroups rows={visible} render={renderList} />
       ) : (
-        <ListingsTable rows={visible} locale={locale} />
+        renderList(visible)
       )}
     </div>
   );

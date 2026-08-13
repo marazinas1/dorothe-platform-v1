@@ -57,12 +57,14 @@ export function ImageCard({
     <div
       data-photo-index={index}
       onPointerDown={(e) => onPointerDown(index, e)}
-      className={`group relative select-none overflow-hidden rounded-md border bg-card transition-[transform,opacity,box-shadow] focus-within:ring-2 focus-within:ring-ring ${
+      className={`group relative select-none overflow-hidden rounded-lg border-2 bg-card transition-[transform,opacity,box-shadow] focus-within:ring-2 focus-within:ring-ring ${
         isDragged
           ? "z-10 scale-[1.03] border-primary opacity-70 shadow-lg"
           : isTarget
             ? "border-primary ring-2 ring-primary"
-            : "border-border"
+            : index === 0
+              ? "border-primary ring-2 ring-primary/40"
+              : "border-border"
       } ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
       style={dragging ? { touchAction: "none" } : undefined}
       aria-busy={savingOrder ? true : undefined}
@@ -92,7 +94,7 @@ export function ImageCard({
         </span>
 
         {index === 0 && !isTarget ? (
-          <span className="absolute right-1 top-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground">
+          <span className="absolute right-1 top-1 rounded bg-primary px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-primary-foreground shadow-sm">
             {t("admin.listings.images.cover")}
           </span>
         ) : null}

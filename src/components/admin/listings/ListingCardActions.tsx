@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Copy, Link2, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Archive, Copy, Link2, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,22 +24,30 @@ import {
 } from "@/components/ui/alert-dialog";
 import { adminListingsQueryOptions } from "@/lib/listings/admin.functions";
 import { deleteListing, duplicateListing } from "@/lib/listings/admin-mutations.functions";
+import { statusOptionsFor } from "@/lib/listings/status-options";
+import { useStatusChange } from "./use-status-change";
 
 /** Edit (primary) plus an overflow menu: copy public link, duplicate, delete. */
 export function ListingCardActions({
   id,
   slug,
   locale,
+  status,
+  dealType,
 }: {
   id: string;
   slug: string;
   locale: string;
+  status: string;
+  dealType: string;
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [busy, setBusy] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const { apply } = useStatusChange();
+  const canArchive = statusOptionsFor(status, dealType).includes("archived");
 
   async function copyLink() {
     const url = `${window.location.origin}/${locale}/immobilien/${slug}`;
@@ -107,6 +115,12 @@ export function ListingCardActions({
             <Copy className="mr-2 h-4 w-4" />
             {t("admin.listings.actions.duplicate")}
           </DropdownMenuItem>
+          {canArchive ? (
+            <DropdownMenuItem onSelect={() => void apply(id, "archived")}>
+              <Archive className="mr-2 h-4 w-4" />
+              {t("admin.listings.statusAction.archived")}
+            </DropdownMenuItem>
+          ) : null}
           <DropdownMenuItem
             className="text-destructive focus:text-destructive"
             onSelect={(event) => {

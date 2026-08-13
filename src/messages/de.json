@@ -851,6 +851,17 @@
           "rest": "Energie, Karte, Kontakt (automatisch)"
         },
         "legend": "Punkte markieren Texte, die Sie selbst schreiben. Graue Zeilen entstehen automatisch aus den Feldern."
+      },
+      "statusSelect": {
+        "label": "Status ändern"
+      },
+      "statusGroups": {
+        "active": "Aktiv",
+        "coming_soon": "Demnächst",
+        "reserved": "Reserviert",
+        "closed": "Verkauft & Vermietet",
+        "draft": "Entwurf",
+        "archived": "Archiviert"
       }
     },
     "inquiries": {

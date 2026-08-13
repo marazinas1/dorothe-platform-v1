@@ -5,8 +5,9 @@ import { ImageOff } from "lucide-react";
 import { pickLocalized, formatPrice, formatArea } from "@/lib/listings/format";
 import type { AdminListingRow } from "@/lib/listings/admin.functions";
 import type { Locale } from "@/i18n/config";
+import { statusTone, TONE_DOT_CLASS } from "@/lib/listings/status-options";
 import { variantUrl } from "./listing-image-url";
-import { ListingRowActions } from "./ListingRowActions";
+import { ListingStatusSelect } from "./ListingStatusSelect";
 import { ListingCardActions } from "./ListingCardActions";
 
 function coverUrl(row: AdminListingRow): string | null {
@@ -28,7 +29,7 @@ export function ListingCardTile({
 }) {
   const { t } = useTranslation();
   const cover = coverUrl(row);
-  const isLive = row.status === "active" || row.status === "coming_soon";
+  const tone = statusTone(row.status);
 
   const figures = [
     row.rooms != null ? `${row.rooms} ${t("admin.listings.figures.rooms")}` : null,
@@ -58,14 +59,7 @@ export function ListingCardTile({
           </span>
         )}
         <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-background/85 px-2.5 py-1 text-[11px] tracking-[0.02em] text-foreground backdrop-blur-sm">
-          <span
-            aria-hidden
-            className={
-              isLive
-                ? "h-1.5 w-1.5 rounded-full bg-primary"
-                : "h-1.5 w-1.5 rounded-full bg-muted-foreground/40"
-            }
-          />
+          <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${TONE_DOT_CLASS[tone]}`} />
           {t(`listings.status.${row.status}`)}
         </span>
       </Link>
@@ -101,8 +95,14 @@ export function ListingCardTile({
         </p>
 
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
-          <ListingCardActions id={row.id} slug={row.slug} locale={locale} />
-          <ListingRowActions id={row.id} status={row.status} locale={locale} />
+          <ListingStatusSelect row={row} />
+          <ListingCardActions
+            id={row.id}
+            slug={row.slug}
+            locale={locale}
+            status={row.status}
+            dealType={row.deal_type}
+          />
         </div>
       </div>
     </article>
