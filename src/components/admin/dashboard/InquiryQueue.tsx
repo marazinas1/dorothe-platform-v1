@@ -43,9 +43,8 @@ export function InquiryQueue({ locale }: { locale: string }) {
           return (
             <li key={item.id}>
               <Link
-                to="/$locale/admin/inquiries"
-                params={{ locale }}
-                search={{ id: item.id }}
+                to="/$locale/admin/inquiries/$id"
+                params={{ locale, id: item.id }}
                 className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 rounded-md px-1.5 py-1.5 text-sm hover:bg-muted"
               >
                 <span
@@ -58,7 +57,7 @@ export function InquiryQueue({ locale }: { locale: string }) {
                 />
                 <span className="font-medium">{item.name?.trim() || item.email}</span>
                 <span className="text-xs text-muted-foreground">
-                  {t(`admin.inquiries.type.${inquiryTypeKey(item.type)}`)}
+                  {t(`admin.inquiries.types.${inquiryTypeKey(item.type)}`)}
                 </span>
                 {item.listing ? (
                   <span className="text-xs text-muted-foreground">
