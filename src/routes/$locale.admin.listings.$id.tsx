@@ -38,6 +38,7 @@ function EditListing() {
         locales={settings.enabled_locales}
         status={(listing.status as string) ?? null}
         slug={(listing.slug as string) ?? null}
+        publishedEver={Boolean(listing.published_at)}
         images={data.images as unknown as ImageRecord[]}
       />
     </div>

@@ -36,12 +36,15 @@ export function ListingForm({
   locales,
   status,
   slug,
+  publishedEver,
   images,
 }: {
   initial: ListingFormValues;
   locales: string[];
   status: string | null;
   slug: string | null;
+  /** Has the listing ever been public? Then its slug is frozen. */
+  publishedEver: boolean;
   images: ImageRecord[];
 }) {
   const { t } = useTranslation();
@@ -200,7 +203,12 @@ export function ListingForm({
               onError={(message) => toast.error(message)}
             />,
             applies(shape, "energy") ? <EnergySection key="energy" form={form} /> : null,
-            <MoreDetailsSection key="more" form={form} lang={lang} />,
+            <MoreDetailsSection
+              key="more"
+              form={form}
+              lang={lang}
+              publishedEver={publishedEver}
+            />,
             <ImageManager
               key="images"
               listingId={listingId}

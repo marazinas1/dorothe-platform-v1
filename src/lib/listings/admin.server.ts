@@ -69,6 +69,9 @@ export function toListingRow(data: ListingFormParsed): Record<string, any> {
     deal_type: data.deal_type,
     property_type: data.property_type,
     reference_code: data.reference_code,
+    // Empty means "unchanged": the trigger keeps the current slug on update and
+    // generates one on insert.
+    slug: data.slug,
     features: data.features ?? [],
     condition: data.condition,
     heating_type: data.heating_type,
