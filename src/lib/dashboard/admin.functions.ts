@@ -216,24 +216,31 @@ export const dashboardMetrics = createServerFn({ method: "GET" })
     };
   });
 
-const QUEUE_FNS = {
-  inquiries: dashboardInquiryQueue,
+/** Listing-shaped groups, keyed so the UI can render them from one component. */
+const LISTING_QUEUE_FNS = {
   blocked: dashboardBlockedQueue,
   gaps: dashboardGapsQueue,
   reserved: dashboardReservedQueue,
   stale: dashboardStaleQueue,
 } as const;
 
-export type QueueKey = keyof typeof QUEUE_FNS;
-export const QUEUE_KEYS = Object.keys(QUEUE_FNS) as QueueKey[];
+export type ListingQueueKey = keyof typeof LISTING_QUEUE_FNS;
+export const LISTING_QUEUE_KEYS = Object.keys(LISTING_QUEUE_FNS) as ListingQueueKey[];
 
-export function queueQueryOptions<K extends QueueKey>(key: K) {
+export function listingQueueQueryOptions(key: ListingQueueKey) {
   return queryOptions({
     queryKey: ["admin", "dashboard", "queue", key],
-    queryFn: () => QUEUE_FNS[key](),
+    queryFn: (): Promise<QueueResult<QueueListingItem>> => LISTING_QUEUE_FNS[key](),
     staleTime: 30_000,
   });
 }
+
+export const inquiryQueueQueryOptions = queryOptions({
+  queryKey: ["admin", "dashboard", "queue", "inquiries"],
+  queryFn: (): Promise<QueueResult<QueueInquiryItem>> => dashboardInquiryQueue(),
+  staleTime: 30_000,
+});
+
 
 export function metricsQueryOptions(from: string, to: string) {
   return queryOptions({
