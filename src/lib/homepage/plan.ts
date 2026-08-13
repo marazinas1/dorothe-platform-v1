@@ -98,25 +98,6 @@ export function areasAreConfigured(settings: SiteSettings): boolean {
 }
 
 /**
- * Decorative photo strip. One photo per listing first, then second photos of
- * the same listings, so a single property can never dominate the band. Small
- * `card` crops only — a small crop survives amateur photography.
- */
-export function photoBandImages(listings: PublicListing[], want = 8): string[] {
-  const rounds: string[] = [];
-  for (let index = 0; index < 3; index += 1) {
-    for (const listing of listings) {
-      const ordered = [...listing.images].sort(
-        (a, b) => Number(b.is_primary) - Number(a.is_primary),
-      );
-      const url = pickImageUrl(ordered[index]?.variants, "card");
-      if (url && !rounds.includes(url)) rounds.push(url);
-    }
-  }
-  return rounds.slice(0, want);
-}
-
-/**
  * German sellers do not expect the price they accepted to be published next to
  * photographs of their house. The achieved price is stripped in /lib so the
  * card component stays untouched, and only a deliberate client setting

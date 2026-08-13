@@ -258,6 +258,15 @@
  * Type scale. Deliberately dramatic: the hero sits several steps above
  * section headings so photography and one line of type carry the page.
  */
+/* Split hero: the headline shares the row with a portrait, so it runs at a
+   smaller measure than the full-width typographic hero. */
+@utility text-hero-split {
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 3.6vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
 @utility text-hero {
   font-family: var(--font-heading);
   font-size: clamp(2.75rem, 7.5vw, 6rem);

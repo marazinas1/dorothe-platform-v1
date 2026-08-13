@@ -7,7 +7,6 @@ import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
 import { Reveal } from "@/components/shared/Reveal";
-import { LISTING_CARD_GRID } from "@/lib/homepage/card-grid";
 
 import { ListingCard } from "./ListingCard";
 
@@ -19,7 +18,7 @@ type Props = {
   hidePrice?: boolean;
 };
 
-/** Sold properties as credibility proof. Kept tight, three items max. */
+/** Sold properties as credibility proof: compact cards, four across. */
 export function SoldStrip({ locale, items, settings, hidePrice = false }: Props) {
   const { t } = useTranslation();
   if (items.length === 0) return null;
@@ -27,19 +26,20 @@ export function SoldStrip({ locale, items, settings, hidePrice = false }: Props)
   return (
     <section className={`mx-auto ${SECTION_GAP.tight} max-w-[1400px] px-6 lg:px-10`}>
       <div className="mb-14 max-w-2xl">
-        <h2 className="text-section">{t("home.recent_sales")}</h2>
+        <h2 className="text-section-sm">{t("home.recent_sales")}</h2>
         <p className="mt-6 text-base leading-relaxed text-muted-foreground">
           {t("home.recent_sales_intro")}
         </p>
       </div>
 
-      <div className={LISTING_CARD_GRID}>
-        {items.slice(0, 3).map((l, i) => (
+      <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
+        {items.slice(0, 4).map((l, i) => (
           <Reveal key={l.id} delay={i * 90} className="h-full">
             <ListingCard
               listing={l}
               locale={locale}
               settings={settings}
+              size="compact"
               hidePrice={hidePrice}
             />
           </Reveal>
