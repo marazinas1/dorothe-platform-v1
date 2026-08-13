@@ -131,6 +131,11 @@ export function withSoldPricePolicy(
   return { ...listing, price: null, price_on_request: false };
 }
 
+/** True when achieved prices must not be shown at all. */
+export function soldPricesHidden(settings: SiteSettings): boolean {
+  return !settings.show_sold_prices;
+}
+
 export function applySoldPricePolicy(
   listings: PublicListing[],
   settings: SiteSettings,

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
-import { applySoldPricePolicy } from "@/lib/homepage/plan";
+import { applySoldPricePolicy, soldPricesHidden } from "@/lib/homepage/plan";
 import { PublicChrome } from "@/components/public/PublicChrome";
 import { ListingCard } from "@/components/brand/ListingCard";
 import type { Locale } from "@/i18n/config";
@@ -90,6 +90,7 @@ function SoldArchive() {
                 locale={locale as Locale}
                 settings={settings}
                 size="compact"
+                hidePrice={soldPricesHidden(settings)}
               />
             ))}
           </div>

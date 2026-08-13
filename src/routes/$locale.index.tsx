@@ -36,6 +36,7 @@ import {
   photoBandImages,
   resolveSocialImage,
   serviceAreas,
+  soldPricesHidden,
   valuationOffer,
 } from "@/lib/homepage/plan";
 
@@ -118,7 +119,7 @@ function HomePage() {
     paths: () => <TwoPaths locale={l} />,
     credibility: () => <Credentials locale={l} settings={settings} />,
     featured: () => <FeaturedListings locale={l} items={shown} settings={settings} />,
-    sold: () => <SoldStrip locale={l} items={soldShown} settings={settings} />,
+    sold: () => <SoldStrip locale={l} items={soldShown} settings={settings} hidePrice={soldPricesHidden(settings)} />,
     valuation: () => <ValuationInvite locale={l} offer={valuationOffer(settings, l)} />,
     team: () => (teamEnabled && team.length > 0 ? <TeamSection members={team} /> : null),
     areas: () => (
