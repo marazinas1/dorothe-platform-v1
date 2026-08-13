@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import type { Locale } from "@/i18n/config";
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import { SEARCH_DEFAULTS } from "@/lib/listings/search-schema";
 
@@ -27,12 +28,12 @@ export function AreaLinks({ locale, cities, linkable = true }: Props) {
   if (cities.length === 0) return null;
 
   return (
-    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
-      <h2 className="max-w-3xl font-heading text-4xl md:text-6xl">
+    <section className={`mx-auto ${SECTION_GAP.normal} max-w-[1400px] px-6 lg:px-10`}>
+      <h2 className="text-section-sm max-w-3xl">
         {t(teamEnabled ? "home.areas" : "home.areas_solo")}
       </h2>
 
-      <div className="mt-14 grid grid-cols-2 gap-x-10 gap-y-2 md:grid-cols-4">
+      <div className="mt-10 grid grid-cols-2 gap-x-10 gap-y-2 md:grid-cols-4">
         {cities.map((city) =>
           linkable ? (
           <Link

@@ -265,11 +265,40 @@
   letter-spacing: -0.02em;
 }
 
+/*
+ * Four named tiers, so heading weight is a decision the design system makes
+ * once and never an ad-hoc text-6xl inside a component:
+ *   text-hero        the hero, largest on the page
+ *   text-section-lg  the one argument block that must land after the hero
+ *   text-section     supporting blocks (evidence, paths)
+ *   text-section-sm  quiet blocks (areas, contact)
+ */
+@utility text-section-lg {
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
 @utility text-section {
   font-family: var(--font-heading);
   font-size: clamp(1.75rem, 3vw, 2.75rem);
   line-height: 1.08;
   letter-spacing: -0.015em;
+}
+
+@utility text-section-sm {
+  font-family: var(--font-heading);
+  font-size: clamp(1.375rem, 2vw, 1.875rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* Lead paragraph: one step above body, well below any heading. */
+@utility text-lead {
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.2vw, 1.1875rem);
+  line-height: 1.65;
 }
 
 /* Handwritten signature motif — the broker's name only. */

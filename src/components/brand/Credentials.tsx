@@ -2,47 +2,57 @@ import { useTranslation } from "react-i18next";
 
 import { Reveal } from "@/components/shared/Reveal";
 import type { Locale } from "@/i18n/config";
+import { buildCredentials } from "@/lib/homepage/credentials";
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
 import type { SiteSettings } from "@/types/site-settings";
 
-import { CredibilityBar } from "./CredibilityBar";
-import { QualificationsList } from "./QualificationsList";
+import { CredentialGroups } from "./CredentialGroups";
 import { TrustSeals } from "./TrustSeals";
 
 type Props = { locale: Locale; settings: SiteSettings };
 
 /**
- * Credentials block. Qualifications are the reason a seller picks a small
- * office over a franchise, so they get a block of their own rather than a
- * line in the footer: the named certifications, the headline figures and the
- * seals of the issuing bodies.
+ * Credentials block — one block, one heading. The institutions and the
+ * qualifications used to be two separate sections stating the same thing in two
+ * formats; they are merged here so each certifying body is named once and
+ * carries what it certifies. Supporting tier: the heading sits below the
+ * valuation block, because this is evidence for the argument, not the argument.
  */
 export function Credentials({ locale, settings }: Props) {
   const { t } = useTranslation();
-  const stats = settings.credibility_stats ?? [];
-  const qualifications = settings.qualifications ?? [];
+  const credentials = buildCredentials(settings, locale);
   const seals = settings.seals ?? [];
-  if (stats.length === 0 && qualifications.length === 0 && seals.length === 0) return null;
+  if (!credentials.hasContent && seals.length === 0) return null;
 
   return (
-    <div className="mt-40">
-      {stats.length > 0 ? (
-        <CredibilityBar locale={locale} stats={stats} settings={settings} />
-      ) : null}
-      {qualifications.length > 0 ? (
-        <Reveal className={stats.length > 0 ? "mt-24" : undefined}>
-          <QualificationsList
-            items={qualifications}
-            title={t("home.credentials_title")}
-            note={t("home.credentials_note")}
-          />
-        </Reveal>
+    <div className={SECTION_GAP.major}>
+      {credentials.hasContent ? (
+        <section className="mx-auto max-w-[1400px] px-6 lg:px-10">
+          <Reveal>
+            <div className="max-w-2xl">
+              <div className="eyebrow text-muted-foreground">
+                {credentials.heading ?? t("home.credentials_title")}
+              </div>
+              <h2 className="text-section mt-6">{t("home.credentials_headline")}</h2>
+              <p className="mt-6 max-w-[52ch] text-base leading-relaxed text-muted-foreground">
+                {t("home.credentials_note")}
+              </p>
+            </div>
+            <CredentialGroups
+              groups={credentials.groups}
+              other={credentials.other}
+              otherLabel={t("home.credentials_further")}
+              className="mt-14"
+            />
+          </Reveal>
+        </section>
       ) : null}
       {seals.length > 0 ? (
         <TrustSeals
           locale={locale}
           items={seals}
           title={t("home.seals_title")}
-          className="mt-20"
+          className={credentials.hasContent ? SECTION_GAP.tight : undefined}
         />
       ) : null}
     </div>

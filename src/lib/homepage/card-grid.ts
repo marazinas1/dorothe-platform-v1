@@ -4,4 +4,4 @@
  * two different widths on one page.
  */
 export const LISTING_CARD_GRID =
-  "grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3";
+  "grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3";

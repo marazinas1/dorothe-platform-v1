@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import type { Locale } from "@/i18n/config";
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -21,9 +22,9 @@ export function FeaturedListings({ locale, items, settings }: Props) {
   if (items.length === 0) return null;
 
   return (
-    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
+    <section className={`mx-auto ${SECTION_GAP.normal} max-w-[1400px] px-6 lg:px-10`}>
       <div className="mb-16 flex items-end justify-between gap-8">
-        <h2 className="max-w-3xl font-heading text-4xl md:text-6xl">
+        <h2 className="text-section max-w-3xl">
           {t("home.featured")}
         </h2>
         <Link
