@@ -120,7 +120,7 @@ function AboutPage() {
 
       <CredibilityBar locale={l} stats={settings.credibility_stats ?? []} settings={settings} />
 
-      <ContactSection settings={settings} />
+      <ContactSection locale={locale as Locale} settings={settings} />
     </PublicChrome>
   );
 }
