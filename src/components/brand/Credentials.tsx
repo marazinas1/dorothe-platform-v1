@@ -6,6 +6,7 @@ import { buildCredentials } from "@/lib/homepage/credentials";
 import { SECTION_GAP } from "@/lib/homepage/rhythm";
 import type { SiteSettings } from "@/types/site-settings";
 
+import { CredentialGroups } from "./CredentialGroups";
 import { TrustSeals } from "./TrustSeals";
 
 type Props = { locale: Locale; settings: SiteSettings };
@@ -37,7 +38,12 @@ export function Credentials({ locale, settings }: Props) {
                 {t("home.credentials_note")}
               </p>
             </div>
-            <CredentialRows locale={locale} settings={settings} />
+            <CredentialGroups
+              groups={credentials.groups}
+              other={credentials.other}
+              otherLabel={t("home.credentials_further")}
+              className="mt-14"
+            />
           </Reveal>
         </section>
       ) : null}
@@ -50,20 +56,5 @@ export function Credentials({ locale, settings }: Props) {
         />
       ) : null}
     </div>
-  );
-}
-
-/** Split out so this file stays a composition and the rows stay reusable. */
-function CredentialRows({ locale, settings }: Props) {
-  const { t } = useTranslation();
-  const { groups, other } = buildCredentials(settings, locale);
-  const { CredentialGroups } = require("./CredentialGroups") as typeof import("./CredentialGroups");
-  return (
-    <CredentialGroups
-      groups={groups}
-      other={other}
-      otherLabel={t("home.credentials_further")}
-      className="mt-14"
-    />
   );
 }
