@@ -205,6 +205,28 @@ export const getListingBySlug = createServerFn({ method: "GET" })
     return normalizeRow(row, images.get(row.id as string) ?? []);
   });
 
+/**
+ * A superseded slug still has to resolve. History is looked up only after the
+ * current slug misses, so a current slug always wins over an old one.
+ */
+export const resolveSupersededSlug = createServerFn({ method: "GET" })
+  .inputValidator((raw: unknown) => z.object({ slug: z.string() }).parse(raw))
+  .handler(async ({ data }): Promise<string | null> => {
+    const supabase = await getPublicClient();
+    const { data: hit } = await supabase
+      .from("listing_slug_history")
+      .select("listing_id")
+      .eq("slug", data.slug)
+      .maybeSingle();
+    if (!hit?.listing_id) return null;
+    const { data: row } = await supabase
+      .from("listings_public")
+      .select("slug")
+      .eq("id", hit.listing_id as string)
+      .maybeSingle();
+    return (row?.slug as string | undefined) ?? null;
+  });
+
 const featuredBase = {
   deal: "",
   type: "",

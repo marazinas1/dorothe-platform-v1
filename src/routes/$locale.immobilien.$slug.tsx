@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
@@ -18,7 +18,11 @@ import { ListingLocationMap } from "@/components/brand/ListingLocationMap";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
-import { getListingBySlug, type PublicListing } from "@/lib/listings/queries.functions";
+import {
+  getListingBySlug,
+  resolveSupersededSlug,
+  type PublicListing,
+} from "@/lib/listings/queries.functions";
 import { getListingPreview } from "@/lib/listings/preview.functions";
 import { pickImageUrl } from "@/lib/listings/image";
 import { pickLocalized } from "@/lib/listings/format";
@@ -47,7 +51,20 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
       getRequestOrigin(),
       context.queryClient.ensureQueryData(slugQueryOptions(params.slug, deps.preview)),
     ]);
-    if (!listing) throw notFound();
+    if (!listing) {
+      // The slug may have been replaced deliberately; old links must not 404.
+      const current = deps.preview
+        ? null
+        : await resolveSupersededSlug({ data: { slug: params.slug } });
+      if (current && current !== params.slug) {
+        throw redirect({
+          to: "/$locale/immobilien/$slug",
+          params: { locale: params.locale, slug: current },
+          statusCode: 301,
+        });
+      }
+      throw notFound();
+    }
     return {
       settings,
       origin,
