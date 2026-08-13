@@ -1,139 +1,111 @@
-# Listing form: rentals, working order, and a checklist that navigates
+# Homepage rebuild — a block library the settings arrange
 
-## What I found first (the four questions you asked)
+The homepage becomes nine core blocks whose order, on/off state and layout live in
+`site_settings.homepage_sections`. Nothing client-specific enters component code.
 
-**`additional_costs` is dead weight, and I am not reusing it.** It is a
-`jsonb NOT NULL DEFAULT '{}'` column on `listings`, passed straight through
-`listings_public`. Nothing in the application reads or writes it — no reference
-anywhere in `src/`, only in old migrations and seed column lists. All 8 existing
-listings hold `{}`. It is a free-form bag from the original schema draft, so it
-cannot carry a `CHECK (>= 0)` constraint, cannot back a computed Warmmiete, and
-cannot be filtered or sorted on. Nebenkosten and Kaution get real typed columns
-instead. `additional_costs` is left untouched (applied migrations are
-immutable), simply unused.
+## 1. What `homepage_sections` supports today
 
-**Label switching.** `price` genuinely has two names in German — Kaufpreis and
-Kaltmiete — so there are two strings, but only one place decides which is used:
-a resolver in `field-visibility.ts` returns the label key for a money field
-given the deal type. The admin form, the public detail page and listing cards
-all call that resolver; no component contains a `deal_type === "rent"` ternary
-around a label. Every other money field has a single label.
+Today each entry is `{ key, enabled, variant?, image? }`, with keys
+`hero | categories | featured | credibility | sold | about | team | areas | contact`.
+Only the hero reads `variant` (`region | property | broker`) and `image`.
+The route renders sections in array order and skips `enabled: false`.
 
-**"Provisionsfrei".** A dedicated boolean column `commission_free`
-(`NOT NULL DEFAULT false`) — a deliberate answer, distinct from
-`commission_value IS NULL` which means "not filled in yet". A checkbox in the
-price section; ticking it hides and clears the commission figure fields. The
-checklist item is satisfied by either a commission value or the tick, so an
-empty commission is never a valid published state while "no commission" is.
+### What is added (mechanism kept, extended)
 
-**Scroll-to-field from the rail.** Every checklist item carries a stable anchor
-id (e.g. `field-title`, `field-energy-year_built`). Fields register that id
-through `FieldRow`. One helper in `/lib` resolves it: find the element, walk its
-ancestors and open any closed `<details>` on the way, then scroll it into view
-and focus the first control inside it. That is what makes the energy year land
-on the energy field rather than the property one.
+- New keys: `photoband`, `paths`, `valuation`. `categories` is removed from the
+  registry (block deleted) — an unknown key is already ignored, so old rows stay safe.
+- Hero `variant` gains `text` and `split`; `region | property | broker` are mapped
+  onto them so existing client rows keep working (`region`/`property` → `text`
+  when no image, `split` when an image exists).
+- Generic per-block `image` stays; the photo band uses no image field.
+- Default arrangement (used by the seed and by new clients): hero, photoband,
+  about, paths, credibility, featured, sold, valuation, contact.
 
-**Existing listings.** Nothing breaks and nothing needs a backfill. The new
-money columns are nullable (`NULL` = not stated), the two new booleans default
-to `false`, and Warmmiete is a database-computed column derived from figures
-that already exist. All 8 current listings are sales, so the rental fields never
-appear for them.
+New `site_settings` columns (migration adds schema; the seed carries this client's values):
 
-## Part 0 — the two leftovers
+| column | purpose |
+| --- | --- |
+| `hero_headline` jsonb | localized client headline |
+| `hero_subline` jsonb | localized supporting line |
+| `hero_cta_label` jsonb | optional; falls back to a template string |
+| `service_areas` jsonb | array of town names she covers |
+| `show_sold_prices` boolean, default `false` | price visibility on sold work |
+| `valuation_offer` jsonb | localized `{ body, deliverables[], price_note }` |
 
-- A pending photo reorder is flushed instead of dropped: on unmount, on
-  navigation away, and before any publish or status change.
-- The publish button stays enabled. Clicking it with outstanding items shows the
-  blocker list already built for the checklist, and does not call the server.
+`qualifications` and `credibility_stats` already exist and now feed the credentials
+block (name + meaning per credential). No statistics row anywhere.
 
-## Part 1 — rental listings
+## 2. Copy that moves from message files into settings
 
-Money fields become deal-type dependent, driven by the visibility matrix:
+| moves | why |
+| --- | --- |
+| `home.hero_line` → `hero_headline` | the headline is this broker's positioning claim, not template wording |
+| new supporting line → `hero_subline` | same; it names her market and promise |
+| valuation offer wording → `valuation_offer` | what she does, delivers and charges differs per client and per country |
+| `home.areas*` town list (derived from listings) → `service_areas` | coverage is a statement about her market, not a by-product of stock |
 
-```text
-sale                          rent
-  Kaufpreis (price)             Kaltmiete (price)
-  Hausgeld (service_charge,     Nebenkosten (new)
-    apartments only)            Heizkosten inklusive (new, yes/no)
-  Provision                     Warmmiete (computed, read-only)
-                                Kaution (new)
-                                Provision
-                                Verfügbar ab (availability_date)
-```
+Everything else — section titles, labels, buttons, tab names — stays in
+`en.json`/`de.json` with `{{region}}`/`{{agent}}` interpolation.
 
-New columns on `listings`: `utilities_cost`, `deposit`,
-`heating_costs_included`, `commission_free`, plus a database-computed
-`total_rent` (Kaltmiete + Nebenkosten) that can never contradict its inputs.
-Same CHECK discipline as migration `20260811091553`, plus the column grants and
-public-view rebuild the anon column-grant model requires.
+## 3. Hero / portrait interlock (one portrait, never twice)
 
-## Part 2 — section order
+A single resolver in `/lib/homepage/blocks.ts` computes the page plan once, before
+render: it reads the hero entry and decides `heroLayout` (`text` | `split`),
+`heroImage`, and `aboutShowsPortrait`.
 
-Final order: Basics (with the title) → Photos → Price & size → Location →
-Equipment → Texts → Energy certificate → More details.
+- `split` with no usable image → downgraded to `text` (never a grey box).
+- If `heroImage` is the portrait URL (normalized compare with
+  `primary_agent_photo_url`), `aboutShowsPortrait = false` and the "Who she is"
+  block renders type-only.
+- Otherwise the portrait belongs to "Who she is" and the hero never renders it.
 
-- The title moves to the top of Basics, with every enabled language shown side
-  by side, primary first and the others visibly optional. Language tabs stay in
-  the Texts block for the long fields.
-- Commission moves out of "More details" into the price section, next to the
-  figure it relates to, and becomes a checklist item.
+Because both blocks read the same computed plan, the two states cannot disagree and
+nobody has to change two settings.
 
-## Part 3 — the checklist becomes the navigation
+## 4. Photo band
 
-- Sticky side rail beside the form on desktop; on narrow screens it collapses
-  into the save bar as an "N items missing" summary that expands on tap.
-- Every item is clickable, scrolls to its field and focuses it.
-- Every item names the specific missing field, as the energy item already does.
-- Done and missing states are visually distinct and calm — a tick versus an
-  open marker with the item name carrying the weight, no alarm colours.
-- No second section navigation is added.
+- Source: photos of currently published listings (the same public listing data the
+  page already loads), one photo per listing first, then additional photos from the
+  same listings, so one property can never dominate the strip.
+- Uses the small `card` variant crop only; decorative, `aria-hidden`, no links.
+- Wants 6–8 crops. With fewer, it renders exactly what exists in a centred,
+  evenly-spaced row and does not stretch or repeat; with zero photos the block is
+  hidden. Enabled by default when the hero layout is `text`.
 
-## Part 4 — smaller fixes
+## 5. Empty-data behaviour per block
 
-- All money inputs show locale-grouped digits while typing (549.000) and store a
-  plain number.
-- Photo help text reduced to one line ("optimised automatically, location data
-  removed"); the full technical detail moves behind an info affordance.
-- The energy `year_built` becomes independently addressable, so the checklist
-  jump lands on it and not on the property year.
+| block | with no data |
+| --- | --- |
+| Hero | always renders (type-only); `split` degrades to `text` |
+| Photo band | hidden when no listing photos |
+| Who she is | hidden with no `about_body`; renders type-only without a portrait |
+| Two paths | always renders (template copy + routes) |
+| Credentials | hidden when `qualifications`/`credibility_stats` are empty |
+| Selected properties | hidden when nothing is featured (max 3, `is_featured` only — no "all published" fallback) |
+| Recently sold | hidden when no sold/rented listings |
+| Valuation | hidden when `valuation_offer` is empty |
+| Contact | always renders; details omitted individually when missing |
 
-## Technical notes
+## 6. Sold work without prices
 
-Database migration (one migration):
+A `/lib` helper strips the achieved price from a sold listing before it reaches the
+card whenever `show_sold_prices` is false, so `ListingCard` stays untouched. Applied
+on both the homepage block and `/verkauft`. Town, key facts and the sold/rented
+status still show.
 
-- `utilities_cost numeric`, `deposit numeric` — nullable,
-  `CHECK (… IS NULL OR … >= 0)`.
-- `heating_costs_included boolean NOT NULL DEFAULT false`.
-- `commission_free boolean NOT NULL DEFAULT false`.
-- `total_rent numeric GENERATED ALWAYS AS (price + COALESCE(utilities_cost, 0)) STORED`
-  — computed in the database so admin and public site cannot disagree.
-- Column-level `GRANT SELECT` to `anon` for the new fields on the allow-list and
-  `SELECT/UPDATE` to `authenticated`; `listings_public` recreated to expose
-  `utilities_cost`, `heating_costs_included`, `deposit`, `total_rent`,
-  `commission_free` (commission figures keep their existing
-  `commission_note_public` gate).
+## 7. Files
 
-Code:
+- Migration: new settings columns + defaults; `supabase/seed/de-waltner.sql` gets the
+  German/English copy, `service_areas`, the `text` hero, and the stock Unsplash hero
+  image and `og_default_image` removed (og falls back to hosting's preview).
+- `src/lib/homepage/blocks.ts` — block plan resolver (hero layout, portrait interlock,
+  photo band selection, sold-price stripping).
+- New core blocks in `src/components/brand/`: `HeroText.tsx`, `HeroSplit.tsx`,
+  `PhotoBand.tsx`, `TwoPaths.tsx`, `Credentials.tsx`, `ValuationOffer.tsx`;
+  `AboutBroker`, `SoldStrip`, `ContactSection`, `AreaLinks`, `FeaturedListings`
+  adjusted; `CategoryGrid` removed from the homepage.
+- `src/routes/$locale.index.tsx` — renderer registry updated to the new keys.
+- `src/messages/{de,en}.json` — new keys in both files; i18n key check green.
+- Contact form defaults to the "Ich verkaufe" tab.
 
-- `src/lib/listings/field-visibility.ts` — gains the deal-type axis. Helpers take
-  `{ property_type, deal_type }` instead of a bare property type, and expose
-  `moneyLabelKey(shape, field)`. All existing call sites (form sections, publish
-  checklist, public specs and facts bar) are updated to the shape argument, so
-  there stays exactly one source of truth.
-- `src/lib/listings/money.ts` — new: grouped-input parsing/formatting.
-- `src/lib/listings/publish-checklist.ts` — items gain `anchor` and named
-  `missing` fields for every item; new `commission` item.
-- `src/lib/listings/scroll-to-field.ts` — new: anchor resolution, opening
-  collapsed `<details>`, scroll and focus.
-- `src/lib/listings/admin-schema.ts` — the new fields, with `total_rent` read-only.
-- Admin components: `PriceGroup` splits into `SalePriceFields`,
-  `RentPriceFields` and `CommissionFields`; new `MoneyInput`, `TitleFields`,
-  `ChecklistRail`; edits to `BasicsSection`, `FiguresSection`, `ListingForm`,
-  `MoreDetailsSection`, `StatusBar`, `SaveBar`, `ImageManager`, `FieldRow`,
-  `use-image-order.ts`, `EnergySection`.
-- Public side: `ListingFactsBar`, `ListingCard`, `ListingSpecs` read the money
-  labels from the resolver and show Nebenkosten, Warmmiete, Kaution and
-  provisionsfrei for rentals. SSR stays intact.
-- New strings added to both `src/messages/de.json` and `en.json`; the existing
-  key check must stay green. Every file stays under 200 lines and all business
-  logic lives in `/lib`.
+Untouched: `ListingCard`, listings index, detail page, admin.
