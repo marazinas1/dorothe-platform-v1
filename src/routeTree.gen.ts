@@ -16,6 +16,7 @@ import { Route as LocaleVerkauftRouteImport } from './routes/$locale.verkauft'
 import { Route as LocaleVerkaufenRouteImport } from './routes/$locale.verkaufen'
 import { Route as LocaleUeberMichRouteImport } from './routes/$locale.ueber-mich'
 import { Route as LocaleKontaktRouteImport } from './routes/$locale.kontakt'
+import { Route as LocaleImpressumRouteImport } from './routes/$locale.impressum'
 import { Route as LocaleImmobilienbewertungRouteImport } from './routes/$locale.immobilienbewertung'
 import { Route as LocaleAuthRouteImport } from './routes/$locale.auth'
 import { Route as LocaleAdminRouteImport } from './routes/$locale.admin'
@@ -72,6 +73,11 @@ const LocaleUeberMichRoute = LocaleUeberMichRouteImport.update({
 const LocaleKontaktRoute = LocaleKontaktRouteImport.update({
   id: '/kontakt',
   path: '/kontakt',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleImpressumRoute = LocaleImpressumRouteImport.update({
+  id: '/impressum',
+  path: '/impressum',
   getParentRoute: () => LocaleRoute,
 } as any)
 const LocaleImmobilienbewertungRoute =
@@ -196,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/$locale/admin': typeof LocaleAdminRouteWithChildren
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
+  '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
   '/$locale/ueber-mich': typeof LocaleUeberMichRoute
   '/$locale/verkaufen': typeof LocaleVerkaufenRoute
@@ -225,6 +232,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
+  '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
   '/$locale/ueber-mich': typeof LocaleUeberMichRoute
   '/$locale/verkaufen': typeof LocaleVerkaufenRoute
@@ -254,6 +262,7 @@ export interface FileRoutesById {
   '/$locale/admin': typeof LocaleAdminRouteWithChildren
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
+  '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
   '/$locale/ueber-mich': typeof LocaleUeberMichRoute
   '/$locale/verkaufen': typeof LocaleVerkaufenRoute
@@ -287,6 +296,7 @@ export interface FileRouteTypes {
     | '/$locale/admin'
     | '/$locale/auth'
     | '/$locale/immobilienbewertung'
+    | '/$locale/impressum'
     | '/$locale/kontakt'
     | '/$locale/ueber-mich'
     | '/$locale/verkaufen'
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$locale/auth'
     | '/$locale/immobilienbewertung'
+    | '/$locale/impressum'
     | '/$locale/kontakt'
     | '/$locale/ueber-mich'
     | '/$locale/verkaufen'
@@ -344,6 +355,7 @@ export interface FileRouteTypes {
     | '/$locale/admin'
     | '/$locale/auth'
     | '/$locale/immobilienbewertung'
+    | '/$locale/impressum'
     | '/$locale/kontakt'
     | '/$locale/ueber-mich'
     | '/$locale/verkaufen'
@@ -424,6 +436,13 @@ declare module '@tanstack/react-router' {
       path: '/kontakt'
       fullPath: '/$locale/kontakt'
       preLoaderRoute: typeof LocaleKontaktRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/impressum': {
+      id: '/$locale/impressum'
+      path: '/impressum'
+      fullPath: '/$locale/impressum'
+      preLoaderRoute: typeof LocaleImpressumRouteImport
       parentRoute: typeof LocaleRoute
     }
     '/$locale/immobilienbewertung': {
@@ -668,6 +687,7 @@ interface LocaleRouteChildren {
   LocaleAdminRoute: typeof LocaleAdminRouteWithChildren
   LocaleAuthRoute: typeof LocaleAuthRouteWithChildren
   LocaleImmobilienbewertungRoute: typeof LocaleImmobilienbewertungRoute
+  LocaleImpressumRoute: typeof LocaleImpressumRoute
   LocaleKontaktRoute: typeof LocaleKontaktRoute
   LocaleUeberMichRoute: typeof LocaleUeberMichRoute
   LocaleVerkaufenRoute: typeof LocaleVerkaufenRoute
@@ -681,6 +701,7 @@ const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleAdminRoute: LocaleAdminRouteWithChildren,
   LocaleAuthRoute: LocaleAuthRouteWithChildren,
   LocaleImmobilienbewertungRoute: LocaleImmobilienbewertungRoute,
+  LocaleImpressumRoute: LocaleImpressumRoute,
   LocaleKontaktRoute: LocaleKontaktRoute,
   LocaleUeberMichRoute: LocaleUeberMichRoute,
   LocaleVerkaufenRoute: LocaleVerkaufenRoute,
