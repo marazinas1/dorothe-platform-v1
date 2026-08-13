@@ -125,7 +125,7 @@ function HomePage() {
     areas: () => (
       <AreaLinks locale={l} cities={areas} linkable={!areasAreConfigured(settings)} />
     ),
-    contact: () => <ContactSection settings={settings} />,
+    contact: () => <ContactSection locale={l} settings={settings} />,
   };
 
   return (
