@@ -3,8 +3,11 @@
 ## What I verified before planning
 
 - **`listings.view_count` is dead.** Nothing writes it: no trigger on `listings`, no RPC, no update in `src` (only references are the column definition, the "omit from the public view" comment, and the admin write-blocklist in `admin-mutations.functions.ts`). Every row is 0. I will **not** display it and will **not** add page-view tracking (that is a separate GDPR decision).
-- **`listings.inquiry_count` is also dead.** `inquiries` has zero non-internal triggers, and no code increments it. Every row is 0. The "no enquiries" queue group must therefore count real rows in `inquiries`, not this column. I will not backfill or maintain it in this step — say the word if you want a trigger later.
+- **`listings.inquiry_count` is also dead.** `inquiries` has zero non-internal triggers, and no code increments it. Every row is 0. It stays dead — no backfill, no half-maintained counter. The "no enquiries" queue group counts real rows in `inquiries`.
+- **Rentals already have a transaction timestamp.** `listings_enforce_status_flow` sets `sold_at := now()` for `status IN ('sold','rented')`, so the sold/rented metric uses `sold_at` for both and never touches `updated_at`. No new column needed. (Correction 2: chose the existing timestamp; the metric stays sales + rentals, split by `deal_type`.)
+- **Marking an enquiry handled is a step someone must remember.** Opening a detail page auto-sets `read`; `handled` only happens when the user clicks "Als bearbeitet markieren" in `InquiryDetail`. Nothing else sets it — no reply action, no automation. So the processing-time metric measures panel discipline, and it is labelled as such. I am not redesigning that screen here.
 - Current data (for empty-state realism): 9 listings — 5 active, 2 sold, 2 drafts; 0 reserved; 8 of 9 without map coordinates; 1 active listing without description; 1 enquiry total, 0 new.
+
 
 ## Part 1 — Work queue
 
