@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 
 import { AreaLinks } from "@/components/brand/AreaLinks";
 import { SiteNav } from "@/components/brand/SiteNav";
+import { SocialLinks } from "@/components/brand/SocialLinks";
 import { LegalLinks } from "@/components/public/LegalLinks";
 import { SiteLogo } from "@/components/brand/SiteLogo";
 import { HomeLink } from "@/components/shared/HomeLink";
@@ -70,6 +71,10 @@ function Footer({ locale, settings }: { locale: Locale; settings: SiteSettings }
           {settings.contact_phone ? <div className="tabular-figures">{settings.contact_phone}</div> : null}
         </div>
         <div className="text-sm text-muted-foreground md:text-right">
+          <SocialLinks
+            settings={settings}
+            className="mb-4 flex gap-4 md:justify-end"
+          />
           <div>
             © {new Date().getFullYear()} {settings.legal_name ?? settings.site_name}.{" "}
             {t("footer.rights")}.

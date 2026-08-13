@@ -47,6 +47,7 @@ UPDATE public.site_settings SET
   contact_email    = 'dorothe.waltner@gmail.com',
   contact_phone    = '0160 4444047',
   whatsapp         = NULL,
+  social           = '{"facebook":"https://www.facebook.com/dorothe.waltner/","linkedin":"https://www.linkedin.com/in/dorothe-waltner-a7411b180/"}'::jsonb,
   address_street   = 'Kyllbergstraße 140',
   address_zip      = '66346',
   address_city     = 'Püttlingen',
