@@ -91,11 +91,10 @@ UPDATE public.site_settings SET
       "price_note":"For owners considering a sale the valuation is free of charge and without obligation."
     }
   }'::jsonb,
-  -- Typographic hero: no photograph competes with the opening statement.
+  -- Person first: the portrait opens the page beside the headline, and the
+  -- evidence (credentials, properties, valuation) follows the argument.
   homepage_sections = '[
-    {"key":"hero","enabled":true,"variant":"text"},
-    {"key":"photoband","enabled":true},
-    {"key":"about","enabled":true},
+    {"key":"hero","enabled":true,"variant":"split","image":"https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/agent/dorothe-waltner-portrait.avif"},
     {"key":"paths","enabled":true},
     {"key":"credibility","enabled":true},
     {"key":"featured","enabled":true},
