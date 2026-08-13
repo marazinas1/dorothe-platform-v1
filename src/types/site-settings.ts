@@ -59,6 +59,21 @@ export interface SiteSettings {
   /** Certification / membership seals shown as images. */
   seals: Seal[];
   about_body: Record<string, string>;
+  /** Localized hero headline / supporting line (client copy). */
+  hero_headline: Record<string, string>;
+  hero_subline: Record<string, string>;
+  /** Areas the broker covers; listing towns are only a fallback. */
+  service_areas: string[];
+  /** Publish achieved prices on sold/rented listings. Off by default. */
+  show_sold_prices: boolean;
+  /** Localized valuation offer used by the valuation block. */
+  valuation_offer: Record<string, ValuationOffer>;
+}
+
+export interface ValuationOffer {
+  body: string;
+  deliverables: string[];
+  price_note: string;
 }
 
 export interface Seal {
@@ -71,6 +86,9 @@ export interface Seal {
 
 export type HomepageSectionKey =
   | "hero"
+  | "photoband"
+  | "paths"
+  | "valuation"
   | "categories"
   | "featured"
   | "credibility"
@@ -80,7 +98,10 @@ export type HomepageSectionKey =
   | "areas"
   | "contact";
 
-export type HeroVariant = "region" | "property" | "broker";
+/** The two supported hero layouts. */
+export type HeroLayout = "text" | "split";
+/** Stored variant: the two layouts plus legacy values kept readable. */
+export type HeroVariant = HeroLayout | "region" | "property" | "broker";
 
 export interface HomepageSection {
   key: HomepageSectionKey;

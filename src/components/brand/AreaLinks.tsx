@@ -7,15 +7,21 @@ import { SEARCH_DEFAULTS } from "@/lib/listings/search-schema";
 
 type Props = {
   locale: Locale;
-  /** Cities discovered from the actual listings dataset. */
+  /** Areas from site_settings, or listing cities while that setting is empty. */
   cities: string[];
+  /**
+   * Configured service areas are a coverage statement and may include towns
+   * with nothing for sale today, so they must not link into a filtered list
+   * that would come back empty.
+   */
+  linkable?: boolean;
 };
 
 /** Broker service area — town names as large-typography anchor links.
  *  Cities are derived from the live listings so a swapped dataset never
  *  leaves stale place names on the homepage. Heading switches between
  *  solo and team wording based on the `team` feature flag. */
-export function AreaLinks({ locale, cities }: Props) {
+export function AreaLinks({ locale, cities, linkable = true }: Props) {
   const { t } = useTranslation();
   const teamEnabled = useFeatureFlag("team");
   if (cities.length === 0) return null;
@@ -27,7 +33,8 @@ export function AreaLinks({ locale, cities }: Props) {
       </h2>
 
       <div className="mt-14 grid grid-cols-2 gap-x-10 gap-y-2 md:grid-cols-4">
-        {cities.map((city) => (
+        {cities.map((city) =>
+          linkable ? (
           <Link
             key={city}
             to="/$locale/immobilien"
@@ -37,7 +44,12 @@ export function AreaLinks({ locale, cities }: Props) {
           >
             <div className="font-heading text-3xl md:text-4xl">{city}</div>
           </Link>
-        ))}
+          ) : (
+            <div key={city} className="border-t border-border py-8">
+              <div className="font-heading text-3xl md:text-4xl">{city}</div>
+            </div>
+          ),
+        )}
       </div>
     </section>
   );
