@@ -127,7 +127,14 @@
         "property_info": "Objektdaten",
         "building_info": "Gebäude & Technik",
         "surroundings": "Lage und Umgebung",
-        "specs": "Objektdaten"
+        "specs": "Objektdaten",
+        "size": "Fläche & Räume",
+        "building": "Gebäude & Technik",
+        "costs": "Preis & Kosten",
+        "terms": "Konditionen",
+        "plans": "Grundrisse & Visualisierungen",
+        "documents": "Unterlagen",
+        "related": "Weitere Objekte"
       },
       "unavailable_title": "Objekt nicht verfügbar",
       "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an.",
@@ -157,7 +164,51 @@
       "total_rent": "Warmmiete",
       "deposit": "Kaution",
       "price_sale": "Kaufpreis",
-      "price_rent": "Kaltmiete"
+      "price_rent": "Kaltmiete",
+      "gallery_open": "Galerie öffnen",
+      "gallery_prev": "Vorheriges Foto",
+      "gallery_next": "Nächstes Foto",
+      "gallery_close": "Schließen",
+      "floorplan": "Grundriss",
+      "visualization": "Visualisierung (unverbindliche Darstellung)",
+      "map_load": "Karte laden",
+      "map_consent_note": "Die Karte wird von OpenStreetMap geladen. Dabei wird Ihre IP-Adresse an den Kartendienst übertragen.",
+      "heating_costs": "Heizkosten",
+      "heating_costs_included": "In den Nebenkosten enthalten",
+      "heating_costs_excluded": "Nicht in den Nebenkosten enthalten",
+      "commission_tenant": "Provision für Mieter",
+      "commission_buyer": "Käuferprovision",
+      "commission_free_tenant": "Provisionsfrei für Mieter",
+      "commission_free_buyer": "Provisionsfrei für Käufer",
+      "commission_payer_rent": {
+        "buyer": "zahlt der Mieter",
+        "seller": "zahlt der Vermieter",
+        "shared": "geteilt"
+      },
+      "document_open": "Öffnen",
+      "document_loading": "Wird geladen …",
+      "document_on_request": "Auf Anfrage",
+      "energy_note_de": "Angaben gemäß Gebäudeenergiegesetz (GEG). Maßgeblich ist der Energieausweis, der bei einer Besichtigung im Original vorgelegt wird.",
+      "energy_note_at": "Angaben gemäß Energieausweis-Vorlage-Gesetz (EAVG). HWB und fGEE stammen aus dem Energieausweis, der bei einer Besichtigung im Original vorgelegt wird.",
+      "energy_note_ch": "Angaben gemäß GEAK. Maßgeblich ist der Gebäudeenergieausweis, der bei einer Besichtigung im Original vorgelegt wird.",
+      "energy_note_generic": "Maßgeblich ist der Energieausweis, der bei einer Besichtigung im Original vorgelegt wird.",
+      "energy_fields": {
+        "certificate_type": "Ausweisart",
+        "certificate": {
+          "demand": "Bedarfsausweis",
+          "consumption": "Verbrauchsausweis"
+        },
+        "final_energy": "Endenergie",
+        "final_energy_demand": "Endenergiebedarf",
+        "final_energy_consumption": "Endenergieverbrauch",
+        "energy_source": "Energieträger",
+        "year_built": "Baujahr laut Ausweis",
+        "certificate_date": "Ausweis ausgestellt",
+        "certificate_valid_until": "Gültig bis",
+        "hwb": "Heizwärmebedarf (HWB)",
+        "eeb": "Endenergiebedarf (EEB)",
+        "fgee": "Gesamtenergieeffizienz-Faktor (fGEE)"
+      }
     },
     "pager": {
       "prev": "Zurück",
@@ -261,6 +312,11 @@
       "more_photos": "+{{count}} Fotos",
       "prev_photo": "Vorheriges Foto",
       "next_photo": "Nächstes Foto"
+    },
+    "energyExemption": {
+      "not_required": "Für dieses Objekt ist kein Energieausweis erforderlich.",
+      "listed_building": "Denkmalgeschütztes Gebäude — nach GEG von der Ausweispflicht ausgenommen.",
+      "new_build_pending": "Neubau — der Energieausweis wird bei Fertigstellung nachgereicht."
     }
   },
   "inquiry": {
