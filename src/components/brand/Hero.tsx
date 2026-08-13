@@ -49,7 +49,7 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
               Between md and lg the column is narrow, so the crop tightens to
               3/4 rather than becoming a sliver. */}
           <div className="md:col-span-5">
-            <div className="mx-auto aspect-[3/4] w-full max-w-[380px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(360px,56svh,560px)] lg:w-auto lg:max-w-none">
+            <div className="mx-auto aspect-[3/4] w-full max-w-[380px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(320px,48svh,480px)] lg:w-auto lg:max-w-none">
               <img
                 src={image}
                 alt={settings.primary_agent_name ?? settings.site_name}
