@@ -1,0 +1,1 @@
+UPDATE public.site_settings SET seals = '[]'::jsonb WHERE seals IS NOT NULL AND seals <> '[]'::jsonb;

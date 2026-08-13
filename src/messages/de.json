@@ -272,7 +272,8 @@
       "rooms_min": "Zimmer ab",
       "area_min": "Fläche ab (m²)",
       "price_max": "Budget bis (EUR)",
-      "submit": "Suchanfrage senden"
+      "submit": "Suchanfrage senden",
+      "catalogue_link": "Alle Immobilien ansehen"
     },
     "seller": {
       "tab": "Ich verkaufe",
@@ -287,7 +288,8 @@
       "photos": "Fotos (optional, bis zu 4)",
       "photos_selected": "{{n}} Foto(s) angehängt",
       "photo_too_large": "Jedes Foto muss unter 3 MB liegen.",
-      "submit": "Bewertung anfordern"
+      "submit": "Bewertung anfordern",
+      "full_form_link": "Ausführliche Wertermittlung anfragen"
     }
   },
   "share": {

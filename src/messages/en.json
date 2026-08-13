@@ -272,7 +272,8 @@
       "rooms_min": "Rooms from",
       "area_min": "Area from (m²)",
       "price_max": "Budget up to (EUR)",
-      "submit": "Send buyer enquiry"
+      "submit": "Send buyer enquiry",
+      "catalogue_link": "Browse all properties"
     },
     "seller": {
       "tab": "I'm selling",
@@ -287,7 +288,8 @@
       "photos": "Photos (optional, up to 4)",
       "photos_selected": "{{n}} photo(s) attached",
       "photo_too_large": "Each photo must be under 3 MB.",
-      "submit": "Request valuation"
+      "submit": "Request valuation",
+      "full_form_link": "Detailed valuation request"
     }
   },
   "share": {

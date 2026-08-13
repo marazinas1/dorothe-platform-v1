@@ -34,11 +34,11 @@ export function AboutBroker({ locale, settings, portrait }: Props) {
 
   return (
     <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
-      <Reveal className="grid grid-cols-1 gap-16 md:grid-cols-12">
-        <div className="md:col-span-4">
-          <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            {t("home.about")}
-          </div>
+      {/* The portrait carries this block; the copy reads at body size so the
+          hero headline stays the largest type on the page. */}
+      <Reveal className="grid grid-cols-1 gap-14 md:grid-cols-12 md:gap-16">
+        <div className="md:col-span-5">
+          <div className="eyebrow text-muted-foreground">{t("home.about")}</div>
           {portrait ? (
             <img
               src={portrait}
@@ -46,12 +46,12 @@ export function AboutBroker({ locale, settings, portrait }: Props) {
               loading="lazy"
               width={1200}
               height={929}
-              className="mt-8 aspect-[4/5] w-full max-w-xs rounded-sm object-cover object-top"
+              className="mt-8 aspect-[4/5] w-full rounded-sm object-cover object-top"
             />
           ) : null}
         </div>
-        <div className="md:col-span-8">
-          <p className="font-heading text-3xl leading-[1.15] text-foreground md:text-5xl whitespace-pre-line">
+        <div className="md:col-span-7 md:pt-14">
+          <p className="max-w-[62ch] whitespace-pre-line text-lg leading-relaxed text-foreground md:text-xl">
             {body}
           </p>
         </div>

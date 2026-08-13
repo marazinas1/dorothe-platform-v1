@@ -105,10 +105,10 @@ UPDATE public.site_settings SET
   ]'::jsonb,
 
   logo_url         = 'https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/brand/logo-4-waende-saar.png',
-  seals = '[
-    {"url":"https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/brand/seal-sprengnetter-immo-erbrecht.png",
-     "label":{"de":"Sprengnetter Immo-Erbrechts-Expertin","en":"Sprengnetter certified property inheritance expert"}}
-  ]'::jsonb,
+  -- Seals stay off for this client: the certification already appears in the
+  -- credentials list, and a single round badge reads as a sticker on an
+  -- otherwise typographic page. The mechanism remains for clients who want it.
+  seals = '[]'::jsonb,
   qualifications = '[
     "Dipl. Betriebswirtin (BA)",
     "Versicherungsfachwirtin (IHK)",

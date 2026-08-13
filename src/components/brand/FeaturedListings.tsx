@@ -6,6 +6,7 @@ import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
 import { Reveal } from "@/components/shared/Reveal";
+import { LISTING_CARD_GRID } from "@/lib/homepage/card-grid";
 
 import { ListingCard } from "./ListingCard";
 
@@ -34,7 +35,7 @@ export function FeaturedListings({ locale, items, settings }: Props) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 gap-x-10 gap-y-24 md:grid-cols-2">
+      <div className={LISTING_CARD_GRID}>
         {items.map((l, i) => (
           <Reveal key={l.id} delay={i * 90}>
             <ListingCard listing={l} locale={locale} settings={settings} />

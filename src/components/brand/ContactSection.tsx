@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
+import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
 
-import { BuyerInquiryForm } from "./BuyerInquiryForm";
-import { SellerInquiryForm } from "./SellerInquiryForm";
+import { ShortInquiryForm } from "./ShortInquiryForm";
 
 type Props = {
+  locale: Locale;
   settings: SiteSettings;
 };
 
@@ -19,7 +20,7 @@ type Tab = "buyer" | "seller";
  * Headline switches between solo and team wording based on the `team`
  * feature flag so an agency still reads correctly.
  */
-export function ContactSection({ settings }: Props) {
+export function ContactSection({ locale, settings }: Props) {
   const { t } = useTranslation();
   const teamEnabled = useFeatureFlag("team");
   const [tab, setTab] = useState<Tab>("seller");
@@ -69,7 +70,7 @@ export function ContactSection({ settings }: Props) {
           </div>
 
           <div className="mt-12">
-            {tab === "buyer" ? <BuyerInquiryForm /> : <SellerInquiryForm />}
+            <ShortInquiryForm key={tab} mode={tab} locale={locale} />
           </div>
         </div>
       </div>

@@ -33,15 +33,17 @@ export function CredibilityBar({ locale, stats, settings }: Props) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-8 gap-y-14 border-t border-border pt-14 md:grid-cols-4">
+      {/* Equal columns, and a subgrid so values and descriptions each sit on
+          one common baseline no matter how many lines they wrap to. */}
+      <div className="grid grid-cols-2 grid-rows-[auto_auto] gap-x-8 gap-y-10 border-t border-border pt-14 md:grid-cols-4">
         {stats.map((s, i) => (
-          <div key={i} className="flex min-w-0 flex-col">
-            <div className="flex min-h-14 items-end md:min-h-20">
-            <div className="font-sans text-4xl leading-[1.05] text-foreground [overflow-wrap:anywhere] md:text-5xl">
-              {s.value}
+          <div key={i} className="row-span-2 grid min-w-0 grid-rows-subgrid gap-y-4">
+            <div className="flex items-end">
+              <div className="font-sans text-4xl leading-[1.05] text-foreground [overflow-wrap:anywhere] md:text-5xl">
+                {s.value}
+              </div>
             </div>
-            </div>
-            <div className="mt-4 [overflow-wrap:anywhere] text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            <div className="[overflow-wrap:anywhere] eyebrow text-muted-foreground">
               {s.label?.[locale] ?? s.label?.de ?? Object.values(s.label ?? {})[0] ?? ""}
             </div>
           </div>
