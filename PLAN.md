@@ -72,8 +72,9 @@ the site could have.
 
 Read `AGENTS.md` in the repo first. The rules that get violated most often:
 
-1. **Clone-per-client.** Not multi-tenant. Each client gets their own
-   database and deployment.
+1. **Clone-per-client.** Not multi-tenant, and not a configurable product.
+   Each client gets their own repository, database and deployment, adapted
+   in code.
 2. **No client data outside the seed file.** Client values in a migration
    follow every clone. This has already happened once and needed a
    neutralising migration. Client content lives in
