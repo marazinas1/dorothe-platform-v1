@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 
 import { AreaLinks } from "@/components/brand/AreaLinks";
 import { SiteNav } from "@/components/brand/SiteNav";
+import { SocialLinks } from "@/components/brand/SocialLinks";
 import { LegalLinks } from "@/components/public/LegalLinks";
 import { SiteLogo } from "@/components/brand/SiteLogo";
 import { HomeLink } from "@/components/shared/HomeLink";
