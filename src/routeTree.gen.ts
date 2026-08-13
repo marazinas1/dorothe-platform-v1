@@ -18,6 +18,7 @@ import { Route as LocaleUeberMichRouteImport } from './routes/$locale.ueber-mich
 import { Route as LocaleKontaktRouteImport } from './routes/$locale.kontakt'
 import { Route as LocaleImpressumRouteImport } from './routes/$locale.impressum'
 import { Route as LocaleImmobilienbewertungRouteImport } from './routes/$locale.immobilienbewertung'
+import { Route as LocaleErbenRouteImport } from './routes/$locale.erben'
 import { Route as LocaleDatenschutzRouteImport } from './routes/$locale.datenschutz'
 import { Route as LocaleAuthRouteImport } from './routes/$locale.auth'
 import { Route as LocaleAgbRouteImport } from './routes/$locale.agb'
@@ -88,6 +89,11 @@ const LocaleImmobilienbewertungRoute =
     path: '/immobilienbewertung',
     getParentRoute: () => LocaleRoute,
   } as any)
+const LocaleErbenRoute = LocaleErbenRouteImport.update({
+  id: '/erben',
+  path: '/erben',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleDatenschutzRoute = LocaleDatenschutzRouteImport.update({
   id: '/datenschutz',
   path: '/datenschutz',
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/datenschutz': typeof LocaleDatenschutzRoute
+  '/$locale/erben': typeof LocaleErbenRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
   '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
@@ -247,6 +254,7 @@ export interface FileRoutesByTo {
   '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/datenschutz': typeof LocaleDatenschutzRoute
+  '/$locale/erben': typeof LocaleErbenRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
   '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
@@ -279,6 +287,7 @@ export interface FileRoutesById {
   '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/datenschutz': typeof LocaleDatenschutzRoute
+  '/$locale/erben': typeof LocaleErbenRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
   '/$locale/impressum': typeof LocaleImpressumRoute
   '/$locale/kontakt': typeof LocaleKontaktRoute
@@ -315,6 +324,7 @@ export interface FileRouteTypes {
     | '/$locale/agb'
     | '/$locale/auth'
     | '/$locale/datenschutz'
+    | '/$locale/erben'
     | '/$locale/immobilienbewertung'
     | '/$locale/impressum'
     | '/$locale/kontakt'
@@ -347,6 +357,7 @@ export interface FileRouteTypes {
     | '/$locale/agb'
     | '/$locale/auth'
     | '/$locale/datenschutz'
+    | '/$locale/erben'
     | '/$locale/immobilienbewertung'
     | '/$locale/impressum'
     | '/$locale/kontakt'
@@ -378,6 +389,7 @@ export interface FileRouteTypes {
     | '/$locale/agb'
     | '/$locale/auth'
     | '/$locale/datenschutz'
+    | '/$locale/erben'
     | '/$locale/immobilienbewertung'
     | '/$locale/impressum'
     | '/$locale/kontakt'
@@ -474,6 +486,13 @@ declare module '@tanstack/react-router' {
       path: '/immobilienbewertung'
       fullPath: '/$locale/immobilienbewertung'
       preLoaderRoute: typeof LocaleImmobilienbewertungRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/erben': {
+      id: '/$locale/erben'
+      path: '/erben'
+      fullPath: '/$locale/erben'
+      preLoaderRoute: typeof LocaleErbenRouteImport
       parentRoute: typeof LocaleRoute
     }
     '/$locale/datenschutz': {
@@ -726,6 +745,7 @@ interface LocaleRouteChildren {
   LocaleAgbRoute: typeof LocaleAgbRoute
   LocaleAuthRoute: typeof LocaleAuthRouteWithChildren
   LocaleDatenschutzRoute: typeof LocaleDatenschutzRoute
+  LocaleErbenRoute: typeof LocaleErbenRoute
   LocaleImmobilienbewertungRoute: typeof LocaleImmobilienbewertungRoute
   LocaleImpressumRoute: typeof LocaleImpressumRoute
   LocaleKontaktRoute: typeof LocaleKontaktRoute
@@ -742,6 +762,7 @@ const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleAgbRoute: LocaleAgbRoute,
   LocaleAuthRoute: LocaleAuthRouteWithChildren,
   LocaleDatenschutzRoute: LocaleDatenschutzRoute,
+  LocaleErbenRoute: LocaleErbenRoute,
   LocaleImmobilienbewertungRoute: LocaleImmobilienbewertungRoute,
   LocaleImpressumRoute: LocaleImpressumRoute,
   LocaleKontaktRoute: LocaleKontaktRoute,
