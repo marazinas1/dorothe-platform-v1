@@ -24,11 +24,6 @@ export function WhyHer({ locale, settings }: Props) {
   const intro = pickLocalized(settings.about_body, locale, settings.default_locale) || "";
   const seals = settings.seals ?? [];
 
-  const claims = [
-    { icon: Scale, key: "valuation" as const },
-    { icon: ShieldCheck as typeof Scale, key: "inheritance" as const },
-    { icon: ScanLine as typeof Scale, key: "personal" as const },
-  ];
 
   return (
     <div className={SECTION_GAP.major}>
