@@ -43,7 +43,8 @@
     "claim_personal_title": "One person, throughout",
     "claim_personal_body": "Deliberately few properties at a time. From the first question to the notary you speak with the same person.",
     "claim_personal_evidence": "Certified estate agent (IHK) · Dipl. Betriebswirtin (BA)",
-    "membership_line": "Member of the European Real Estate Academy."
+    "membership_line": "Member of the European Real Estate Academy.",
+    "credibility_kicker": "Why {{agent}}"
   },
   "nav": {
     "listings": "Properties",

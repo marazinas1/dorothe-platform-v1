@@ -43,7 +43,8 @@
     "claim_personal_title": "Eine Ansprechpartnerin, durchgehend",
     "claim_personal_body": "Bewusst wenige Objekte gleichzeitig. Sie sprechen von der ersten Frage bis zum Notartermin mit derselben Person.",
     "claim_personal_evidence": "Immobilienmaklerin (IHK) · Dipl. Betriebswirtin (BA)",
-    "membership_line": "Mitglied der Europäischen Immobilienakademie."
+    "membership_line": "Mitglied der Europäischen Immobilienakademie.",
+    "credibility_kicker": "Warum {{agent}}"
   },
   "nav": {
     "listings": "Immobilien",
