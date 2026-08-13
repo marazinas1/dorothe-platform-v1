@@ -213,17 +213,28 @@ export const getListingBySlug = createServerFn({ method: "GET" })
 /**
  * A superseded slug still has to resolve. History is looked up only after the
  * current slug misses, so a current slug always wins over an old one.
+ *
+ * The history table is not readable by anon (it would expose slugs and ids of
+ * draft and archived listings), so the lookup runs with the service-role
+ * client. That read is safe to expose publicly because it never leaves this
+ * handler: the returned id is only used to ask `listings_public` for the
+ * current slug, and that view contains published listings only. A superseded
+ * slug belonging to a draft or archived listing therefore yields `null` —
+ * indistinguishable from an unknown slug — and no history row, id, status or
+ * any other listing field is ever returned to the caller.
  */
 export const resolveSupersededSlug = createServerFn({ method: "GET" })
   .inputValidator((raw: unknown) => z.object({ slug: z.string() }).parse(raw))
   .handler(async ({ data }): Promise<string | null> => {
-    const supabase = await getPublicClient();
-    const { data: hit } = await supabase
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: hit } = await supabaseAdmin
       .from("listing_slug_history")
       .select("listing_id")
       .eq("slug", data.slug)
       .maybeSingle();
     if (!hit?.listing_id) return null;
+
+    const supabase = await getPublicClient();
     const { data: row } = await supabase
       .from("listings_public")
       .select("slug")
