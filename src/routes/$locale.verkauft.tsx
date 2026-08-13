@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
+import { applySoldPricePolicy } from "@/lib/homepage/plan";
 import { PublicChrome } from "@/components/public/PublicChrome";
 import { ListingCard } from "@/components/brand/ListingCard";
 import type { Locale } from "@/i18n/config";
@@ -65,6 +66,8 @@ function SoldArchive() {
   const { t } = useTranslation();
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const { data } = useSuspenseQuery(soldOpts);
+  // Achieved prices stay hidden unless the client turns them on.
+  const items = applySoldPricePolicy(data.items, settings);
 
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
@@ -74,13 +77,13 @@ function SoldArchive() {
           {t("listings.sold_description")}
         </p>
 
-        {data.items.length === 0 ? (
+        {items.length === 0 ? (
           <div className="py-24 text-center text-sm text-muted-foreground">
             {t("listings.sold_empty")}
           </div>
         ) : (
           <div className="mt-16 grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-            {data.items.map((l) => (
+            {items.map((l) => (
               <ListingCard
                 key={l.id}
                 listing={l}
