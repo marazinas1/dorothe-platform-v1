@@ -169,6 +169,7 @@ export function ListingForm({
           slug={slug}
           dirty={form.dirty}
           hasImages={images.length > 0}
+          dealType={form.values.deal_type}
           checklist={checklist}
           publicLocale={navLocale}
           onChanged={refreshListing}
