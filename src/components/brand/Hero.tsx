@@ -113,7 +113,7 @@ function HeroActions({ locale, className }: { locale: Locale; className?: string
     >
       <Link
         to="/$locale/verkaufen"
-            hash="form"
+        hash="form"
         params={{ locale }}
         className="eyebrow inline-flex h-12 items-center rounded-sm bg-primary px-7 text-primary-foreground transition-opacity duration-300 hover:opacity-90"
       >
