@@ -72,7 +72,7 @@ Not built: revenue/commission, occupancy/booking metrics, view counts.
 
 ## Part 4 — Technical shape
 
-- New migration: three security-invoker SQL functions (`admin_listing_gaps`, `admin_stale_active`, `admin_dashboard_metrics`) so RLS and the existing permission helpers still govern rows; permission asserted in the server functions via `current_user_has_permission` (`analytics.view.*`, `inquiry.view.*`) — no role literals.
+- New migration: two security-invoker SQL functions (`admin_stale_active`, `admin_dashboard_metrics`) so RLS and the existing permission helpers still govern rows; permission asserted in the server functions via `current_user_has_permission` (`analytics.view.*`, `inquiry.view.*`) — no role literals. No SQL function for the gaps group; that rule lives only in TypeScript.
 - `src/lib/dashboard/admin.functions.ts` — one admin-gated server function per queue group plus one for metrics, each with its own `queryOptions` so groups load independently and one slow query cannot block the page. `src/lib/dashboard/types.ts` for shapes, `src/lib/dashboard/period.ts` for preset→range resolution.
 - Components under `src/components/admin/dashboard/`: `QueueGroup.tsx` (shell: title, count, empty line, "+N more"), `QueueItem.tsx`, one small item-body per group, `MetricsPanel.tsx`, `PeriodFilter.tsx`, `FirstRunPanel.tsx`. Presentation only, all values via props, tokens only, each file well under 200 lines.
 - Route `src/routes/$locale.admin.index.tsx` composes the blocks and owns the period search param; the admin subtree keeps `ssr: false`.
