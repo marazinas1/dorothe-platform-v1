@@ -239,6 +239,42 @@ export type Database = {
           },
         ]
       }
+      listing_slug_history: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_slug_history_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_slug_history_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listing_tours: {
         Row: {
           created_at: string
@@ -1155,6 +1191,20 @@ export type Database = {
       current_user_role: { Args: never; Returns: string }
       has_role: { Args: { _roles: string[] }; Returns: boolean }
       listing_is_public: { Args: { _listing_id: string }; Returns: boolean }
+      listing_slug_base: {
+        Args: {
+          _city: string
+          _property_type: string
+          _rooms: number
+          _title: Json
+        }
+        Returns: string
+      }
+      listing_slug_is_reserved: { Args: { _slug: string }; Returns: boolean }
+      listing_unique_slug: {
+        Args: { _base: string; _id: string }
+        Returns: string
+      }
       map_energy_source_text: { Args: { _input: string }; Returns: string }
       slugify: { Args: { _input: string }; Returns: string }
       storage_can_edit_listing_object: {
