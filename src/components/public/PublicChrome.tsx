@@ -2,11 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { ReactNode } from "react";
 
+import { AreaLinks } from "@/components/brand/AreaLinks";
 import { SiteNav } from "@/components/brand/SiteNav";
 import { LegalLinks } from "@/components/public/LegalLinks";
 import { SiteLogo } from "@/components/brand/SiteLogo";
 import { HomeLink } from "@/components/shared/HomeLink";
 import type { Locale } from "@/i18n/config";
+import { areasAreConfigured, serviceAreas } from "@/lib/homepage/plan";
 import type { SiteSettings } from "@/types/site-settings";
 
 type Props = {
@@ -33,6 +35,15 @@ function Footer({ locale, settings }: { locale: Locale; settings: SiteSettings }
   const { t } = useTranslation();
   return (
     <footer className="mt-24 border-t border-border/60 bg-background">
+      {/* Local links belong on every page, not only the homepage. */}
+      <div className="mx-auto max-w-[1400px] px-0 pt-12">
+        <AreaLinks
+          locale={locale}
+          cities={serviceAreas(settings, [])}
+          linkable={!areasAreConfigured(settings)}
+          tone="footer"
+        />
+      </div>
       <div className="mx-auto grid max-w-[1400px] gap-10 px-6 py-14 md:grid-cols-3 lg:px-10">
         <div>
           <HomeLink locale={locale} label={settings.site_name}>
