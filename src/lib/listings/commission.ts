@@ -60,7 +60,7 @@ export function commissionRow(
     if (freeForCounterparty || value == null) {
       return {
         labelKey: `${PREFIX}.commission_tenant`,
-        value: t(`${PREFIX}.commission_free_tenant`),
+        value: t("listings.detail.commission_free_tenant"),
       };
     }
     const payer = input.commission_payer
@@ -75,7 +75,7 @@ export function commissionRow(
   if (freeForCounterparty) {
     return {
       labelKey: `${PREFIX}.commission_buyer`,
-      value: t(`${PREFIX}.commission_free_buyer`),
+      value: t("listings.detail.commission_free_buyer"),
     };
   }
   if (value == null) return null;
