@@ -20,6 +20,7 @@ import { Route as LocaleImpressumRouteImport } from './routes/$locale.impressum'
 import { Route as LocaleImmobilienbewertungRouteImport } from './routes/$locale.immobilienbewertung'
 import { Route as LocaleDatenschutzRouteImport } from './routes/$locale.datenschutz'
 import { Route as LocaleAuthRouteImport } from './routes/$locale.auth'
+import { Route as LocaleAgbRouteImport } from './routes/$locale.agb'
 import { Route as LocaleAdminRouteImport } from './routes/$locale.admin'
 import { Route as LocaleImmobilienIndexRouteImport } from './routes/$locale.immobilien.index'
 import { Route as LocaleAdminIndexRouteImport } from './routes/$locale.admin.index'
@@ -95,6 +96,11 @@ const LocaleDatenschutzRoute = LocaleDatenschutzRouteImport.update({
 const LocaleAuthRoute = LocaleAuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleAgbRoute = LocaleAgbRouteImport.update({
+  id: '/agb',
+  path: '/agb',
   getParentRoute: () => LocaleRoute,
 } as any)
 const LocaleAdminRoute = LocaleAdminRouteImport.update({
@@ -206,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
   '/$locale/admin': typeof LocaleAdminRouteWithChildren
+  '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/datenschutz': typeof LocaleDatenschutzRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
@@ -237,6 +244,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/datenschutz': typeof LocaleDatenschutzRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
@@ -268,6 +276,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
   '/$locale/admin': typeof LocaleAdminRouteWithChildren
+  '/$locale/agb': typeof LocaleAgbRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/datenschutz': typeof LocaleDatenschutzRoute
   '/$locale/immobilienbewertung': typeof LocaleImmobilienbewertungRoute
@@ -303,6 +312,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$locale'
     | '/$locale/admin'
+    | '/$locale/agb'
     | '/$locale/auth'
     | '/$locale/datenschutz'
     | '/$locale/immobilienbewertung'
@@ -334,6 +344,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$locale/agb'
     | '/$locale/auth'
     | '/$locale/datenschutz'
     | '/$locale/immobilienbewertung'
@@ -364,6 +375,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$locale'
     | '/$locale/admin'
+    | '/$locale/agb'
     | '/$locale/auth'
     | '/$locale/datenschutz'
     | '/$locale/immobilienbewertung'
@@ -476,6 +488,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/$locale/auth'
       preLoaderRoute: typeof LocaleAuthRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/agb': {
+      id: '/$locale/agb'
+      path: '/agb'
+      fullPath: '/$locale/agb'
+      preLoaderRoute: typeof LocaleAgbRouteImport
       parentRoute: typeof LocaleRoute
     }
     '/$locale/admin': {
@@ -704,6 +723,7 @@ const LocaleAuthRouteWithChildren = LocaleAuthRoute._addFileChildren(
 
 interface LocaleRouteChildren {
   LocaleAdminRoute: typeof LocaleAdminRouteWithChildren
+  LocaleAgbRoute: typeof LocaleAgbRoute
   LocaleAuthRoute: typeof LocaleAuthRouteWithChildren
   LocaleDatenschutzRoute: typeof LocaleDatenschutzRoute
   LocaleImmobilienbewertungRoute: typeof LocaleImmobilienbewertungRoute
@@ -719,6 +739,7 @@ interface LocaleRouteChildren {
 
 const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleAdminRoute: LocaleAdminRouteWithChildren,
+  LocaleAgbRoute: LocaleAgbRoute,
   LocaleAuthRoute: LocaleAuthRouteWithChildren,
   LocaleDatenschutzRoute: LocaleDatenschutzRoute,
   LocaleImmobilienbewertungRoute: LocaleImmobilienbewertungRoute,
