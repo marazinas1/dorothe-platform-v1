@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -7,11 +8,17 @@ import { ListingForm } from "@/components/admin/listings/ListingForm";
 import { rowToValues } from "@/components/admin/listings/listing-form-state";
 import type { ImageRecord } from "@/components/admin/listings/ImageCard";
 import { adminListingQueryOptions } from "@/lib/listings/admin.functions";
+import { scrollToField } from "@/lib/listings/scroll-to-field";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 
 export const Route = createFileRoute("/$locale/admin/listings/$id")({
+  // ?field=<anchor> lets the dashboard hand over to the exact field to fix.
+  validateSearch: (search: Record<string, unknown>) => ({
+    field: typeof search.field === "string" ? search.field : undefined,
+  }),
   component: EditListing,
 });
+
 
 function EditListing() {
   const { t } = useTranslation();
