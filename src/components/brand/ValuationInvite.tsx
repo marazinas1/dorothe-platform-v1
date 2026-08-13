@@ -36,7 +36,8 @@ export function ValuationInvite({ locale, offer }: Props) {
             <p className="text-lead mt-8 max-w-[46ch] text-muted-foreground">{offer.body}</p>
           ) : null}
           <Link
-            to="/$locale/immobilienbewertung"
+            to="/$locale/verkaufen"
+            hash="form"
             params={{ locale }}
             className="eyebrow mt-12 inline-flex h-14 items-center rounded-sm bg-primary px-9 text-primary-foreground transition-opacity duration-300 hover:opacity-90"
           >

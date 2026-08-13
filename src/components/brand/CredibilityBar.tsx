@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import type { Locale } from "@/i18n/config";
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
 import type { CredibilityStat, SiteSettings } from "@/types/site-settings";
 
 type Props = {
@@ -26,7 +27,7 @@ export function CredibilityBar({ locale, stats, settings }: Props) {
     t("home.credibility_kicker", { agent: settings.site_name });
 
   return (
-    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
+    <section className={`mx-auto ${SECTION_GAP.major} max-w-[1400px] px-6 lg:px-10`}>
       <div className="mb-14 max-w-2xl">
         <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           {heading}
