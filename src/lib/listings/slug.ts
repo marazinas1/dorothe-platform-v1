@@ -30,14 +30,25 @@ export function slugifyText(input: string): string {
 /** Slugs that would shadow a locale prefix or a reserved path segment. */
 const RESERVED = ["de", "en", "preview", "api", "admin"];
 
-export type SlugIssue = "empty" | "reserved" | "normalized";
+/** Message keys under admin.listings.errors, one per rejection reason. */
+export const SLUG_ISSUE_KEYS = [
+  "slug_empty",
+  "slug_reserved",
+  "slug_normalized",
+  "slug_taken",
+  "slug_invalid",
+] as const;
 
-export function slugIssue(raw: string, enabledLocales: string[]): SlugIssue | null {
+export type SlugIssueKey = (typeof SLUG_ISSUE_KEYS)[number];
+
+export function slugIssue(raw: string, enabledLocales: string[]): SlugIssueKey | null {
   const value = (raw ?? "").trim();
   const normalized = slugifyText(value);
-  if (normalized === "") return "empty";
-  if (RESERVED.includes(normalized) || enabledLocales.includes(normalized)) return "reserved";
-  if (normalized !== value) return "normalized";
+  if (normalized === "") return "slug_empty";
+  if (RESERVED.includes(normalized) || enabledLocales.includes(normalized)) {
+    return "slug_reserved";
+  }
+  if (normalized !== value) return "slug_normalized";
   return null;
 }
 

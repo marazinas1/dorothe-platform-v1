@@ -34,6 +34,7 @@ const ENUMS = {
   textFields: listFrom("src/lib/listings/text-placement.ts", "TEXT_FIELDS"),
   outlineRegions: listFrom("src/lib/listings/text-placement.ts", "OUTLINE_REGION_KEYS"),
   statusGroups: listFrom("src/lib/listings/admin-list-groups.ts", "STATUS_GROUP_KEYS"),
+  slugIssues: listFrom("src/lib/listings/slug.ts", "SLUG_ISSUE_KEYS"),
 };
 
 // prefix -> the enumeration whose values are appended to it at runtime.
@@ -47,6 +48,7 @@ const DYNAMIC_PREFIXES = {
   "admin.listings.placement": ENUMS.textFields,
   "admin.listings.outline.regions": ENUMS.outlineRegions,
   "admin.listings.statusGroups": ENUMS.statusGroups,
+  "admin.listings.errors": ENUMS.slugIssues,
 };
 
 /** Scope prefixes used by the label resolvers, read from source. */

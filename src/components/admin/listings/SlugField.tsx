@@ -37,7 +37,7 @@ export function SlugField({
     <FieldRow
       label={t("admin.listings.fields.slug")}
       help={publishedEver ? undefined : t("admin.listings.help.slugFollowsTitle")}
-      error={issue ? t(`admin.listings.errors.slug_${issue}`) : undefined}
+      error={issue ? t(`admin.listings.errors.${issue}`) : undefined}
       anchor="slug"
     >
       <Input
