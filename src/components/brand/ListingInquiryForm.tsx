@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ConsentCheckbox } from "@/components/public/ConsentCheckbox";
+import { useConsent } from "@/lib/inquiry/use-consent";
+
 import { submitInquiry } from "@/lib/inquiry/submit.functions";
 
 type Props = {
@@ -19,10 +22,12 @@ export function ListingInquiryForm({ listingId, defaultMessage }: Props) {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
     "idle",
   );
+  const consent = useConsent();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    if (!consent.check()) return;
     setStatus("submitting");
     try {
       await submitInquiry({
@@ -32,6 +37,8 @@ export function ListingInquiryForm({ listingId, defaultMessage }: Props) {
           email: String(fd.get("email") ?? ""),
           phone: String(fd.get("phone") ?? ""),
           message: String(fd.get("message") ?? ""),
+          consent: true,
+          locale: consent.locale,
         },
       });
       setStatus("success");
@@ -78,6 +85,15 @@ export function ListingInquiryForm({ listingId, defaultMessage }: Props) {
             className={`${inputCls} resize-none pt-3`}
           />
         </div>
+      </div>
+
+      <div className="mt-8">
+        <ConsentCheckbox
+          id="inq-consent"
+          checked={consent.given}
+          onChange={consent.set}
+          showError={consent.error}
+        />
       </div>
 
       {status === "error" ? (
