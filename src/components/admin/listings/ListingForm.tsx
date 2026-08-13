@@ -12,6 +12,7 @@ import {
 } from "@/lib/listings/admin.functions";
 import { applies } from "@/lib/listings/field-visibility";
 import { buildPublishChecklist } from "@/lib/listings/publish-checklist";
+import { formatPublishError } from "@/lib/listings/publish-error";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { FALLBACK_LOCALE } from "@/i18n/config";
 import type { Country } from "@/lib/validation/energy";
@@ -132,7 +133,9 @@ export function ListingForm({
       await queryClient.invalidateQueries(adminListingQueryOptions(listingId));
       return true;
     } catch (error) {
-      if (!silent) toast.error(error instanceof Error ? error.message : String(error));
+      // Raw trigger wording (slug taken/reserved) becomes a readable sentence.
+      const raw = error instanceof Error ? error.message : String(error);
+      if (!silent) toast.error(formatPublishError(t, raw));
       return false;
     } finally {
       setSaving(false);
