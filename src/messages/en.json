@@ -851,6 +851,17 @@
           "rest": "Energy, map, contact (automatic)"
         },
         "legend": "Dots mark texts you write yourself. Grey rows are generated from the structured fields."
+      },
+      "statusSelect": {
+        "label": "Change status"
+      },
+      "statusGroups": {
+        "active": "Active",
+        "coming_soon": "Coming soon",
+        "reserved": "Reserved",
+        "closed": "Sold & rented",
+        "draft": "Draft",
+        "archived": "Archived"
       }
     },
     "inquiries": {
