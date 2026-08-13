@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
 import type { PublicTeamMember } from "@/lib/team/queries.functions";
 
 type Props = {
