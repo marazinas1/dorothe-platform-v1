@@ -6,6 +6,7 @@ import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
 import { Reveal } from "@/components/shared/Reveal";
+import { LISTING_CARD_GRID } from "@/lib/homepage/card-grid";
 
 import { ListingCard } from "./ListingCard";
 
