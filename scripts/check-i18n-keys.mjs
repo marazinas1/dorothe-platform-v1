@@ -140,7 +140,14 @@ const IDENTIFIERS = {
   },
   // src/components/admin/settings/LegalTab.tsx
   "f.labelKey": { prefix: "admin.settings.legal" },
+  // src/lib/dashboard/age.ts — unit keys for "how long has this been waiting".
+  "age.key": { prefix: "admin.dashboard.age" },
+  "duration.key": { prefix: "admin.dashboard.age" },
+  // src/components/admin/dashboard/QueueGroup.tsx — group title/empty state.
+  titleKey: { prefix: "admin.dashboard.queue" },
+  emptyKey: { prefix: "admin.dashboard.queue" },
 };
+
 
 function listFrom(file, name) {
   const source = readFileSync(file, "utf8");

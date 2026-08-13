@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -7,19 +8,33 @@ import { ListingForm } from "@/components/admin/listings/ListingForm";
 import { rowToValues } from "@/components/admin/listings/listing-form-state";
 import type { ImageRecord } from "@/components/admin/listings/ImageCard";
 import { adminListingQueryOptions } from "@/lib/listings/admin.functions";
+import { scrollToField } from "@/lib/listings/scroll-to-field";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 
 export const Route = createFileRoute("/$locale/admin/listings/$id")({
+  // ?field=<anchor> lets the dashboard hand over to the exact field to fix.
+  validateSearch: (search: Record<string, unknown>): { field?: string } =>
+    typeof search.field === "string" ? { field: search.field } : {},
   component: EditListing,
 });
+
 
 function EditListing() {
   const { t } = useTranslation();
   const { locale, id } = Route.useParams();
+  const { field } = Route.useSearch();
   const { data } = useSuspenseQuery(adminListingQueryOptions(id));
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
 
+  // Arriving from the dashboard: open the section and land on the named field.
+  useEffect(() => {
+    if (!field) return;
+    const timer = window.setTimeout(() => scrollToField(field), 120);
+    return () => window.clearTimeout(timer);
+  }, [field, id]);
+
   const listing = data.listing as Record<string, unknown>;
+
 
   return (
     <div className="space-y-6">

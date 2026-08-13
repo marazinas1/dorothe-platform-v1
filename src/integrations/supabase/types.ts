@@ -1200,6 +1200,20 @@ export type Database = {
       }
     }
     Functions: {
+      admin_dashboard_metrics: {
+        Args: { _from: string; _to: string }
+        Returns: Json
+      }
+      admin_stale_active: {
+        Args: { _days: number; _limit: number }
+        Returns: {
+          id: string
+          published_at: string
+          slug: string
+          title: Json
+          total: number
+        }[]
+      }
       count_active_owners: { Args: never; Returns: number }
       current_user_has_permission: { Args: { _key: string }; Returns: boolean }
       current_user_is_active: { Args: never; Returns: boolean }

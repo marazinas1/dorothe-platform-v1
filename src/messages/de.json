@@ -936,6 +936,73 @@
         "year_built": "Baujahr",
         "condition": "Zustand"
       }
+    },
+    "dashboard": {
+      "queue": {
+        "heading": "Zu tun",
+        "failed": "Diese Gruppe konnte nicht geladen werden.",
+        "more": "{{count}} weitere nicht angezeigt",
+        "inquiries": {
+          "title": "Unbearbeitete Anfragen",
+          "empty": "Alle Anfragen sind bearbeitet.",
+          "all": "Alle Anfragen"
+        },
+        "blocked": {
+          "title": "Nicht veröffentlichbar",
+          "empty": "Kein Entwurf ist blockiert.",
+          "since": "bearbeitet vor {{age}}"
+        },
+        "gaps": {
+          "title": "Veröffentlicht mit Lücken",
+          "empty": "Alle veröffentlichten Objekte sind vollständig.",
+          "since": "online seit {{age}}"
+        },
+        "reserved": {
+          "title": "Reserviert",
+          "empty": "Nichts ist reserviert.",
+          "since": "seit {{age}}"
+        },
+        "stale": {
+          "title": "Lange online ohne Anfrage",
+          "empty": "Kein Objekt bleibt unbeachtet.",
+          "since": "online seit {{age}}"
+        }
+      },
+      "gaps": {
+        "description": "Keine Beschreibung",
+        "map": "Keine Kartenposition",
+        "photos": "Zu wenige Fotos",
+        "reference": "Keine Objektnummer"
+      },
+      "age": {
+        "minutes": "{{count}} Min.",
+        "hours": "{{count}} Std.",
+        "days": "{{count}} Tg."
+      },
+      "period": {
+        "7d": "7 Tage",
+        "30d": "30 Tage",
+        "90d": "90 Tage",
+        "ytd": "Dieses Jahr"
+      },
+      "metrics": {
+        "heading": "Zahlen",
+        "period": "Zeitraum",
+        "failed": "Die Zahlen konnten nicht geladen werden.",
+        "listings": "Objekte",
+        "listingsHint": "Aktuell, alle Status",
+        "inquiries": "Anfragen",
+        "closed": "Verkauft / vermietet",
+        "processing": "Ø Bearbeitungszeit",
+        "periodHint": "Im gewählten Zeitraum",
+        "sample": "Basis: {{count}} bearbeitete Anfrage(n)",
+        "noSample": "In diesem Zeitraum nichts bearbeitet"
+      },
+      "firstRun": {
+        "title": "Noch nichts vorhanden",
+        "body": "Sobald das erste Objekt existiert, zeigt diese Seite, was zu tun ist: offene Anfragen, Entwürfe, die noch nicht online gehen können, und veröffentlichte Objekte mit Lücken.",
+        "cta": "Erstes Objekt anlegen"
+      }
     }
   },
   "pages": {

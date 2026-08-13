@@ -936,6 +936,73 @@
         "year_built": "Year built",
         "condition": "Condition"
       }
+    },
+    "dashboard": {
+      "queue": {
+        "heading": "To do",
+        "failed": "Could not load this group.",
+        "more": "{{count}} more not shown",
+        "inquiries": {
+          "title": "Unhandled enquiries",
+          "empty": "Every enquiry has been handled.",
+          "all": "All enquiries"
+        },
+        "blocked": {
+          "title": "Cannot be published",
+          "empty": "No draft is blocked.",
+          "since": "edited {{age}} ago"
+        },
+        "gaps": {
+          "title": "Published with gaps",
+          "empty": "Every published property is complete.",
+          "since": "online {{age}}"
+        },
+        "reserved": {
+          "title": "Reserved",
+          "empty": "Nothing is reserved.",
+          "since": "for {{age}}"
+        },
+        "stale": {
+          "title": "Long online without an enquiry",
+          "empty": "No property has gone unnoticed.",
+          "since": "online {{age}}"
+        }
+      },
+      "gaps": {
+        "description": "No description",
+        "map": "No map position",
+        "photos": "Too few photos",
+        "reference": "No reference number"
+      },
+      "age": {
+        "minutes": "{{count}} min",
+        "hours": "{{count}} h",
+        "days": "{{count}} d"
+      },
+      "period": {
+        "7d": "7 days",
+        "30d": "30 days",
+        "90d": "90 days",
+        "ytd": "This year"
+      },
+      "metrics": {
+        "heading": "Figures",
+        "period": "Period",
+        "failed": "Could not load the figures.",
+        "listings": "Properties",
+        "listingsHint": "Current, all statuses",
+        "inquiries": "Enquiries",
+        "closed": "Sold / rented",
+        "processing": "Ø processing time",
+        "periodHint": "In the selected period",
+        "sample": "Based on {{count}} handled enquiry/enquiries",
+        "noSample": "Nothing handled in this period"
+      },
+      "firstRun": {
+        "title": "Nothing here yet",
+        "body": "As soon as the first property exists, this page shows what needs doing: unanswered enquiries, drafts that cannot go live yet and published properties with gaps.",
+        "cta": "Create first property"
+      }
     }
   },
   "pages": {
