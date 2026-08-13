@@ -13,7 +13,7 @@
 
 Five groups in fixed order, each with its own query, its own loading state, and item-level deep links using the existing `scrollToField` anchors (`/$locale/admin/listings/$id` + `?field=<anchor>` read on mount, so "energy certificate incomplete" lands on the energy field).
 
-1. **New enquiries** — `inquiries` where `status = 'new'`, ordered `created_at ASC` (oldest first), `limit 8`, with a separate exact count. Shows name/email, listing title or the `type` (listing/buyer/seller), and waiting age; items older than 24 h get an accent-toned "overdue" marker. Always first.
+1. **Unhandled enquiries** — `inquiries` where `status IN ('new','read')`, ordered `created_at ASC` (oldest first), with an exact count. `read` items are the risky ones (seen, not dealt with) and are visually distinguished from `new` — different badge tone plus a "gesehen, nicht bearbeitet" note — but they sit in the same age-ordered list. Anything older than 24 h gets an overdue marker. Shows name/email, listing title or the `type` (listing/buyer/seller), and waiting age. Always first.
 2. **Cannot be published** — drafts whose publish checklist has outstanding items, each naming the missing fields.
 3. **Published with gaps** — live listings that work but underperform; the concrete gap is named, no score.
 4. **Reserved** — `status = 'reserved'`, ordered by `updated_at ASC`, showing how long they have been reserved.
