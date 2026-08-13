@@ -50,8 +50,7 @@ export const getPermissionMatrix = createServerFn({ method: "GET" })
       matrix[key][row.role] = row.granted;
     }
     return matrix;
-  },
-);
+  });
 
 export const permissionMatrixQueryOptions = queryOptions({
   queryKey: ["permission-matrix"] as const,
