@@ -8,6 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { LegalLinks } from "@/components/public/LegalLinks";
 import { useSignOut } from "@/lib/auth/use-sign-out";
 import type { Locale } from "@/i18n/config";
 
