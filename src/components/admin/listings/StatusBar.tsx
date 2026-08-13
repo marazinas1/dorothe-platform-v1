@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { allowedTransitions, type ListingStatus } from "@/lib/listings/admin-schema";
 import type { Checklist } from "@/lib/listings/publish-checklist";
+import { blockerSummary } from "@/lib/listings/blocker-summary";
 import { scrollToField } from "@/lib/listings/scroll-to-field";
 import { PreviewButton } from "./PreviewButton";
 import { useStatusChange } from "./use-status-change";
@@ -138,16 +139,7 @@ export function StatusBar({
         <p className="flex items-start gap-2 border-t border-border px-4 py-2 text-xs text-muted-foreground">
           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span>
-            {t("admin.listings.publishBlocked")}{" "}
-            {blocking
-              .map((item) =>
-                item.missing?.length
-                  ? `${t(`admin.listings.checklist.items.${item.key}`)} (${item.missing
-                      .map((key) => t(`admin.listings.energyFields.${key}`))
-                      .join(", ")})`
-                  : t(`admin.listings.checklist.items.${item.key}`),
-              )
-              .join(" · ")}
+            {t("admin.listings.publishBlocked")} {blockerSummary(t, blocking)}
           </span>
         </p>
       ) : canPublish && !hasImages ? (
