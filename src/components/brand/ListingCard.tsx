@@ -1,11 +1,13 @@
 import { Link } from "@tanstack/react-router";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ListingFactPills } from "@/components/brand/ListingFactPills";
+import { ListingCardCarousel } from "@/components/brand/ListingCardCarousel";
+import { ListingCardSpecs } from "@/components/brand/ListingCardSpecs";
 import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
-import { pickImageUrl } from "@/lib/listings/image";
-import { formatDate, formatPrice, pickLocalized } from "@/lib/listings/format";
+import { formatDate, formatPrice } from "@/lib/listings/format";
+import { listingDisplayName, listingHeadline } from "@/lib/listings/display-title";
 import { moneyLabelKey } from "@/lib/listings/field-labels";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -16,100 +18,121 @@ type Props = {
   size?: "large" | "compact";
   /** Suppress the price row (achieved prices on closed properties). */
   hidePrice?: boolean;
+  /** Above-the-fold rows may load their cover eagerly. */
+  eager?: boolean;
 };
 
 /**
- * Brand-owned listing card: photograph, fact pills, headline, two lines of
- * description, price. Hairline border, uniform media radius, no shadow.
+ * The one listing card: homepage, catalogue, sold archive and the agent block
+ * all render this, so the sold emphasis is a prop (`hidePrice`), not a copy.
+ *
+ * Structure is an <article> with the real <a> on the headline; that link spreads
+ * an inset-0 pseudo-element over the whole card, which is why the entire surface
+ * is clickable while the card stays valid HTML with a single tab stop. Carousel
+ * controls sit above that overlay, so they need no click guards.
+ *
+ * Every zone has reserved height (media aspect, spec row, two-line title, two
+ * line description) and the price is pinned with mt-auto, so neighbours in a row
+ * always end at the same height whatever data they carry.
  */
-export function ListingCard({ listing, locale, settings, size = "large", hidePrice = false }: Props) {
+export function ListingCard({
+  listing,
+  locale,
+  settings,
+  size = "large",
+  hidePrice = false,
+  eager = false,
+}: Props) {
   const { t } = useTranslation();
-  const primary = listing.images.find((i) => i.is_primary) ?? listing.images[0];
-  const image =
-    pickImageUrl(primary?.variants, size === "large" ? "detail" : "card") ??
-    pickImageUrl(primary?.variants, "card");
-  // Second photograph drives the exterior → interior cross-fade on hover.
-  const secondary = listing.images.find((i) => i !== primary);
-  const secondaryImage = pickImageUrl(secondary?.variants, "card");
-  const title = pickLocalized(listing.title, locale) || listing.slug;
-  const description = pickLocalized(listing.description, locale);
+  const drag = useRef<{ x: number; y: number } | null>(null);
+
+  const headline = listingHeadline(listing, locale);
+  // Never the slug: a title-less listing shows no headline, and the link still
+  // needs a name, so it gets a descriptive one ("Wohnung in Kevelaer").
+  const linkName = listingDisplayName(listing, locale, t);
+  const description = listingHeadline({ title: listing.description }, locale);
   const price = formatPrice(listing.price, settings.currency, locale, {
     onRequest: listing.price_on_request,
     period: listing.price_period,
     onRequestLabel: t("listings.on_request"),
   });
   const status = statusLabel(listing, t);
-  // Kaufpreis vs Kaltmiete: the same resolver the admin form uses, so the label
-  // never has to be decided twice.
   const priceLabel = t(
-    moneyLabelKey({ property_type: listing.property_type, deal_type: listing.deal_type }, "price", "public"),
+    moneyLabelKey(
+      { property_type: listing.property_type, deal_type: listing.deal_type },
+      "price",
+      "public",
+    ),
   );
 
   return (
-    <Link
-      to="/$locale/immobilien/$slug"
-      params={{ locale, slug: listing.slug }}
-      className="group block rounded-media border border-border/70 bg-card p-3 md:p-4"
+    <article
+      // A swipe that ends on the media must not follow the card link.
+      onPointerDown={(e) => {
+        drag.current = { x: e.clientX, y: e.clientY };
+      }}
+      onClickCapture={(e) => {
+        const start = drag.current;
+        drag.current = null;
+        if (!start) return;
+        const moved = Math.hypot(e.clientX - start.x, e.clientY - start.y);
+        if (moved > 8) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+      className="group relative flex h-full flex-col rounded-media border border-border/70 bg-card p-3 md:p-4"
     >
-      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-media bg-muted">
-        {image ? (
-          <img
-            src={image}
-            alt={pickLocalized(primary?.alt_text, locale) || ""}
-            loading="lazy"
-            width={1200}
-            height={800}
-            className={
-              secondaryImage
-                ? "absolute inset-0 h-full w-full object-cover transition-[transform,opacity] duration-[1000ms] ease-out group-hover:scale-[1.03] group-hover:opacity-0"
-                : "absolute inset-0 h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.05]"
-            }
-          />
-        ) : (
-          <div className="h-full w-full bg-muted" />
-        )}
-        {secondaryImage ? (
-          <img
-            src={secondaryImage}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            width={1200}
-            height={800}
-            className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[1000ms] ease-out group-hover:opacity-100"
-          />
-        ) : null}
-      </div>
+      <ListingCardCarousel
+        images={listing.images}
+        locale={locale}
+        name={linkName}
+        eager={eager}
+      />
 
-      <div className="px-2 pt-5 pb-2 md:px-3">
+      <div className="flex flex-1 flex-col px-2 pt-5 pb-2 md:px-3">
         <div className="flex items-baseline justify-between gap-4">
-          <span
-            className={
-              status.accent ? "eyebrow text-primary" : "eyebrow text-muted-foreground"
-            }
-          >
+          <span className={status.accent ? "eyebrow text-primary" : "eyebrow text-muted-foreground"}>
             {status.label}
           </span>
           <span className="eyebrow text-muted-foreground">{listing.address_city}</span>
         </div>
 
         <div className="mt-4">
-          <ListingFactPills listing={listing} locale={locale} settings={settings} />
+          <ListingCardSpecs
+            listing={listing}
+            areaUnit={settings.area_unit}
+            locale={locale}
+          />
         </div>
 
-        <h3 className="mt-4 font-heading text-2xl leading-tight text-foreground md:text-[1.75rem]">
-          {title}
+        <h3
+          className={
+            size === "large"
+              ? "mt-4 line-clamp-2 min-h-[2.5em] font-heading text-2xl leading-tight text-foreground md:text-[1.75rem]"
+              : "mt-4 line-clamp-2 min-h-[2.5em] font-heading text-xl leading-tight text-foreground md:text-2xl"
+          }
+          title={headline || undefined}
+        >
+          <Link
+            to="/$locale/immobilien/$slug"
+            params={{ locale, slug: listing.slug }}
+            aria-label={headline ? undefined : linkName}
+            className="transition-opacity duration-300 before:absolute before:inset-0 before:z-10 before:content-[''] group-hover:opacity-80"
+          >
+            {/* No headline for a title-less listing, but the link (and its
+                inset overlay) is still here, so the card stays clickable. */}
+            {headline}
+          </Link>
         </h3>
 
-        {description ? (
-          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-            {description}
-          </p>
-        ) : null}
+        <p className="mt-2 line-clamp-2 min-h-[3.25em] text-sm leading-relaxed text-muted-foreground">
+          {description}
+        </p>
 
-        <div className="mt-5 flex items-baseline justify-between gap-6 border-t border-border/70 pt-4 text-sm">
-          {/* On closed properties the price row disappears entirely rather than
-              reading "on request" — the sale is over, there is nothing to ask. */}
+        <div className="mt-auto flex items-baseline justify-between gap-6 border-t border-border/70 pt-4 text-sm">
+          {/* On closed properties the price row disappears rather than reading
+              "on request" — the sale is over, there is nothing to ask. */}
           {hidePrice ? (
             <span />
           ) : (
@@ -120,12 +143,12 @@ export function ListingCard({ listing, locale, settings, size = "large", hidePri
           )}
           {listing.status === "sold" && listing.sold_at ? (
             <span className="text-xs text-muted-foreground">
-              {t("listings.sold_on").replace("{{date}}", formatDate(listing.sold_at, locale))}
+              {t("listings.sold_on", { date: formatDate(listing.sold_at, locale) })}
             </span>
           ) : null}
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
 

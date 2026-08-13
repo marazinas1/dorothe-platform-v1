@@ -317,6 +317,17 @@
   text-transform: uppercase;
 }
 
+/* Swipeable card carousel: the dots are the position indicator, not a bar. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+
+
 
 /*
  * Motion — pure CSS, no animation library.

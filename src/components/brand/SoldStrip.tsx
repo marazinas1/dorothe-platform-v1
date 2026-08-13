@@ -35,7 +35,7 @@ export function SoldStrip({ locale, items, settings, hidePrice = false }: Props)
 
       <div className={LISTING_CARD_GRID}>
         {items.slice(0, 3).map((l, i) => (
-          <Reveal key={l.id} delay={i * 90}>
+          <Reveal key={l.id} delay={i * 90} className="h-full">
             <ListingCard
               listing={l}
               locale={locale}
