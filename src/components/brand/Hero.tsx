@@ -31,7 +31,7 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
 
   if (layout === "split" && image) {
     return (
-      <section className="mx-auto flex max-w-[1400px] flex-col justify-center px-6 pb-14 pt-24 lg:min-h-svh lg:px-10 lg:pb-8 lg:pt-24">
+      <section className="mx-auto flex max-w-[1400px] flex-col justify-center px-6 pb-14 pt-24 lg:min-h-[calc(100svh-7rem)] lg:px-10 lg:pb-8 lg:pt-24">
         <div className="grid items-center gap-10 md:grid-cols-12 md:gap-12 lg:gap-14">
           <div className="md:col-span-7">
             <div className="eyebrow text-muted-foreground">{settings.site_name}</div>
