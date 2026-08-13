@@ -22,10 +22,19 @@ export const Route = createFileRoute("/$locale/admin/listings/$id")({
 function EditListing() {
   const { t } = useTranslation();
   const { locale, id } = Route.useParams();
+  const { field } = Route.useSearch();
   const { data } = useSuspenseQuery(adminListingQueryOptions(id));
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
 
+  // Arriving from the dashboard: open the section and land on the named field.
+  useEffect(() => {
+    if (!field) return;
+    const timer = window.setTimeout(() => scrollToField(field), 120);
+    return () => window.clearTimeout(timer);
+  }, [field, id]);
+
   const listing = data.listing as Record<string, unknown>;
+
 
   return (
     <div className="space-y-6">
