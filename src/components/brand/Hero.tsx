@@ -31,25 +31,25 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
 
   if (layout === "split" && image) {
     return (
-      <section className="mx-auto flex max-w-[1400px] flex-col justify-center px-6 pb-16 pt-28 lg:min-h-svh lg:px-10 lg:pb-20 lg:pt-32">
-        <div className="grid items-center gap-14 md:grid-cols-12 md:gap-16">
+      <section className="mx-auto flex max-w-[1400px] flex-col justify-center px-6 pb-14 pt-24 lg:min-h-svh lg:px-10 lg:pb-10 lg:pt-28">
+        <div className="grid items-center gap-10 md:grid-cols-12 md:gap-12 lg:gap-14">
           <div className="md:col-span-7">
             <div className="eyebrow text-muted-foreground">{settings.site_name}</div>
-            <h1 className="text-hero-split mt-6 max-w-[20ch] text-balance hyphens-auto">
+            <h1 className="text-hero-split mt-4 max-w-[20ch] text-balance hyphens-auto lg:mt-5">
               {title}
             </h1>
             {subline ? (
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground lg:mt-6 md:text-xl">
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg lg:mt-5 lg:text-[1.0625rem]">
                 {subline}
               </p>
             ) : null}
-            <HeroActions locale={locale} className="mt-8" />
+            <HeroActions locale={locale} className="mt-6 lg:mt-7" />
           </div>
           {/* Portrait after the text on a phone: the headline is read first.
-              Between md and lg the column is narrow, so the crop tightens to
-              3/4 rather than becoming a sliver. */}
+              The portrait keeps its generous scale and is bounded by viewport
+              height so the whole hero stays on one screen. */}
           <div className="md:col-span-5">
-            <div className="mx-auto aspect-[3/4] w-full max-w-[380px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(320px,48svh,480px)] lg:w-auto lg:max-w-none">
+            <div className="mx-auto aspect-[3/4] w-full max-w-[420px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(360px,60svh,560px)] lg:w-auto lg:max-w-none">
               <img
                 src={image}
                 alt={settings.primary_agent_name ?? settings.site_name}
@@ -57,14 +57,16 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
                 fetchPriority="high"
               />
             </div>
-            <div className="mt-5">
-              <SignatureBlock settings={settings} />
+            {/* Signature sits centred beneath the portrait it belongs to. */}
+            <div className="mt-4 flex justify-center">
+              <SignatureBlock settings={settings} align="center" />
             </div>
           </div>
         </div>
       </section>
     );
   }
+
 
   return (
     <section className="mx-auto max-w-[1400px] px-6 pt-32 pb-24 lg:px-10 lg:pt-44 lg:pb-32">
