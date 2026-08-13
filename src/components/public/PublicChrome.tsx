@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { ReactNode } from "react";
 
 import { SiteNav } from "@/components/brand/SiteNav";
+import { LegalLinks } from "@/components/public/LegalLinks";
 import { SiteLogo } from "@/components/brand/SiteLogo";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
