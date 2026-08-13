@@ -13,8 +13,13 @@ type ImageRow = {
   sort_order: number | null;
   variants: any;
   alt_text: any;
+  caption: any;
   width: number | null;
   height: number | null;
+  // Plans and renderings are already flagged in the public view; the detail
+  // page keeps them out of the photo gallery and shows them as documents.
+  is_floorplan: boolean | null;
+  is_visualization: boolean | null;
 };
 
 export type PublicListing = {
@@ -299,3 +304,103 @@ export const activeListingsQueryOptions = queryOptions({
     } as any),
   staleTime: 60_000,
 });
+
+// ---- Related properties ----
+
+/**
+ * Candidates for the "other properties" block on a detail page. Restricted to
+ * enquirable statuses in the query itself (see src/lib/listings/related.ts) so
+ * a sold or rented listing can never reach the block, then ranked client-side.
+ */
+export function relatedCandidatesQueryOptions(input: {
+  dealType: string;
+  city: string | null;
+}) {
+  return queryOptions({
+    queryKey: ["listings", "related", input.dealType, input.city ?? ""],
+    queryFn: () =>
+      listPublicListings({
+        data: {
+          deal: input.dealType,
+          type: "",
+          city: "",
+          rooms_min: 0,
+          price_min: 0,
+          price_max: 0,
+          area_min: 0,
+          sort: "newest",
+          page: 1,
+          onlyStatus: [...PublicSaleStatuses],
+          limit: 12,
+        },
+      } as any),
+    staleTime: 60_000,
+  });
+}
+
+// ---- Public documents ----
+
+export type PublicDocument = {
+  id: string;
+  type: string | null;
+  filename: string;
+  /** Null when the document is gated behind an enquiry. */
+  storage_path: string | null;
+};
+
+/**
+ * Documents released for public download. Only called when the documents
+ * feature flag is on, so the site's busiest page runs no extra query while the
+ * feature has no admin UI.
+ */
+export const listPublicDocuments = createServerFn({ method: "GET" })
+  .inputValidator((raw: unknown) => z.object({ listing_id: z.string().uuid() }).parse(raw))
+  .handler(async ({ data }): Promise<PublicDocument[]> => {
+    const supabase = await getPublicClient();
+    const { data: rows, error } = await supabase
+      .from("listing_documents_public")
+      .select("id, type, filename, storage_path, requires_lead")
+      .eq("listing_id", data.listing_id);
+    if (error) throw new Error(error.message);
+    return (rows ?? []).map((r: any) => ({
+      id: r.id,
+      type: r.type ?? null,
+      filename: r.filename,
+      // A document behind a lead gate is announced, never linked.
+      storage_path: r.requires_lead ? null : (r.storage_path ?? null),
+    }));
+  });
+
+export function listingDocumentsQueryOptions(listingId: string, enabled: boolean) {
+  return queryOptions({
+    queryKey: ["listings", "documents", listingId],
+    queryFn: () => listPublicDocuments({ data: { listing_id: listingId } }),
+    enabled,
+    staleTime: 60_000,
+  });
+}
+
+/**
+ * Short-lived download link for a publicly released document. The eligibility
+ * check runs against the public view, so a private or lead-gated document can
+ * never be signed even if its id is guessed.
+ */
+export const signListingDocument = createServerFn({ method: "POST" })
+  .inputValidator((raw: unknown) => z.object({ id: z.string().uuid() }).parse(raw))
+  .handler(async ({ data }): Promise<string | null> => {
+    const supabase = await getPublicClient();
+    const { data: row } = await supabase
+      .from("listing_documents_public")
+      .select("storage_path, requires_lead")
+      .eq("id", data.id)
+      .maybeSingle();
+    const path = (row as any)?.storage_path as string | undefined;
+    if (!path || (row as any)?.requires_lead) return null;
+
+    const { DOCUMENTS_BUCKET } = await import("./media-paths");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: signed } = await supabaseAdmin.storage
+      .from(DOCUMENTS_BUCKET)
+      .createSignedUrl(path, 300);
+    return signed?.signedUrl ?? null;
+  });
