@@ -405,7 +405,11 @@
     "imprint": "Imprint",
     "privacy": "Privacy",
     "terms": "Terms",
-    "contact": "Contact"
+    "contact": "Contact",
+    "social": {
+      "facebook": "Dorothe Waltner on Facebook",
+      "linkedin": "Dorothe Waltner on LinkedIn"
+    }
   },
   "locale": {
     "switch": "Switch language",
