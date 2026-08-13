@@ -31,7 +31,7 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
 
   if (layout === "split" && image) {
     return (
-      <section className="mx-auto flex max-w-[1400px] flex-col justify-center px-6 pb-14 pt-24 lg:min-h-svh lg:px-10 lg:pb-10 lg:pt-28">
+      <section className="mx-auto flex max-w-[1400px] flex-col justify-center px-6 pb-14 pt-24 lg:min-h-svh lg:px-10 lg:pb-8 lg:pt-24">
         <div className="grid items-center gap-10 md:grid-cols-12 md:gap-12 lg:gap-14">
           <div className="md:col-span-7">
             <div className="eyebrow text-muted-foreground">{settings.site_name}</div>
@@ -49,7 +49,7 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
               The portrait keeps its generous scale and is bounded by viewport
               height so the whole hero stays on one screen. */}
           <div className="md:col-span-5">
-            <div className="mx-auto aspect-[3/4] w-full max-w-[420px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(360px,60svh,560px)] lg:w-auto lg:max-w-none">
+            <div className="mx-auto aspect-[3/4] w-full max-w-[420px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(340px,54svh,540px)] lg:w-auto lg:max-w-none">
               <img
                 src={image}
                 alt={settings.primary_agent_name ?? settings.site_name}
