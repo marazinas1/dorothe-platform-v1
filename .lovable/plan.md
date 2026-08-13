@@ -16,11 +16,18 @@ code (PLAN.md §1); logic in `/lib`; strings in both message files.
 7 Contact         unchanged
 ```
 
-Removed: photo band, standalone "Über uns", areas block stays out of the order
-list only if it is currently disabled — it is dropped from the homepage set.
-`homepage_sections` in the seed is rewritten to exactly these seven keys, and
-`AboutBroker` is retired as a homepage block: its paragraph moves into the
-credentials block as its opening.
+Removed from the homepage: the photo band (deleted) and the standalone
+"Über uns" (retired into the credentials block — its paragraph opens it).
+`homepage_sections` in the seed is rewritten to exactly these seven keys.
+
+**Areas block moves, it is not deleted.** `AreaLinks` stays in the codebase and
+moves into the footer as a quiet row of place names above the legal links, so
+the local links appear on every page — including listing pages, where owners
+who arrived from "Makler Riegelsberg" land — instead of interrupting the
+homepage argument. Rendered as plain text links at footer scale, no heading
+larger than the other footer columns, still fed by `serviceAreas` /
+`areasAreConfigured` so linking behaviour is unchanged.
+
 
 ## 2. Hero — split, with the signature under the face
 
@@ -74,11 +81,13 @@ quiet membership line
 
 - Three claims in a `md:grid-cols-3` grid, each a card-less panel: a rule above,
   generous internal space, no borders between columns on mobile.
-- **Graphic device:** a large tabular numeral (01 / 02 / 03) in the heading serif
-  at low emphasis, plus a short sage rule above each claim. No icon set is
-  introduced — the page's visual language is type, rule and space, and numbering
-  reads as an argument in three parts rather than a spec table. (If you prefer
-  icons, say so and I will swap the numeral for a thin line-icon trio.)
+- **Graphic device: a thin line-icon trio, plus the short sage rule above each
+  claim.** No numerals — three independent competences are not a sequence and
+  must not imply one, or completeness. Icons are `lucide-react` at
+  `strokeWidth={1.25}`, ~28px, in muted foreground: abstract marks about
+  judgement rather than pictures of houses (candidates: `ScanLine` / `Scale` /
+  `ShieldCheck`, final trio chosen for evenness of weight). No filled shapes, no
+  icon badges or circles — the icon sits on the page like a piece of rule work.
 - Each claim: heading, one supporting sentence, one quiet evidence line naming
   the credential (that is where the certifying body appears — as evidence, never
   as the headline).
@@ -116,10 +125,22 @@ quieter heading tier (`text-section-sm`). Prices stay hidden exactly as now
 
 ## 7. Valuation — real weight
 
-Keeps its late position and gains emphasis: full-bleed band on the surface
-token with the widest break above and below, `text-hero`-adjacent scale for the
-heading, the deliverables set at lead size in a short measure, and one large
-primary action (the secondary text link is dropped so there is a single ask).
+Order of attack is unchanged from last time: space, measure and type first.
+Widest break above and below, heading one tier up from the surrounding blocks,
+deliverables at lead size in a short measure, and one large primary action (the
+secondary text link is dropped so there is a single ask).
+
+**On the surface tint.** It is not settled, and the earlier decision stands
+until the type-only version is looked at: I build this block with no fill and
+check it against the seven-block page. The reason it might read differently now
+is that at nine blocks the valuation sat among several typographic siblings, so
+the break alone separated it; at seven the block above it is a grid of property
+cards, and a rule plus space between two very different textures separates them
+less clearly. If it still does not read as its own object, the fallback is a
+very light tint — a few percent, boundary visible only as a change of paper,
+never a banner — and the two-paths block keeps the page's single heavy filled
+area. I will report which of the two I ended on.
+
 
 ## 8. Logo — monochrome header, original below
 
@@ -146,5 +167,9 @@ primary action (the secondary text link is dropped so there is a single ask).
   split hero. No client data outside the seed.
 - Every file stays under 200 lines; existing type tiers and `SECTION_GAP` used
   throughout; SSR untouched; `de.json`/`en.json` kept key-identical so the i18n
-  check stays green.
+- Before deleting `PhotoBand`, `AboutBroker` and the credentials table, sweep the
+  whole codebase for remaining imports — `/ueber-mich` in particular, which is
+  why `CredibilityBar` and `QualificationsList` survived the last cleanup. Any
+  page still using a deleted piece keeps a working equivalent; nothing is
+  removed while something imports it.
 - Untouched: listing detail page, catalogue, admin.
