@@ -15,12 +15,12 @@ export function TeamSection({ members }: Props) {
   if (!members || members.length === 0) return null;
 
   return (
-    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
+    <section className={`mx-auto ${SECTION_GAP.normal} max-w-[1400px] px-6 lg:px-10`}>
       <div className="mb-14 max-w-2xl">
         <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           {t("home.team_kicker")}
         </div>
-        <h2 className="mt-4 font-heading text-4xl leading-[1.05] md:text-6xl">
+        <h2 className="text-section mt-4">
           {t("home.team_title")}
         </h2>
       </div>

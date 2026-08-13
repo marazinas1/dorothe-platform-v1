@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Reveal } from "@/components/shared/Reveal";
 import type { Locale } from "@/i18n/config";
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
 
 type Props = { locale: Locale };
 
@@ -15,7 +16,7 @@ export function TwoPaths({ locale }: Props) {
   const { t } = useTranslation();
 
   return (
-    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
+    <section className={`mx-auto ${SECTION_GAP.normal} max-w-[1400px] px-6 lg:px-10`}>
       <Reveal className="grid gap-6 md:grid-cols-12 md:gap-8">
         <Link
           to="/$locale/verkaufen"
@@ -24,7 +25,7 @@ export function TwoPaths({ locale }: Props) {
         >
           <div>
             <div className="eyebrow opacity-80">{t("home.path_sell_kicker")}</div>
-            <h2 className="mt-6 max-w-[22ch] font-heading text-4xl leading-[1.1] md:text-5xl">
+            <h2 className="text-section mt-6 max-w-[22ch]">
               {t("home.path_sell_title")}
             </h2>
             <p className="mt-6 max-w-md text-base leading-relaxed opacity-90">
@@ -44,7 +45,7 @@ export function TwoPaths({ locale }: Props) {
         >
           <div>
             <div className="eyebrow text-muted-foreground">{t("home.path_buy_kicker")}</div>
-            <h2 className="mt-6 max-w-[18ch] font-heading text-3xl leading-[1.1] md:text-4xl">
+            <h2 className="text-section-sm mt-6 max-w-[18ch]">
               {t("home.path_buy_title")}
             </h2>
             <p className="mt-6 max-w-sm text-base leading-relaxed text-muted-foreground">

@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 
 import { Reveal } from "@/components/shared/Reveal";
 import type { Locale } from "@/i18n/config";
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
 import type { SiteSettings } from "@/types/site-settings";
 
 
@@ -33,11 +34,11 @@ export function AboutBroker({ locale, settings, portrait }: Props) {
   if (!body) return null;
 
   return (
-    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
+    <section className={`mx-auto ${SECTION_GAP.major} max-w-[1400px] px-6 lg:px-10`}>
       {/* The portrait carries this block; the copy reads at body size so the
           hero headline stays the largest type on the page. */}
       <Reveal className="grid grid-cols-1 gap-14 md:grid-cols-12 md:gap-16">
-        <div className="md:col-span-5">
+        <div className="md:col-span-6">
           <div className="eyebrow text-muted-foreground">{t("home.about")}</div>
           {portrait ? (
             <img
@@ -50,8 +51,8 @@ export function AboutBroker({ locale, settings, portrait }: Props) {
             />
           ) : null}
         </div>
-        <div className="md:col-span-7 md:pt-14">
-          <p className="max-w-[62ch] whitespace-pre-line text-lg leading-relaxed text-foreground md:text-xl">
+        <div className="md:col-span-5 md:col-start-8 md:pt-14">
+          <p className="text-lead max-w-[48ch] whitespace-pre-line text-foreground">
             {body}
           </p>
         </div>

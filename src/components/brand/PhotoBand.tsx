@@ -1,3 +1,5 @@
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
+
 type Props = {
   /** Resolved by the homepage plan; already de-duplicated and capped. */
   images: string[];
@@ -13,7 +15,7 @@ export function PhotoBand({ images }: Props) {
   if (images.length < 3) return null;
 
   return (
-    <section aria-hidden="true" className="mt-24 overflow-hidden">
+    <section aria-hidden="true" className={`${SECTION_GAP.tight} overflow-hidden`}>
       <div className="flex gap-2 md:gap-3">
         {images.map((src) => (
           <div

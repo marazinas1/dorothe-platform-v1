@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import type { Locale } from "@/i18n/config";
+import { SECTION_GAP } from "@/lib/homepage/rhythm";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -24,9 +25,9 @@ export function SoldStrip({ locale, items, settings, hidePrice = false }: Props)
   if (items.length === 0) return null;
 
   return (
-    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
+    <section className={`mx-auto ${SECTION_GAP.tight} max-w-[1400px] px-6 lg:px-10`}>
       <div className="mb-14 max-w-2xl">
-        <h2 className="font-heading text-4xl md:text-6xl">{t("home.recent_sales")}</h2>
+        <h2 className="text-section">{t("home.recent_sales")}</h2>
         <p className="mt-6 text-base leading-relaxed text-muted-foreground">
           {t("home.recent_sales_intro")}
         </p>
