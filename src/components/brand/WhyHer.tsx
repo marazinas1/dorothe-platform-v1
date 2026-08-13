@@ -36,19 +36,19 @@ export function WhyHer({ locale, settings }: Props) {
 
           <div className="mt-16 grid gap-12 md:mt-20 md:grid-cols-3 md:gap-10 lg:gap-16">
             <ClaimColumn
-              icon={claims[0].icon}
+              icon={Scale}
               title={t("home.claim_valuation_title")}
               body={t("home.claim_valuation_body")}
               evidence={t("home.claim_valuation_evidence")}
             />
             <ClaimColumn
-              icon={claims[1].icon}
+              icon={ShieldCheck}
               title={t("home.claim_inheritance_title")}
               body={t("home.claim_inheritance_body")}
               evidence={t("home.claim_inheritance_evidence")}
             />
             <ClaimColumn
-              icon={claims[2].icon}
+              icon={ScanLine}
               title={t("home.claim_personal_title")}
               body={t("home.claim_personal_body")}
               evidence={t("home.claim_personal_evidence")}
