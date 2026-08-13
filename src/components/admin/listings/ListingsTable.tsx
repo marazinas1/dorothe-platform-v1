@@ -17,7 +17,8 @@ import type { AdminListingRow } from "@/lib/listings/admin.functions";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import type { Locale } from "@/i18n/config";
 import { variantUrl } from "./listing-image-url";
-import { ListingRowActions } from "./ListingRowActions";
+import { ListingStatusSelect } from "./ListingStatusSelect";
+import { ListingCardActions } from "./ListingCardActions";
 
 function primaryThumb(row: AdminListingRow): string | null {
   const sorted = [...(row.images ?? [])].sort(
@@ -100,17 +101,7 @@ export function ListingsTable({
                   })}
                 </TableCell>
                 <TableCell>
-                  <span className="flex items-center gap-2 text-[13px] tracking-[0.01em]">
-                    <span
-                      aria-hidden
-                      className={
-                        row.status === "active" || row.status === "coming_soon"
-                          ? "h-1.5 w-1.5 rounded-full bg-primary"
-                          : "h-1.5 w-1.5 rounded-full bg-muted-foreground/40"
-                      }
-                    />
-                    {t(`listings.status.${row.status}`)}
-                  </span>
+                  <ListingStatusSelect row={row} />
                   {(row.images ?? []).length === 0 ? (
                     <span className="mt-1 block text-[11px] text-muted-foreground">
                       {t("admin.listings.noImages")}
@@ -118,7 +109,15 @@ export function ListingsTable({
                   ) : null}
                 </TableCell>
                 <TableCell className="text-right">
-                  <ListingRowActions id={row.id} status={row.status} locale={locale} />
+                  <div className="flex justify-end">
+                    <ListingCardActions
+                      id={row.id}
+                      slug={row.slug}
+                      locale={locale}
+                      status={row.status}
+                      dealType={row.deal_type}
+                    />
+                  </div>
                 </TableCell>
               </TableRow>
 
