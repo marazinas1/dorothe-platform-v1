@@ -130,6 +130,9 @@ export const ListingFormSchema = z.object({
   deal_type: z.enum(DEAL_TYPES),
   property_type: z.enum(PROPERTY_TYPES),
   reference_code: nullableText,
+  // Manual web address. NULL means "let the database decide": it generates the
+  // slug from the title and freezes it after the first publication.
+  slug: nullableText,
 
   // Equipment
   features: z.array(z.string()).default([]),

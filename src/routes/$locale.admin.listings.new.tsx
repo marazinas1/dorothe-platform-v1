@@ -41,6 +41,7 @@ function NewListing() {
         locales={settings.enabled_locales}
         status={null}
         slug={null}
+        publishedEver={false}
         images={[]}
       />
     </div>

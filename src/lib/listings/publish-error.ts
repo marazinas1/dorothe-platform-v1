@@ -5,6 +5,7 @@ export type PublishErrorInfo =
   | { kind: "energy"; fields: string[] }
   | { kind: "permission" }
   | { kind: "transition" }
+  | { kind: "slug"; key: string }
   | { kind: "raw"; message: string };
 
 const ENERGY_RE = /missing or invalid energy fields[^:]*:\s*(.+)$/i;
@@ -21,6 +22,8 @@ export function parsePublishError(message: string): PublishErrorInfo {
   if (/permission denied|not permitted|insufficient/i.test(message)) {
     return { kind: "permission" };
   }
+  const slug = /slug_(taken|reserved|invalid)/i.exec(message);
+  if (slug) return { kind: "slug", key: `slug_${slug[1].toLowerCase()}` };
   if (/invalid status|status flow|transition/i.test(message)) {
     return { kind: "transition" };
   }
@@ -41,6 +44,8 @@ export function formatPublishError(t: Translate, message: string): string {
       });
       return t("admin.listings.publishNeedsEnergy", { fields: names.join(", ") });
     }
+    case "slug":
+      return t(`admin.listings.errors.${info.key}`);
     case "permission":
       return t("admin.listings.errors.permission");
     case "transition":

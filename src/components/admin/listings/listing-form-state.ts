@@ -17,6 +17,7 @@ export const EMPTY_VALUES: ListingFormValues = {
   deal_type: "sale",
   property_type: "apartment",
   reference_code: null,
+  slug: null,
   features: [],
   condition: null,
   heating_type: null,

@@ -591,7 +591,8 @@
         "heating_costs_included": "Heating costs included in the additional costs",
         "commission_free": "No commission for the buyer",
         "commission_value_percent": "Commission (%)",
-        "commission_free_rent": "No commission for the tenant"
+        "commission_free_rent": "No commission for the tenant",
+        "slug": "Web address (slug)"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -623,7 +624,10 @@
         "deposit": "Usually up to three months of rent, excluding costs.",
         "commission_free": "Turn this on for a commission-free listing. Otherwise state the commission.",
         "title": "What a visitor sees first, e.g. “Bright three-room flat with balcony”.",
-        "titleOptional": "Optional. If empty, the {{locale}} title is shown."
+        "titleOptional": "Optional. If empty, the {{locale}} title is shown.",
+        "slugFollowsTitle": "Follows the title until the listing goes public for the first time.",
+        "slugFrozen": "This listing has been public. Changing its web address breaks every link already shared; the old address will redirect, but nothing else will.",
+        "slugWarning": "Changing this breaks existing links. The old address will redirect to the new one."
       },
       "energy": {
         "intro": "Required fields for {{country}}. Publishing is blocked until they are complete.",
@@ -766,7 +770,12 @@
       "errors": {
         "permission": "Your account is not allowed to do this.",
         "transition": "This status change is not possible from the current status.",
-        "generic": "That did not work. Please check the entries and try again."
+        "generic": "That did not work. Please check the entries and try again.",
+        "slug_empty": "Enter at least one letter or digit.",
+        "slug_reserved": "This address is reserved and would hide part of the site.",
+        "slug_normalized": "Will be saved as the lowercase, URL-safe form shown below.",
+        "slug_taken": "That web address is already used by another listing.",
+        "slug_invalid": "That web address cannot be used."
       },
       "commissionType": {
         "percent": "Percent (%)",
@@ -862,7 +871,8 @@
         "closed": "Sold & rented",
         "draft": "Draft",
         "archived": "Archived"
-      }
+      },
+      "slugUnlock": "Change web address anyway"
     },
     "inquiries": {
       "summary": "{{total}} total · {{unread}} new",

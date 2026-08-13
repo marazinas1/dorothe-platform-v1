@@ -5,6 +5,7 @@ import type { ListingFormApi } from "./listing-form-state";
 import { NUMERIC_KEYS, NumberFields } from "./NumberFields";
 import { TenancyFields } from "./TenancyFields";
 import { SeoSection } from "./SeoSection";
+import { SlugField } from "./SlugField";
 
 /**
  * One single collapse for everything that is not part of the short path to
@@ -14,9 +15,11 @@ import { SeoSection } from "./SeoSection";
 export function MoreDetailsSection({
   form,
   lang,
+  publishedEver,
 }: {
   form: ListingFormApi;
   lang: string;
+  publishedEver: boolean;
 }) {
   const { t } = useTranslation();
   const shape = {
@@ -39,6 +42,7 @@ export function MoreDetailsSection({
           <NumberFields form={form} keys={detailNumbers} />
         ) : null}
         <TenancyFields form={form} level="details" />
+        <SlugField form={form} publishedEver={publishedEver} />
         <SeoSection form={form} lang={lang} />
       </div>
     </details>
