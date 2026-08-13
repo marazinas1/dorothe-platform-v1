@@ -4,14 +4,11 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { PublicChrome } from "@/components/public/PublicChrome";
 import { Hero } from "@/components/brand/Hero";
-import { PhotoBand } from "@/components/brand/PhotoBand";
 import { TwoPaths } from "@/components/brand/TwoPaths";
-import { Credentials } from "@/components/brand/Credentials";
+import { WhyHer } from "@/components/brand/WhyHer";
 import { ValuationInvite } from "@/components/brand/ValuationInvite";
 import { FeaturedListings } from "@/components/brand/FeaturedListings";
 import { SoldStrip } from "@/components/brand/SoldStrip";
-import { AreaLinks } from "@/components/brand/AreaLinks";
-import { AboutBroker } from "@/components/brand/AboutBroker";
 import { ContactSection } from "@/components/brand/ContactSection";
 import { TeamSection } from "@/components/brand/TeamSection";
 import type { Locale } from "@/i18n/config";
@@ -30,12 +27,9 @@ import { buildHead } from "@/lib/seo/build-head";
 import {
   HOMEPAGE_LISTING_LIMIT,
   applySoldPricePolicy,
-  areasAreConfigured,
   buildHomepagePlan,
   heroCopy,
-  photoBandImages,
   resolveSocialImage,
-  serviceAreas,
   soldPricesHidden,
   valuationOffer,
 } from "@/lib/homepage/plan";
@@ -101,7 +95,6 @@ function HomePage() {
   const teamEnabled = flags?.team?.enabled !== false;
   const shown = featured.items.slice(0, HOMEPAGE_LISTING_LIMIT);
   const soldShown = applySoldPricePolicy(sold.items.slice(0, HOMEPAGE_LISTING_LIMIT), settings);
-  const areas = serviceAreas(settings, cities);
 
   const renderers: Record<string, () => ReactNode> = {
     hero: () => (
@@ -114,17 +107,12 @@ function HomePage() {
         subline={copy.subline}
       />
     ),
-    photoband: () => <PhotoBand images={photoBandImages(featured.items)} />,
-    about: () => <AboutBroker locale={l} settings={settings} portrait={plan.aboutPortrait} />,
     paths: () => <TwoPaths locale={l} />,
-    credibility: () => <Credentials locale={l} settings={settings} />,
+    credibility: () => <WhyHer locale={l} settings={settings} />,
     featured: () => <FeaturedListings locale={l} items={shown} settings={settings} />,
     sold: () => <SoldStrip locale={l} items={soldShown} settings={settings} hidePrice={soldPricesHidden(settings)} />,
     valuation: () => <ValuationInvite locale={l} offer={valuationOffer(settings, l)} />,
     team: () => (teamEnabled && team.length > 0 ? <TeamSection members={team} /> : null),
-    areas: () => (
-      <AreaLinks locale={l} cities={areas} linkable={!areasAreConfigured(settings)} />
-    ),
     contact: () => <ContactSection locale={l} settings={settings} />,
   };
 
