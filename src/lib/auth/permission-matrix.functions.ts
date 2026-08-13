@@ -4,6 +4,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { queryOptions } from "@tanstack/react-query";
 
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   ROLES,
   isRole,
@@ -12,17 +13,25 @@ import {
   type Role,
 } from "./permissions";
 
-export const getPermissionMatrix = createServerFn({ method: "GET" }).handler(
-  async (): Promise<PermissionMatrix> => {
-    // Uses the shared publishable-key client (apikey header shim) — the raw
-    // createClient path fails with opaque sb_publishable_ keys.
-    const { createPublicSupabase } = await import("@/lib/supabase/server-public");
-    const supabase = createPublicSupabase();
+export const getPermissionMatrix = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<PermissionMatrix> => {
+    // The matrix is the admin panel's permission vocabulary: no longer readable
+    // by anon, and gated here too. current_user_is_active() is the right bar —
+    // every active staff member needs the matrix to render the admin shell,
+    // and a deactivated or non-staff account gets nothing.
+    const { data: active } = await context.supabase.rpc("current_user_is_active");
+    if (active !== true) throw new Error("Forbidden");
 
-    const { data, error } = await supabase
+    // Read with the service-role client: the table is authenticated-only and
+    // the shape returned here is the role vocabulary, never user data.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data, error } = await supabaseAdmin
       .from("role_permissions")
       .select("role, permission_key, granted");
     if (error) throw error;
+
 
     const matrix = {} as PermissionMatrix;
     for (const row of (data ?? []) as {
