@@ -23,8 +23,11 @@ export function useNavItems() {
   const teamEnabled = useFeatureFlag("team");
   return [
     { to: "/$locale/immobilien" as const, label: t("nav.listings") },
-    { to: "/$locale/verkauft" as const, label: t("nav.sold") },
-    { to: "/$locale/immobilienbewertung" as const, label: t("nav.valuation") },
+    // Selling replaces the valuation link: an owner weighs "should I sell",
+    // not "I need a valuation". Sold work is evidence, so it is linked from
+    // the homepage and Über mich rather than the main menu.
+    { to: "/$locale/verkaufen" as const, label: t("nav.selling") },
+    { to: "/$locale/erben" as const, label: t("nav.inheritance") },
     {
       to: "/$locale/ueber-mich" as const,
       label: t(teamEnabled ? "nav.about_team" : "nav.about_solo"),
