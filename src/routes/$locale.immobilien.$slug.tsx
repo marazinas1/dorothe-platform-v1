@@ -24,6 +24,7 @@ import {
   type PublicListing,
 } from "@/lib/listings/queries.functions";
 import { getListingPreview } from "@/lib/listings/preview.functions";
+import { countListingView } from "@/lib/listings/views.functions";
 import { pickImageUrl } from "@/lib/listings/image";
 import { pickLocalized } from "@/lib/listings/format";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
@@ -65,6 +66,12 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
       }
       throw notFound();
     }
+    // Count one page view per navigation. Admin previews are never counted, and
+    // the call is fire-and-forget so a counting failure cannot fail the page.
+    if (!deps.preview) {
+      void countListingView({ data: { listing_id: listing.id } }).catch(() => {});
+    }
+
     return {
       settings,
       origin,
