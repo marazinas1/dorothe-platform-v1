@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { SiteNav } from "@/components/brand/SiteNav";
 import { LegalLinks } from "@/components/public/LegalLinks";
 import { SiteLogo } from "@/components/brand/SiteLogo";
+import { HomeLink } from "@/components/shared/HomeLink";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -34,7 +35,9 @@ function Footer({ locale, settings }: { locale: Locale; settings: SiteSettings }
     <footer className="mt-24 border-t border-border/60 bg-background">
       <div className="mx-auto grid max-w-[1400px] gap-10 px-6 py-14 md:grid-cols-3 lg:px-10">
         <div>
-          <SiteLogo settings={settings} />
+          <HomeLink locale={locale} label={settings.site_name}>
+            <SiteLogo settings={settings} />
+          </HomeLink>
           {settings.address_street ? (
             <p className="mt-3 text-sm text-muted-foreground">
               {settings.address_street}

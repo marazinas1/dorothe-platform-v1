@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SiteLogo } from "@/components/brand/SiteLogo";
+import { HomeLink } from "@/components/shared/HomeLink";
 import { NavDrawer } from "@/components/brand/NavDrawer";
 import { LocaleSwitcher } from "@/components/shared/LocaleSwitcher";
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
@@ -72,13 +73,13 @@ export function SiteNav({ locale, settings, overlay = false }: Props) {
             scrolled ? "h-20" : "h-24 md:h-28",
           )}
         >
-          <Link
-            to="/$locale"
-            params={{ locale }}
+          <HomeLink
+            locale={locale}
+            label={settings.site_name}
             className="min-w-0 shrink-0 transition-opacity duration-300 hover:opacity-80"
           >
             <SiteLogo settings={settings} size={scrolled ? "sm" : "md"} />
-          </Link>
+          </HomeLink>
 
           <div className="hidden items-center gap-8 md:flex">
             {nav.map((n) => (
