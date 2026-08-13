@@ -13,9 +13,8 @@ import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 
 export const Route = createFileRoute("/$locale/admin/listings/$id")({
   // ?field=<anchor> lets the dashboard hand over to the exact field to fix.
-  validateSearch: (search: Record<string, unknown>) => ({
-    field: typeof search.field === "string" ? search.field : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { field?: string } =>
+    typeof search.field === "string" ? { field: search.field } : {},
   component: EditListing,
 });
 
