@@ -8,6 +8,11 @@ import type { SiteSettings } from "@/types/site-settings";
 type Props = {
   locale: Locale;
   settings: SiteSettings;
+  /**
+   * Portrait resolved by the homepage plan. It is null when the hero already
+   * shows the same photograph, so the face never appears twice on one page.
+   */
+  portrait?: string | null;
 };
 
 /**
@@ -16,7 +21,7 @@ type Props = {
  * story — solo brokers speak in the first person, teams in the plural.
  * Falls back to the messages file only if a client has not filled it in.
  */
-export function AboutBroker({ locale, settings }: Props) {
+export function AboutBroker({ locale, settings, portrait }: Props) {
   const { t } = useTranslation();
 
   const body =
@@ -34,9 +39,9 @@ export function AboutBroker({ locale, settings }: Props) {
           <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
             {t("home.about")}
           </div>
-          {settings.primary_agent_photo_url ? (
+          {portrait ? (
             <img
-              src={settings.primary_agent_photo_url}
+              src={portrait}
               alt={settings.primary_agent_name ?? ""}
               loading="lazy"
               width={1200}

@@ -56,18 +56,54 @@ UPDATE public.site_settings SET
   primary_agent_name      = 'Dorothe Waltner',
   primary_agent_role      = 'Inhaberin & Immobilienmaklerin',
   primary_agent_photo_url = 'https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/agent/dorothe-waltner-portrait.avif',
-  og_default_image        = 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=1200&h=630&q=80',
+  -- No stock link-preview image: the resolver falls back to a featured
+  -- listing cover, then to the portrait.
+  og_default_image        = NULL,
+  hero_headline = '{
+    "de":"Ihre Immobilie im Saarland — bewertet und verkauft von einer zertifizierten Sachverständigen.",
+    "en":"Your property in the Saarland — valued and sold by a certified expert."
+  }'::jsonb,
+  hero_subline = '{
+    "de":"Eine Maklerin, wenige Objekte gleichzeitig, volle Aufmerksamkeit für Ihres. Vom ersten Wertgutachten bis zum Notartermin sprechen Sie immer mit mir.",
+    "en":"One broker, few properties at a time, full attention on yours. From the first valuation to the notary appointment you always speak with me."
+  }'::jsonb,
+  service_areas = '["Püttlingen","Völklingen","Riegelsberg","Heusweiler","Schwalbach","Saarbrücken","Saarlouis","Schmelz"]'::jsonb,
+  show_sold_prices = false,
+  valuation_offer = '{
+    "de":{
+      "body":"Ich bewerte Ihre Immobilie persönlich vor Ort — als von der DEKRA geprüfte Sachverständige für Immobilienbewertung, nicht per Online-Rechner.",
+      "deliverables":[
+        "Termin vor Ort mit Besichtigung und Aufnahme aller wertrelevanten Merkmale",
+        "Marktwerteinschätzung auf Basis aktueller Vergleichsdaten aus dem Saarland",
+        "Schriftliche Auswertung mit realistischer Preisspanne",
+        "Persönliches Gespräch über Zeitpunkt, Unterlagen und Vermarktungsstrategie"
+      ],
+      "price_note":"Für Eigentümer, die einen Verkauf erwägen, ist die Wertermittlung kostenfrei und unverbindlich."
+    },
+    "en":{
+      "body":"I value your property in person, on site — as a DEKRA-certified property valuation expert, not through an online calculator.",
+      "deliverables":[
+        "On-site appointment with a full survey of all value-relevant features",
+        "Market value assessment based on current comparable data from the Saarland",
+        "A written summary with a realistic price range",
+        "A personal conversation about timing, documents and sales strategy"
+      ],
+      "price_note":"For owners considering a sale the valuation is free of charge and without obligation."
+    }
+  }'::jsonb,
+  -- Typographic hero: no photograph competes with the opening statement.
   homepage_sections = '[
-    {"key":"hero","enabled":true,"variant":"region","image":"https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2400&q=80"},
-    {"key":"categories","enabled":true},
-    {"key":"featured","enabled":true},
-    {"key":"credibility","enabled":true},
-    {"key":"sold","enabled":true},
+    {"key":"hero","enabled":true,"variant":"text"},
+    {"key":"photoband","enabled":true},
     {"key":"about","enabled":true},
-    {"key":"team","enabled":false},
-    {"key":"areas","enabled":true},
+    {"key":"paths","enabled":true},
+    {"key":"credibility","enabled":true},
+    {"key":"featured","enabled":true},
+    {"key":"sold","enabled":true},
+    {"key":"valuation","enabled":true},
     {"key":"contact","enabled":true}
   ]'::jsonb,
+
   logo_url         = 'https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/brand/logo-4-waende-saar.png',
   seals = '[
     {"url":"https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/brand/seal-sprengnetter-immo-erbrecht.png",

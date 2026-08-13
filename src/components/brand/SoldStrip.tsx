@@ -13,10 +13,12 @@ type Props = {
   locale: Locale;
   items: PublicListing[];
   settings: SiteSettings;
+  /** Achieved prices stay hidden unless the client opts in. */
+  hidePrice?: boolean;
 };
 
 /** Sold properties as credibility proof. Kept tight, three items max. */
-export function SoldStrip({ locale, items, settings }: Props) {
+export function SoldStrip({ locale, items, settings, hidePrice = false }: Props) {
   const { t } = useTranslation();
   if (items.length === 0) return null;
 
@@ -37,6 +39,7 @@ export function SoldStrip({ locale, items, settings }: Props) {
               locale={locale}
               settings={settings}
               size="compact"
+              hidePrice={hidePrice}
             />
           </Reveal>
         ))}

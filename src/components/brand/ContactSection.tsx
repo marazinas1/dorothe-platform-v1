@@ -22,7 +22,7 @@ type Tab = "buyer" | "seller";
 export function ContactSection({ settings }: Props) {
   const { t } = useTranslation();
   const teamEnabled = useFeatureFlag("team");
-  const [tab, setTab] = useState<Tab>("buyer");
+  const [tab, setTab] = useState<Tab>("seller");
 
   return (
     <section className="mx-auto mt-40 max-w-[1400px] px-6 pb-32 lg:px-10">
@@ -58,11 +58,13 @@ export function ContactSection({ settings }: Props) {
 
         <div className="md:col-span-8">
           <div role="tablist" className="flex gap-10 border-b border-border">
-            <TabButton active={tab === "buyer"} onClick={() => setTab("buyer")}>
-              {t("inquiry.buyer.tab")}
-            </TabButton>
+            {/* Selling first, and selected by default: the seller is the visitor
+                whose decision this page is trying to win. */}
             <TabButton active={tab === "seller"} onClick={() => setTab("seller")}>
               {t("inquiry.seller.tab")}
+            </TabButton>
+            <TabButton active={tab === "buyer"} onClick={() => setTab("buyer")}>
+              {t("inquiry.buyer.tab")}
             </TabButton>
           </div>
 

@@ -14,13 +14,15 @@ type Props = {
   locale: Locale;
   settings: SiteSettings;
   size?: "large" | "compact";
+  /** Suppress the price row (achieved prices on closed properties). */
+  hidePrice?: boolean;
 };
 
 /**
  * Brand-owned listing card: photograph, fact pills, headline, two lines of
  * description, price. Hairline border, uniform media radius, no shadow.
  */
-export function ListingCard({ listing, locale, settings, size = "large" }: Props) {
+export function ListingCard({ listing, locale, settings, size = "large", hidePrice = false }: Props) {
   const { t } = useTranslation();
   const primary = listing.images.find((i) => i.is_primary) ?? listing.images[0];
   const image =
@@ -106,10 +108,16 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
         ) : null}
 
         <div className="mt-5 flex items-baseline justify-between gap-6 border-t border-border/70 pt-4 text-sm">
-          <span className="font-body text-foreground">
-            <span className="text-muted-foreground">{priceLabel}</span>{" "}
-            <span className="tabular-figures">{price}</span>
-          </span>
+          {/* On closed properties the price row disappears entirely rather than
+              reading "on request" — the sale is over, there is nothing to ask. */}
+          {hidePrice ? (
+            <span />
+          ) : (
+            <span className="font-body text-foreground">
+              <span className="text-muted-foreground">{priceLabel}</span>{" "}
+              <span className="tabular-figures">{price}</span>
+            </span>
+          )}
           {listing.status === "sold" && listing.sold_at ? (
             <span className="text-xs text-muted-foreground">
               {t("listings.sold_on").replace("{{date}}", formatDate(listing.sold_at, locale))}

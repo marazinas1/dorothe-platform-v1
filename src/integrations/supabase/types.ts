@@ -716,6 +716,8 @@ export type Database = {
           geo_lng: number | null
           google_analytics_id: string | null
           google_site_verification: string | null
+          hero_headline: Json
+          hero_subline: Json
           homepage_sections: Json
           id: string
           legal_impressum: Json
@@ -736,12 +738,15 @@ export type Database = {
           radius_scale: string | null
           seals: Json
           secondary_color: string | null
+          service_areas: Json
           service_region: Json
+          show_sold_prices: boolean
           site_name: string
           social: Json
           surface_color: string | null
           text_color: string | null
           updated_at: string
+          valuation_offer: Json
           whatsapp: string | null
         }
         Insert: {
@@ -770,6 +775,8 @@ export type Database = {
           geo_lng?: number | null
           google_analytics_id?: string | null
           google_site_verification?: string | null
+          hero_headline?: Json
+          hero_subline?: Json
           homepage_sections?: Json
           id?: string
           legal_impressum?: Json
@@ -790,12 +797,15 @@ export type Database = {
           radius_scale?: string | null
           seals?: Json
           secondary_color?: string | null
+          service_areas?: Json
           service_region?: Json
+          show_sold_prices?: boolean
           site_name: string
           social?: Json
           surface_color?: string | null
           text_color?: string | null
           updated_at?: string
+          valuation_offer?: Json
           whatsapp?: string | null
         }
         Update: {
@@ -824,6 +834,8 @@ export type Database = {
           geo_lng?: number | null
           google_analytics_id?: string | null
           google_site_verification?: string | null
+          hero_headline?: Json
+          hero_subline?: Json
           homepage_sections?: Json
           id?: string
           legal_impressum?: Json
@@ -844,12 +856,15 @@ export type Database = {
           radius_scale?: string | null
           seals?: Json
           secondary_color?: string | null
+          service_areas?: Json
           service_region?: Json
+          show_sold_prices?: boolean
           site_name?: string
           social?: Json
           surface_color?: string | null
           text_color?: string | null
           updated_at?: string
+          valuation_offer?: Json
           whatsapp?: string | null
         }
         Relationships: []
