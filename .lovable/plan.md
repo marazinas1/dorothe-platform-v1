@@ -1,110 +1,150 @@
-# Security review — seven findings, judged one by one
+# Homepage rebuild — person first, evidence after
 
-Everything below was verified against the live database (policies, grants, view options, function definitions) and the code paths that use them. No fixes applied yet.
+Seven blocks, a portrait hero, credentials as claims, a compact sold row, a loud
+valuation block, and a monochrome logo in the header. Presentation edited in
+code (PLAN.md §1); logic in `/lib`; strings in both message files.
 
----
+## 1. New block order
 
-## 7 (first, because it changes the picture) — "Security Definer View" — FALSE POSITIVE, do not fix
+```text
+1 Hero            text + portrait, side by side
+2 Two paths       unchanged
+3 Why her         her paragraph + three credential claims (one block)
+4 Selected        three full cards
+5 Recently sold   compact cards, four across
+6 Valuation       loudest block after the hero
+7 Contact         unchanged
+```
 
-The flagged view is **`public.listings_public`**. It is ours. Verified: it is the only one of the four public views without `security_invoker`; `listing_images_public`, `listing_tours_public` and `listing_documents_public` all carry `{security_invoker=true}`.
+Removed: photo band, standalone "Über uns", areas block stays out of the order
+list only if it is currently disabled — it is dropped from the homepage set.
+`homepage_sections` in the seed is rewritten to exactly these seven keys, and
+`AboutBroker` is retired as a homepage block: its paragraph moves into the
+credentials block as its opening.
 
-Why it is flagged: a view without `security_invoker` runs with the owner's rights, so the linter warns that RLS on the base table is bypassed.
+## 2. Hero — split, with the signature under the face
 
-Why that is intentional here: `anon` has **no** SELECT on `public.listings` (revoked deliberately). `listings_public` filters `status IN (active, coming_soon, reserved, sold, rented)` inside the view and masks address/geo by `geo_precision` and commission by `commission_note_public`. It is the single public door to listing data. Flipping it to `security_invoker` would make it evaluate as `anon`, which has no read on `listings` — every public listing page, the index, the sold archive and (through the joined child views) all photos would return zero rows.
+- Seed flips the hero to `variant: "split"` with the portrait as its image, so
+  the existing `buildHomepagePlan` picks the `split` layout.
+- Text column (7/12): company name small above, headline, supporting line, the
+  two existing actions.
+- Portrait column (5/12): portrait crop `aspect-[4/5]`, full column width,
+  `object-cover object-top`, with `Signature` directly beneath it (the
+  signature moves out of the text column in this layout).
 
-**Proposal: no change. Mark the finding as intentional in security memory with this reasoning so it stops being re-raised.**
+**Tablet and mobile.** Side by side holds at `md` and up (768px+). Below that
+the grid collapses to one column with the portrait *after* the text — the
+headline must still be the first thing read on a phone. At `md` the portrait
+narrows to 5/12 of a ~768px viewport, so the crop tightens to `aspect-[3/4]`
+between `md` and `lg` to stop it becoming a thin sliver; from `lg` it returns
+to `4/5`. Minimum rendered width is never below ~240px, so it never reads as a
+small floating square.
 
-## The other must-not-fix — "Public Can Execute SECURITY DEFINER Function"
+**No portrait.** Already handled and stays handled: `normalizeLayout` degrades
+`split` to `text` when there is no image, and the hero renders the current
+typographic layout with the signature on the actions baseline. Nothing renders
+a grey rectangle or a stock photo. Verified in `src/lib/homepage/plan.ts`.
 
-Your reading is correct, and the category covers more than one function. `SECURITY DEFINER` functions currently executable by `anon`:
+**Portrait interlock.** `buildHomepagePlan` sets `aboutPortrait = null` when the
+hero image equals `primary_agent_photo_url`. Since "Über uns" is gone, the
+portrait can only appear once anyway; the interlock is kept and re-verified by
+comparing the two URLs after the seed change.
 
-| Function | Anon needs it? | Verdict |
-|---|---|---|
-| `listing_is_public(uuid)` | Yes — it is the `USING` expression of the anon SELECT policies on `listing_images`, `listing_tours`, `listing_documents`. Revoking it removes every public photo, floor plan, tour and document. | **Keep. False positive.** |
-| `increment_listing_view(uuid)` | No — only ever called through the service-role client | See 4 |
-| `current_user_has_permission`, `current_user_role`, `current_user_is_active`, `has_role`, `count_active_owners`, `storage_can_edit_listing_object` | No — no anon-facing policy references them | See 6 |
-| trigger functions (`handle_new_user`, `listings_set_actor`, `listings_validate_energy_on_publish`, `permissions_guard_overrides`, `profiles_*`) | No — triggers fire regardless of EXECUTE grants | Revoke from anon and authenticated (harmless, silences noise) |
+## 3. Photo band removed
 
-So: the judgement is per function, and only `listing_is_public` stays open to anon.
+Delete `src/components/brand/PhotoBand.tsx`, its renderer entry, the
+`photoband` seed section, and `photoBandImages` in `src/lib/homepage/plan.ts`.
+No replacement imagery.
 
----
+## 4. Credentials become three claims
 
-## 1 — Slug history readable by anon — REAL
+New shape, in her language, opening with her own paragraph:
 
-Verified: `GRANT SELECT ... TO anon` plus policy `slug history read` = `USING (true)`. Anyone with the anon key can list every superseded slug and `listing_id`, including drafts and archived listings.
+```text
+Her paragraph (about_body, lead size, short measure)
+──────────────────────────────────────────────────────
+[ device ]        [ device ]        [ device ]
+Claim heading     Claim heading     Claim heading
+Supporting        Supporting        Supporting
+sentence          sentence          sentence
+Evidence line     Evidence line     Evidence line
+──────────────────────────────────────────────────────
+quiet membership line
+```
 
-The redirect itself already refuses to leak: `resolveSupersededSlug` looks the id up in `listings_public`, so a history hit on a non-public listing returns `null`. Only the enumeration is the problem.
+- Three claims in a `md:grid-cols-3` grid, each a card-less panel: a rule above,
+  generous internal space, no borders between columns on mobile.
+- **Graphic device:** a large tabular numeral (01 / 02 / 03) in the heading serif
+  at low emphasis, plus a short sage rule above each claim. No icon set is
+  introduced — the page's visual language is type, rule and space, and numbering
+  reads as an argument in three parts rather than a spec table. (If you prefer
+  icons, say so and I will swap the numeral for a thin line-icon trio.)
+- Each claim: heading, one supporting sentence, one quiet evidence line naming
+  the credential (that is where the certifying body appears — as evidence, never
+  as the headline).
+- All six claim strings plus the membership line ship as clearly named
+  placeholder keys in `de.json` and `en.json` for you to write.
+- **Membership line:** one single line, singular wording, naming only the
+  Europäische Immobilienakademie. Nothing plural, nothing implying further
+  associations.
+- The "Nachweise … zur Einsicht vor" line is deleted.
+- `src/lib/homepage/credentials.ts` and `CredentialGroups.tsx` (the
+  institution/qualification table) are retired; the new block reads its three
+  claims from messages and its opening paragraph from `about_body`. Trust seals
+  render as before if configured.
 
-**Proposal**
-- Migration: drop the anon SELECT policy, `REVOKE SELECT ... FROM anon`. Keep the authenticated write/read policy gated by `current_user_has_permission('listing.edit.any')`.
-- Change `resolveSupersededSlug` to read the history table through the server-only admin client inside its handler, then keep the existing second step against `listings_public`. Result unchanged for published listings, `null` for drafts/archived, table invisible to anon.
+## 5. Selected properties — three-line titles
 
-## 2 — `listing-images` bucket public regardless of status — REAL, and the honest answer is: not worth full gating
+In `ListingCard`, the `large` size title becomes `line-clamp-3` with
+`min-h-[3.75em]` (three lines reserved), so a truncating German title gets one
+more line and every card in a row still ends at the same height. The `compact`
+size keeps two lines. No other change to the card.
 
-Verified: bucket is public; the only anon SELECT policy is `bucket_id = 'listing-images'`. Paths are `listings/<listing uuid>/<image uuid>/<variant>.webp` — two unguessable UUIDs, and the image rows for a draft are not readable by anon, so there is no way to *discover* a draft's paths through the API. Exposure requires someone already holding the URL.
+## 6. Recently sold — compact variant of the same card
 
-Cost of real gating: a public bucket serves images straight from CDN with plain `<img src>`. Gating on listing status means making the bucket private, which kills every public `<img>` URL. Then:
-- every public read path (`listing_images_public.variants` holds absolute public URLs) has to switch to signed URLs minted server-side per request, with an expiry; OG/`twitter:image` tags need long-lived signed URLs, which browsers and crawlers cache badly and which expire in shared links;
-- the browser upload pipeline stores those absolute URLs in `variants` — that JSON and `src/lib/listings/image.ts` would have to become path-based;
-- the admin editor and dashboard thumbnails move to signed URLs too;
-- CDN caching is lost, so listing pages get slower.
+One component, one extra prop path. `ListingCard` already accepts
+`size="compact"`; the variant is extended so `compact` also:
 
-That is a multi-day change affecting the image pipeline, SEO tags and the admin, for an exposure that requires a leaked UUID path.
+- hides the description paragraph,
+- uses a shorter media aspect and tighter padding,
+- keeps status, town, key figures and the sold date.
 
-**Proposal (pick one):**
-- **A (recommended):** leave the public bucket; add a migration that hard-deletes a listing's storage folder when it is archived or reverted to draft — no, correction: on *unpublish* the row stays, so instead treat this as accepted risk and record it in security memory with the UUID-path reasoning. No code change.
-- **B:** full private-bucket + signed-URL migration, estimated a full working session across the pipeline, admin, SEO tags and public components, plus an end-to-end re-verification. Only worth it if drafts routinely contain owner-confidential photos that must be provably unreachable.
+`SoldStrip` passes `size="compact"` and switches to a four-across grid
+(`grid-cols-2 md:grid-cols-3 lg:grid-cols-4`) with up to four items, and a
+quieter heading tier (`text-section-sm`). Prices stay hidden exactly as now
+(`soldPricesHidden`, unchanged). No second card component and no copy.
 
-I recommend A now and B only on your word.
+## 7. Valuation — real weight
 
-## 3 — Signed-in users can execute SECURITY DEFINER functions — REAL, and worse than the scanner says
+Keeps its late position and gains emphasis: full-bleed band on the surface
+token with the widest break above and below, `text-hero`-adjacent scale for the
+heading, the deliverables set at lead size in a short measure, and one large
+primary action (the secondary text link is dropped so there is a single ask).
 
-Verified: `admin_stale_active` and `admin_dashboard_metrics` are *not* SECURITY DEFINER (so RLS still applies to them) but they carry **no internal permission check** and are executable by every authenticated user. The dashboard asserts permission in the server function only — exactly the pattern you called out. `storage_can_edit_listing_object` and the trigger functions are also broadly executable.
+## 8. Logo — monochrome header, original below
 
-**Proposal**
-- Migration: add an internal guard at the top of `admin_stale_active` and `admin_dashboard_metrics` using `current_user_has_permission('listing.edit.own')` / `('listing.edit.any')` (same rule the dashboard uses), raising on failure. No role literals.
-- `REVOKE EXECUTE ... FROM anon` on both, and on every trigger function and on `storage_can_edit_listing_object` (used only inside storage policies, which run as the definer chain, not via EXECUTE grants — verified no anon-facing policy calls it).
-- Keep the server-function assertion as defence in depth.
+- Download the supplied logo from the `site-assets` brand path, and derive a
+  one-colour version with a script: keep the alpha channel exactly as it is, set
+  every opaque pixel to one dark ink value (the mark's shape is untouched, and
+  it is dark-on-light, not a palette recolour).
+- Both files live together in `src/assets/brand/`: `logo.png` (original, as
+  supplied) and `logo-mono.png` (derived). Swapping either file changes the site
+  with no code edit.
+- `SiteLogo` gains `variant?: "mono" | "original"` resolved through a tiny
+  `src/lib/theme/logo.ts` map, falling back to `settings.logo_url` when a clone
+  ships no asset. Header passes `mono`; footer and Impressum pass `original`.
 
-## 4 — `increment_listing_view` callable by anon — REAL, and cheaply fixed
+## Technical notes
 
-Verified: it is `SECURITY DEFINER` with EXECUTE granted to `anon` and `authenticated`, but the app calls it **only** from `views.server.ts` through `supabaseAdmin` (service role). So the anon grant buys nothing and lets anyone inflate any published listing's counter with a loop.
-
-**Proposal:** `REVOKE EXECUTE ... FROM anon, authenticated`, leaving `service_role`. No cookies, no identifiers, no design change — the existing bot/prefetch/auth filtering in `isCountableView()` stays the only heuristic. Counts then can only be moved by requests that actually reach the server route. Residual exposure (repeat page loads by one visitor) is unchanged and, per the cookieless design, not worth addressing.
-
-## 5 — Permission matrix readable by anon — REAL, small
-
-Verified: `role_permissions readable by all` = `TO anon, authenticated USING (true)`, and `GRANT SELECT` includes anon.
-
-Caveat found while checking: `getPermissionMatrix` reads this table through the **publishable-key** client, i.e. as anon. Restricting the policy without touching that would break the admin permission matrix.
-
-**Proposal:** migration restricts the policy and grant to `authenticated` (+ `service_role`), and `getPermissionMatrix` switches to the server-only admin client inside its handler. Same for `owner_only_permissions` if it turns out to be read on the same path (its policy is already authenticated-only).
-
-## 6 — Permission-check helpers callable by anon — REAL, small
-
-`current_user_role`, `current_user_has_permission`, `current_user_is_active`, `has_role`, `count_active_owners` — all return only booleans/strings about the caller, and no anon-facing policy uses them (verified against `pg_policies`).
-
-**Proposal:** `REVOKE EXECUTE ... FROM anon` on those five, keep `authenticated` and `service_role`. `listing_is_public` explicitly excluded.
-
----
-
-## Dependency vulnerabilities — cannot confirm "three"
-
-The platform dependency scanner reports **no high or critical vulnerabilities**, and the registry audit endpoint is unavailable in this sandbox (404), so I cannot enumerate moderate/low advisories. I will not guess package names. Either paste the three entries you can see and I will report package, severity, whether the vulnerable code path is reachable here, and upgrade risk — or I will report this as "no high/critical, lower severities not retrievable". Nothing gets upgraded in this task either way.
-
----
-
-## What the fix migration would contain (if you approve 1, 3, 4, 5, 6)
-
-One migration, no client data:
-1. slug history: drop anon policy + revoke anon SELECT.
-2. `admin_stale_active`, `admin_dashboard_metrics`: internal permission guard via existing helpers; revoke anon EXECUTE.
-3. `increment_listing_view`: revoke anon + authenticated EXECUTE.
-4. `role_permissions`: policy and grant restricted to authenticated/service_role.
-5. Revoke anon EXECUTE on the five caller-scoped helpers, `storage_can_edit_listing_object`, and all trigger functions. `listing_is_public` untouched.
-
-Plus two code changes: `resolveSupersededSlug` and `getPermissionMatrix` move their reads to the admin client inside their handlers.
-
-## Verification after the migration
-
-With the anon key end to end, via a headless browser against the running app: homepage renders, listing index lists published properties, a listing detail page resolves with photos loading from the images bucket, the map placeholder loads its tiles, an old slug redirects to the current one for a published listing, an old slug of a draft 404s, and the admin dashboard + settings still load for the owner account. Also re-run the database linter to confirm only the two intentional findings remain.
+- Files touched: `src/routes/$locale.index.tsx` (composition only),
+  `src/components/brand/Hero.tsx`, `ListingCard.tsx` (title lines + compact
+  variant), `SoldStrip.tsx`, `ValuationInvite.tsx`, `SiteLogo.tsx`, a new
+  `WhyHer`/credentials block split into small presentational parts, new
+  `src/lib/theme/logo.ts`, deletions of `PhotoBand.tsx`, `AboutBroker.tsx`,
+  `CredentialGroups.tsx`, `src/lib/homepage/credentials.ts`.
+- `supabase/seed/de-waltner.sql` updated for the new `homepage_sections` and the
+  split hero. No client data outside the seed.
+- Every file stays under 200 lines; existing type tiers and `SECTION_GAP` used
+  throughout; SSR untouched; `de.json`/`en.json` kept key-identical so the i18n
+  check stays green.
+- Untouched: listing detail page, catalogue, admin.
