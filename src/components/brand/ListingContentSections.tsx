@@ -15,7 +15,9 @@ type Props = {
 // Only the sections that are still written by hand. Property and building info
 // were retired in favour of the generated specification table, so legacy rows
 // keep their data in the database but stop being rendered twice.
-const KNOWN_KEYS = ["highlights", "surroundings"] as const;
+// Surroundings moved into the location block, where a reader is already
+// thinking about where the property is.
+const KNOWN_KEYS = ["highlights"] as const;
 
 function pickItems(items: unknown, locale: string): string[] {
   if (!items || typeof items !== "object") return [];

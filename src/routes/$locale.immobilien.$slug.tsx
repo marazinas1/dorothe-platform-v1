@@ -3,17 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { PublicChrome } from "@/components/public/PublicChrome";
-import { ShareButtons } from "@/components/public/ShareButtons";
-import { ListingGallery } from "@/components/brand/ListingGallery";
-import { ListingHeroOverlay } from "@/components/brand/ListingHeroOverlay";
-import { ListingFactsBar } from "@/components/brand/ListingFactsBar";
-import { ListingFeatures } from "@/components/brand/ListingFeatures";
-import { ListingSpecs } from "@/components/brand/ListingSpecs";
-import { ListingHeadline } from "@/components/brand/ListingHeadline";
-import { ListingContentSections } from "@/components/brand/ListingContentSections";
-import { EnergyPanel } from "@/components/brand/EnergyPanel";
-import { ListingAgent } from "@/components/brand/ListingAgent";
-import { ListingLocationMap } from "@/components/brand/ListingLocationMap";
+import { ListingDetailBody } from "@/components/brand/ListingDetailBody";
 
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
@@ -205,13 +195,7 @@ function ListingDetail() {
 
   if (!listing) return null;
   const l = listing as PublicListing;
-  const title = listingDisplayName(l, locale, t);
-  const shareUrl = `${origin}/${locale}/immobilien/${l.slug}`;
-
-  const locationLine =
-    l.geo_precision === "hidden"
-      ? [l.address_zip, l.address_city].filter(Boolean).join(" ")
-      : [l.address_street, l.address_zip, l.address_city].filter(Boolean).join(" · ");
+  const title = listingDisplayName(l, locale as Locale, t);
 
   return (
     <PublicChrome locale={locale as Locale} settings={settings} heroOverlay>
@@ -223,81 +207,13 @@ function ListingDetail() {
             })}
           </div>
         ) : null}
-        {/* 1. Hero gallery + overlaid headline */}
-        <section className="mx-auto max-w-[1600px] px-3 pt-6 sm:px-6 lg:px-8">
-          <ListingGallery
-            images={l.images}
-            locale={locale as Locale}
-            title={title}
-            overlay={
-              <ListingHeroOverlay
-                title={title}
-                locationLine={locationLine}
-                contactHref="#kontakt"
-              />
-            }
-          />
-        </section>
-
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-10">
-          {/* 2. Facts */}
-          <section className="mt-20">
-            <ListingFactsBar
-              listing={l}
-              locale={locale as Locale}
-              settings={settings}
-            />
-          </section>
-
-          {/* 2b. Equipment features */}
-          <section className="mt-20">
-            <ListingFeatures features={l.features} />
-          </section>
-
-          {/* 3. Description */}
-          <section className="mt-28">
-            <ListingHeadline listing={l} locale={locale as Locale} />
-          </section>
-
-          {/* 3b. Full specification, generated from the structured fields */}
-          <section className="mt-28">
-            <ListingSpecs listing={l} locale={locale as Locale} settings={settings} />
-          </section>
-
-          {/* 4. Content sections */}
-          <section className="mt-32">
-            <ListingContentSections
-              sections={l.content_sections}
-              locale={locale as Locale}
-            />
-          </section>
-
-          {/* 5. Energy panel */}
-          <section className="mt-32">
-            <EnergyPanel energy={l.energy} propertyType={l.property_type} />
-          </section>
-
-          {/* 6. Location map — precision-aware, hydrates on the client */}
-          <section className="mt-32">
-            <ListingLocationMap listing={l} locale={locale as Locale} />
-          </section>
-
-
-          {/* 7. Agent + inquiry */}
-          <section id="kontakt" className="mt-32 scroll-mt-32">
-            <ListingAgent listingId={l.id} settings={settings} />
-          </section>
-
-          {/* 8. Share */}
-          <section className="mt-24">
-            <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              {t("listings.detail.share")}
-            </div>
-            <div className="mt-4">
-              <ShareButtons url={shareUrl} title={title} />
-            </div>
-          </section>
-        </div>
+        <ListingDetailBody
+          listing={l}
+          locale={locale as Locale}
+          settings={settings}
+          title={title}
+          shareUrl={`${origin}/${locale}/immobilien/${l.slug}`}
+        />
       </article>
     </PublicChrome>
   );

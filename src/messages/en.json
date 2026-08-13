@@ -127,7 +127,14 @@
         "property_info": "Property information",
         "building_info": "Building & technology",
         "surroundings": "Location & surroundings",
-        "specs": "Specification"
+        "specs": "Specification",
+        "size": "Size & rooms",
+        "building": "Building & technology",
+        "costs": "Price & costs",
+        "terms": "Terms",
+        "plans": "Floor plans & visualisations",
+        "documents": "Documents",
+        "related": "Other properties"
       },
       "unavailable_title": "Property unavailable",
       "unavailable_body": "This listing is no longer online. Browse our current offerings instead.",
@@ -157,7 +164,51 @@
       "total_rent": "Total rent",
       "deposit": "Deposit",
       "price_sale": "Purchase price",
-      "price_rent": "Base rent"
+      "price_rent": "Base rent",
+      "gallery_open": "Open gallery",
+      "gallery_prev": "Previous photo",
+      "gallery_next": "Next photo",
+      "gallery_close": "Close",
+      "floorplan": "Floor plan",
+      "visualization": "Visualisation (indicative only)",
+      "map_load": "Load map",
+      "map_consent_note": "The map is loaded from OpenStreetMap. Your IP address is sent to the map service when you do.",
+      "heating_costs": "Heating costs",
+      "heating_costs_included": "Included in the additional costs",
+      "heating_costs_excluded": "Not included in the additional costs",
+      "commission_tenant": "Commission for the tenant",
+      "commission_buyer": "Buyer's commission",
+      "commission_free_tenant": "No commission for the tenant",
+      "commission_free_buyer": "No commission for the buyer",
+      "commission_payer_rent": {
+        "buyer": "paid by the tenant",
+        "seller": "paid by the landlord",
+        "shared": "shared"
+      },
+      "document_open": "Open",
+      "document_loading": "Loading …",
+      "document_on_request": "On request",
+      "energy_note_de": "Disclosed under the German Buildings Energy Act (GEG). The energy certificate itself is authoritative and is shown in the original at a viewing.",
+      "energy_note_at": "Disclosed under the Austrian Energy Certificate Act (EAVG). HWB and fGEE are taken from the certificate, which is shown in the original at a viewing.",
+      "energy_note_ch": "Disclosed under GEAK. The building energy certificate is authoritative and is shown in the original at a viewing.",
+      "energy_note_generic": "The energy certificate is authoritative and is shown in the original at a viewing.",
+      "energy_fields": {
+        "certificate_type": "Certificate type",
+        "certificate": {
+          "demand": "Demand certificate",
+          "consumption": "Consumption certificate"
+        },
+        "final_energy": "Final energy",
+        "final_energy_demand": "Final energy demand",
+        "final_energy_consumption": "Final energy consumption",
+        "energy_source": "Energy source",
+        "year_built": "Year built per certificate",
+        "certificate_date": "Certificate issued",
+        "certificate_valid_until": "Valid until",
+        "hwb": "Heating demand (HWB)",
+        "eeb": "Final energy demand (EEB)",
+        "fgee": "Overall energy efficiency factor (fGEE)"
+      }
     },
     "pager": {
       "prev": "Previous",
@@ -261,6 +312,18 @@
       "more_photos": "+{{count}} photos",
       "prev_photo": "Previous photo",
       "next_photo": "Next photo"
+    },
+    "energyExemption": {
+      "not_required": "No energy certificate is required for this property.",
+      "listed_building": "Listed building — exempt from the certificate requirement.",
+      "new_build_pending": "New build — the energy certificate follows on completion."
+    },
+    "documentType": {
+      "floorplan": "Floor plan",
+      "expose": "Brochure",
+      "energy_certificate": "Energy certificate",
+      "land_register": "Land register extract",
+      "other": "Document"
     }
   },
   "inquiry": {
