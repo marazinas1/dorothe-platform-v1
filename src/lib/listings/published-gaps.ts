@@ -7,6 +7,7 @@
 import type { Json } from "@/lib/inquiries/types";
 
 export const PUBLISHED_GAP_KEYS = [
+  "title",
   "description",
   "map",
   "photos",
@@ -17,6 +18,7 @@ export type PublishedGapKey = (typeof PUBLISHED_GAP_KEYS)[number];
 
 /** Form anchor each gap deep-links to. */
 export const GAP_ANCHOR: Record<PublishedGapKey, string> = {
+  title: "title",
   description: "texts",
   map: "map",
   photos: "photos",
@@ -27,6 +29,7 @@ export const GAP_ANCHOR: Record<PublishedGapKey, string> = {
 export const MIN_PUBLIC_PHOTOS = 5;
 
 export type PublishedGapRow = {
+  title: Json;
   description: Json;
   geo_lat: number | string | null;
   geo_lng: number | string | null;
@@ -44,6 +47,7 @@ function hasText(value: Json): boolean {
 /** Gaps present on a public listing, in display order. Empty means fine. */
 export function publishedGaps(row: PublishedGapRow): PublishedGapKey[] {
   const gaps: PublishedGapKey[] = [];
+  if (!hasText(row.title)) gaps.push("title");
   if (!hasText(row.description)) gaps.push("description");
   if (row.geo_lat == null || row.geo_lng == null) gaps.push("map");
   if (row.imageCount < MIN_PUBLIC_PHOTOS) gaps.push("photos");

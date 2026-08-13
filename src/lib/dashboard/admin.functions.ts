@@ -117,6 +117,7 @@ export const dashboardGapsQueue = createServerFn({ method: "GET" })
     const withGaps: QueueListingItem[] = [];
     for (const row of (data ?? []) as Json[]) {
       const gaps = publishedGaps({
+        title: row.title,
         description: row.description,
         geo_lat: row.geo_lat,
         geo_lng: row.geo_lng,

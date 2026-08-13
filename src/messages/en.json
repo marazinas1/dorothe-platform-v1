@@ -969,6 +969,7 @@
         }
       },
       "gaps": {
+        "title": "No title",
         "description": "No description",
         "map": "No map position",
         "photos": "Too few photos",
