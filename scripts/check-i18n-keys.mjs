@@ -146,6 +146,23 @@ const IDENTIFIERS = {
   // src/components/admin/dashboard/QueueGroup.tsx — group title/empty state.
   titleKey: { prefix: "admin.dashboard.queue" },
   emptyKey: { prefix: "admin.dashboard.queue" },
+  // src/lib/listings/spec-groups.ts — grouped specification table titles.
+  "group.titleKey": { prefix: "listings.detail.sections" },
+  // src/lib/listings/energy-display.ts — certificate type wording.
+  "cell.valueKey": {
+    keys: [
+      "listings.detail.energy_fields.certificate.demand",
+      "listings.detail.energy_fields.certificate.consumption",
+    ],
+  },
+  // src/lib/listings/commission.ts — who owes the commission.
+  "commission.labelKey": {
+    keys: [
+      "listings.detail.commission",
+      "listings.detail.commission_tenant",
+      "listings.detail.commission_buyer",
+    ],
+  },
   // src/lib/listings/card-specs.ts — accessible labels for the card spec icons.
   "spec.labelKey": {
     keys: [
