@@ -6,7 +6,7 @@ import { PublicChrome } from "@/components/public/PublicChrome";
 import { LegalDocument } from "@/components/public/LegalDocument";
 import type { Locale } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
-import { LEGAL_DOCS, legalText } from "@/lib/legal/documents";
+import { legalText } from "@/lib/legal/documents";
 import { legalHead } from "@/lib/legal/legal-head";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 
@@ -33,7 +33,7 @@ function ImpressumPage() {
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
       <LegalDocument
-        title={t(LEGAL_DOCS.impressum.titleKey)}
+        title={t("legal.impressum.title")}
         text={legalText(settings, "impressum", locale)}
       />
     </PublicChrome>

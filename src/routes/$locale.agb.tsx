@@ -6,7 +6,7 @@ import { PublicChrome } from "@/components/public/PublicChrome";
 import { LegalDocument } from "@/components/public/LegalDocument";
 import type { Locale } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
-import { LEGAL_DOCS, hasLegalDoc, legalText } from "@/lib/legal/documents";
+import { hasLegalDoc, legalText } from "@/lib/legal/documents";
 import { legalHead } from "@/lib/legal/legal-head";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 
@@ -37,7 +37,7 @@ function TermsPage() {
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
       <LegalDocument
-        title={t(LEGAL_DOCS.terms.titleKey)}
+        title={t("legal.terms.title")}
         text={legalText(settings, "terms", locale)}
       />
     </PublicChrome>
