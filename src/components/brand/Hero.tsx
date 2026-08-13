@@ -49,7 +49,7 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
               The portrait keeps its generous scale and is bounded by viewport
               height so the whole hero stays on one screen. */}
           <div className="md:col-span-5">
-            <div className="mx-auto aspect-[3/4] w-full max-w-[420px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(340px,54svh,540px)] lg:w-auto lg:max-w-none">
+            <div className="mx-auto aspect-[3/4] w-full max-w-[420px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(320px,50svh,520px)] lg:w-auto lg:max-w-none">
               <img
                 src={image}
                 alt={settings.primary_agent_name ?? settings.site_name}
