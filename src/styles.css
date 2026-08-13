@@ -262,10 +262,13 @@
    smaller measure than the full-width typographic hero. */
 @utility text-hero-split {
   font-family: var(--font-heading);
-  font-size: clamp(2.25rem, 3.6vw, 3.5rem);
-  line-height: 1.02;
+  /* Scales with height as well as width so the split hero survives a short
+     13" laptop viewport without shrinking the portrait. */
+  font-size: clamp(2.25rem, min(3.4vw, 5.4svh), 3.5rem);
+  line-height: 1.04;
   letter-spacing: -0.02em;
 }
+
 
 @utility text-hero {
   font-family: var(--font-heading);
