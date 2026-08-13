@@ -81,6 +81,7 @@ export function BasicsSection({ form }: { form: ListingFormApi }) {
 
         {applies(shape, "reference_code") ? (
           <FieldRow
+            anchor="reference_code"
             label={t("admin.listings.fields.reference_code")}
             help={t("admin.listings.help.reference_code")}
           >

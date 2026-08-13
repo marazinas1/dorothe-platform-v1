@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { geocodeAddress } from "@/lib/geo/geocode.functions";
 import type { ListingFormApi } from "./listing-form-state";
 import { FieldRow } from "./FieldRow";
+import { fieldAnchorId } from "@/lib/listings/scroll-to-field";
 
 const PinMapCanvas = lazy(() => import("./PinMapCanvas"));
 
@@ -85,7 +86,7 @@ export function AddressMapPicker({ form }: { form: ListingFormApi }) {
                 : t("admin.listings.geocode.noAddress");
 
   return (
-    <div className="rounded-md border border-border">
+    <div id={fieldAnchorId("map")} className="scroll-mt-28 rounded-md border border-border">
       <div className="flex flex-wrap items-center gap-3 px-3 py-2">
         <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           {t("admin.listings.geocode.title")}
