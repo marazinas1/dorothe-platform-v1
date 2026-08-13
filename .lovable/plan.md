@@ -44,7 +44,7 @@ Both listing-side queue groups use the same shape: a bounded candidate set fetch
   - `photos` — fewer than 5 images
   - `title` — no non-empty title in any locale (a published listing with no title is a gap, not a blocker, since it is already live)
 
-  Each gap key maps to a form anchor in the same module, so the editor's checklist rail and the dashboard read one table. The SQL RPC mirrors these predicates for the *bounded selection*; the *rendered gap labels* come from `publishedGaps()` on the returned rows, so the displayed truth is always the TypeScript rule.
+  Each gap key maps to a form anchor in the same module, so the editor's checklist rail and the dashboard read one table. There is no SQL copy of these predicates: selection, count and labels all come from `publishedGaps()` over the fetched candidate set. One rule, one place.
 
 ## Part 2 — Metrics
 
@@ -52,8 +52,8 @@ One period control (presets: 7 days, 30 days, 90 days, this year, custom range) 
 
 - Active listings by status (all statuses, counted in SQL, `group by status`)
 - Enquiries received in period, split by `type`
-- Sold / rented in period (`sold_at` within range; `rented` by `updated_at` within range for rentals)
-- Average response time: `avg(handled_at - created_at)` over enquiries with `handled_at` in the period, shown as a plain duration ("Ø 4 Std. 12 Min., über 3 bearbeitete Anfragen") with the sample size, never a grade
+- Sold / rented in period — both keyed on `sold_at`, which the status-flow trigger already sets for `sold` **and** `rented`; split by `deal_type` so "Verkauft 2 / Vermietet 1" stays honest. `updated_at` is never used here.
+- **Ø Bearbeitungszeit** (time to processing, not response time): `avg(handled_at - created_at)` over enquiries whose `handled_at` falls in the period, rendered as a plain duration with the sample size beside it ("Ø 4 Std. 12 Min. · 3 bearbeitete Anfragen") and a one-line note that it measures when an enquiry was marked handled in the panel, not when the broker replied. Never a score or a grade.
 
 All four come from one RPC `admin_dashboard_metrics(_from timestamptz, _to timestamptz)` returning a single JSON row — one round trip, all aggregation in Postgres.
 
@@ -61,13 +61,13 @@ Not built: revenue/commission, occupancy/booking metrics, view counts.
 
 ## Part 3 — Empty states, in words
 
-- **New enquiries empty**: "Keine unbeantworteten Anfragen." with a quiet check mark — reads as achieved, not blank.
+- **Unhandled enquiries empty**: "Keine offenen Anfragen." with a quiet check mark — reads as achieved, not blank.
 - **Cannot be published empty**: "Alle Entwürfe sind vollständig." (or, with no drafts at all, "Keine Entwürfe offen.")
 - **Published with gaps empty**: "Alle veröffentlichten Objekte sind vollständig."
 - **Reserved empty**: "Keine reservierten Objekte." — neutral, no tone.
 - **Long active, no enquiries empty**: "Kein Objekt länger als 90 Tage ohne Anfrage."
 - **All five empty**: the groups collapse into one calm line — "Nichts liegt an. Alle Objekte und Anfragen sind aktuell." — and metrics stay visible below.
-- **Metrics with no data**: em dash plus label ("Ø Antwortzeit —"), never `0 €`, never `NaN`.
+- **Metrics with no data**: em dash plus label ("Ø Bearbeitungszeit —"), never `0 €`, never `NaN`.
 - **Brand-new install, zero listings**: the queue is replaced entirely by a first-run panel — one heading, one sentence explaining that listings drive the public site, one primary action "Erstes Objekt anlegen" linking to `/$locale/admin/listings/new`. Metrics are omitted in this state (there is nothing to measure yet).
 
 ## Part 4 — Technical shape
