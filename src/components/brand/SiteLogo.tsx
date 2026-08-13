@@ -1,4 +1,5 @@
 import { BrandMark } from "@/components/brand/BrandMark";
+import { logoSrc, type LogoVariant } from "@/lib/theme/logo";
 import { cn } from "@/lib/utils";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -9,16 +10,28 @@ type Props = {
   className?: string;
   /** Rendered height of the logo image. */
   size?: "sm" | "md";
+  /**
+   * `mono` is the one-colour header mark, `original` the supplied file. Both
+   * come from src/assets/brand via @/lib/theme/logo.
+   */
+  variant?: LogoVariant;
 };
 
 /**
- * Renders site_settings.logo_url when a client has uploaded a logo, otherwise
- * falls back to the typographic BrandMark. The file is shown in its own
- * colours; a client that needs a light variant over photography uploads it as
- * logo_dark_url.
+ * Renders the brand mark, falling back to site_settings.logo_url and then to
+ * the typographic BrandMark. A client that needs a light variant over
+ * photography uploads it as logo_dark_url.
  */
-export function SiteLogo({ settings, tone = "dark", className, size = "md" }: Props) {
-  const src = tone === "light" ? (settings.logo_dark_url ?? settings.logo_url) : settings.logo_url;
+export function SiteLogo({
+  settings,
+  tone = "dark",
+  className,
+  size = "md",
+  variant = "original",
+}: Props) {
+  const fallback =
+    tone === "light" ? (settings.logo_dark_url ?? settings.logo_url) : settings.logo_url;
+  const src = tone === "light" ? fallback : logoSrc(variant, fallback);
   if (!src) return <BrandMark settings={settings} tone={tone} className={className} />;
 
   return (
