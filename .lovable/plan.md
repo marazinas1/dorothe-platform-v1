@@ -77,3 +77,16 @@ Not built: revenue/commission, occupancy/booking metrics, view counts.
 - Components under `src/components/admin/dashboard/`: `QueueGroup.tsx` (shell: title, count, empty line, "+N more"), `QueueItem.tsx`, one small item-body per group, `MetricsPanel.tsx`, `PeriodFilter.tsx`, `FirstRunPanel.tsx`. Presentation only, all values via props, tokens only, each file well under 200 lines.
 - Route `src/routes/$locale.admin.index.tsx` composes the blocks and owns the period search param; the admin subtree keeps `ssr: false`.
 - Every string added to `src/messages/de.json` and `en.json`, German using the shipped market terms (Entwurf, Aktiv, Reserviert, Verkauft, Vermietet, Archiviert); `check-i18n-keys.mjs` must pass.
+
+## Part 5 — How the queue will render against today's data
+
+From the current rows (I will confirm this against the built page and report it back):
+
+- **Unhandled enquiries** — empty. One enquiry exists and it is already `handled`. Renders the calm "Keine offenen Anfragen." state.
+- **Cannot be published** — expected to hold both drafts (Nonnweiler-Kastel, Alten Stadtbad), each naming its outstanding checklist items.
+- **Published with gaps** — the full group: 4 of 5 published listings lack map coordinates; one of those also has no title, no description and no Objektnummer; one has 6 photos plus a missing Objektnummer.
+- **Reserved** — empty. No listing is in `reserved`.
+- **Long active, no enquiries** — empty. Everything was published yesterday, far inside 90 days.
+- **Metrics** — active by status shows 5 Aktiv / 2 Entwurf / 2 Verkauft; enquiries in period likely 0 or 1; sold/rented in a 30-day window shows 2 Verkauft, 0 Vermietet; Ø Bearbeitungszeit shows a value only if that one enquiry's `handled_at` falls inside the period, otherwise an em dash.
+
+So on the first open, one group is full, one has two items, and three read as achieved — which is exactly the state the empty design has to carry.
