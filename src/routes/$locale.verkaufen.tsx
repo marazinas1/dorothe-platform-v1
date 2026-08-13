@@ -3,6 +3,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { PublicChrome } from "@/components/public/PublicChrome";
+import { PageIntro } from "@/components/brand/PageIntro";
+import { NumberedSteps, type Step } from "@/components/brand/NumberedSteps";
+import { TextSection } from "@/components/brand/TextSection";
+import { SellerInquiryForm } from "@/components/brand/SellerInquiryForm";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
@@ -36,71 +40,69 @@ export const Route = createFileRoute("/$locale/verkaufen")({
   component: SellingPage,
 });
 
-type Step = { title: string; body: string };
-
 function SellingPage() {
   const { locale } = Route.useParams();
   const { t } = useTranslation();
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const steps = t("pages.selling.steps", { returnObjects: true }) as Step[];
+  const services = t("pages.selling.services", { returnObjects: true }) as string[];
 
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
-      <section className="mx-auto max-w-[1400px] px-6 pt-24 lg:px-10">
-        <div className="max-w-3xl">
-          <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            {t("pages.selling.kicker")}
+      <PageIntro
+        kicker={t("pages.selling.kicker")}
+        headline={t("pages.selling.headline")}
+        lead={t("pages.selling.intro")}
+      />
+
+      <NumberedSteps title={t("pages.selling.steps_title")} steps={steps} />
+
+      <TextSection
+        title={t("pages.selling.services_title")}
+        body={t("pages.selling.services_body")}
+        items={services}
+      />
+
+      <TextSection
+        title={t("pages.selling.costs_title")}
+        body={t("pages.selling.costs_body")}
+      />
+
+      <section
+        id="form"
+        className="mx-auto mt-40 max-w-[1400px] px-6 lg:mt-56 lg:px-10"
+      >
+        <div className="grid grid-cols-1 gap-14 border-t border-border pt-16 md:grid-cols-12 lg:pt-24">
+          <div className="md:col-span-4">
+            <div className="eyebrow text-muted-foreground">{t("pages.selling.kicker")}</div>
+            <h2 className="text-section-lg mt-8 max-w-[18ch] text-balance">
+              {t("pages.selling.form_title")}
+            </h2>
+            <p className="text-lead mt-8 max-w-[42ch] text-muted-foreground">
+              {t("pages.selling.form_intro")}
+            </p>
           </div>
-          <h1 className="mt-6 font-heading text-4xl leading-[1.05] md:text-6xl">
-            {t("pages.selling.headline")}
-          </h1>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            {t("pages.selling.intro")}
-          </p>
-        </div>
-      </section>
-
-      <section className="mx-auto mt-24 max-w-[1400px] px-6 lg:px-10">
-        <ol className="border-t border-border">
-          {steps.map((s, i) => (
-            <li key={i} className="grid grid-cols-1 gap-6 border-b border-border py-12 md:grid-cols-12">
-              <div className="md:col-span-3">
-                <div className="font-sans text-4xl tabular-figures text-muted-foreground">
-                  {String(i + 1).padStart(2, "0")}
-                </div>
-                <div className="mt-3 font-heading text-2xl md:text-3xl">{s.title}</div>
-              </div>
-              <div className="md:col-span-9">
-                <p className="max-w-2xl text-base leading-relaxed text-foreground">{s.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="mx-auto mt-32 max-w-[1400px] px-6 pb-32 lg:px-10">
-        <div className="border-t border-border pt-16">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
-            <div className="md:col-span-7">
-              <h2 className="font-heading text-3xl leading-[1.05] md:text-5xl">
-                {t("pages.selling.cta_title")}
-              </h2>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
-                {t("pages.selling.cta_body")}
-              </p>
-            </div>
-            <div className="flex md:col-span-5 md:items-end md:justify-end">
-              <Link
-                to="/$locale/immobilienbewertung"
-                params={{ locale }}
-                className="inline-flex h-12 items-center justify-center bg-foreground px-8 text-[11px] uppercase tracking-[0.18em] text-background transition-opacity duration-300 hover:opacity-85"
-              >
-                {t("pages.selling.cta_button")}
-              </Link>
-            </div>
+          <div className="md:col-span-8">
+            <SellerInquiryForm />
           </div>
         </div>
       </section>
+
+      <div className="pb-32">
+        <TextSection
+          title={t("pages.selling.proof_title")}
+          body={t("pages.selling.proof_body")}
+          quiet
+        >
+          <Link
+            to="/$locale/verkauft"
+            params={{ locale }}
+            className="eyebrow text-muted-foreground transition-colors duration-300 hover:text-foreground"
+          >
+            {t("pages.selling.proof_link")} →
+          </Link>
+        </TextSection>
+      </div>
     </PublicChrome>
   );
 }
