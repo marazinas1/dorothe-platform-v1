@@ -591,7 +591,8 @@
         "heating_costs_included": "Heizkosten in den Nebenkosten enthalten",
         "commission_free": "Provisionsfrei für Käufer",
         "commission_value_percent": "Provision (%)",
-        "commission_free_rent": "Provisionsfrei für Mieter"
+        "commission_free_rent": "Provisionsfrei für Mieter",
+        "slug": "Webadresse (Slug)"
       },
       "energyFields": {
         "hwb": "HWB (kWh/m²a)",
@@ -623,7 +624,10 @@
         "deposit": "In der Regel höchstens drei Kaltmieten.",
         "commission_free": "Einschalten für ein provisionsfreies Angebot. Sonst Provision angeben.",
         "title": "Das Erste, was Interessenten sehen, z. B. „Helle 3-Zimmer-Wohnung mit Balkon“.",
-        "titleOptional": "Optional. Ist das Feld leer, wird der Titel auf {{locale}} gezeigt."
+        "titleOptional": "Optional. Ist das Feld leer, wird der Titel auf {{locale}} gezeigt.",
+        "slugFollowsTitle": "Folgt dem Titel, bis das Objekt erstmals veröffentlicht wird.",
+        "slugFrozen": "Dieses Objekt war schon öffentlich. Eine Änderung der Webadresse macht alle bereits geteilten Links ungültig; die alte Adresse leitet weiter, mehr nicht.",
+        "slugWarning": "Änderung macht bestehende Links ungültig. Die alte Adresse leitet auf die neue weiter."
       },
       "energy": {
         "intro": "Pflichtfelder für {{country}}. Ohne sie ist eine Veröffentlichung nicht möglich.",
@@ -766,7 +770,12 @@
       "errors": {
         "permission": "Ihr Konto darf das nicht.",
         "transition": "Dieser Statuswechsel ist aus dem aktuellen Status nicht möglich.",
-        "generic": "Das hat nicht funktioniert. Bitte Eingaben prüfen und erneut versuchen."
+        "generic": "Das hat nicht funktioniert. Bitte Eingaben prüfen und erneut versuchen.",
+        "slug_empty": "Mindestens einen Buchstaben oder eine Zahl eingeben.",
+        "slug_reserved": "Diese Adresse ist reserviert und würde einen Teil der Website verdecken.",
+        "slug_normalized": "Wird in der unten gezeigten Kleinschreibung gespeichert.",
+        "slug_taken": "Diese Webadresse wird schon von einem anderen Objekt verwendet.",
+        "slug_invalid": "Diese Webadresse ist nicht verwendbar."
       },
       "commissionType": {
         "percent": "Prozent (%)",
@@ -862,7 +871,8 @@
         "closed": "Verkauft & Vermietet",
         "draft": "Entwurf",
         "archived": "Archiviert"
-      }
+      },
+      "slugUnlock": "Webadresse trotzdem ändern"
     },
     "inquiries": {
       "summary": "{{total}} insgesamt · {{unread}} neu",
