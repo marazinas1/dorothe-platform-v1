@@ -14,7 +14,7 @@ export function WorkQueue({ locale }: { locale: string }) {
   return (
     <section className="space-y-4">
       <h2 className="font-heading text-lg">{t("admin.dashboard.queue.heading")}</h2>
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid items-start gap-4 lg:grid-cols-2">
         <InquiryQueue locale={locale} />
         {LISTING_QUEUE_KEYS.map((key) => (
           <ListingQueue key={key} queue={key} locale={locale} />
