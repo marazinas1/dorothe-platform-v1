@@ -1,87 +1,125 @@
-# Homepage hierarchy (PLAN.md 7.2)
+# Rebuild the listing card (PLAN.md 7.3)
 
-Right now every block on the homepage is set at the same weight: nine sections,
-each opening with a `text-4xl/6xl` heading, each separated by exactly `mt-40`,
-each on the same 1400px container. Scrolling gives no signal about what matters,
-and the credentials are stated twice — four large institution names
-(`credibility_stats`) followed by a qualifications list naming the same
-institutions again.
+One card component, used identically on the homepage, the catalogue, the sold
+archive and the agent block. Sold emphasis stays a variant (`hidePrice`), not a
+copy.
 
-This pass changes weight, rhythm and the credentials block. Nothing else.
+## 1. Equal height, always
 
-## The hierarchy we commit to
+The card becomes a flex column with `h-full`, and every grid cell stretches
+(`items-stretch` is the grid default; the cards currently don't fill because
+they are not `h-full` flex columns).
 
-Four tiers, applied consistently:
+Fixed zones, top to bottom:
 
-1. **Hero** — largest type on the page. Unchanged in size; only the right side
-   of the text layout gets resolved so the composition looks chosen.
-2. **Valuation** — the block that earns the mandate. Becomes the second-loudest
-   thing on the page: full-bleed accent panel, section heading one step below
-   the hero, the deliverables list framed rather than a plain row of borders,
-   and the CTA as the only large button below the hero.
-3. **Supporting blocks** (property grid, sold, credentials, two paths) —
-   one step quieter: smaller headings, an eyebrow instead of a display heading
-   where the block is evidence rather than an argument.
-4. **Quiet blocks** (photo band, areas, contact) — smallest headings, tightest
-   type.
+- media: unchanged `aspect-[3/2]`, so the tallest thing on the card can never vary
+- meta row (status + city): one line, always rendered
+- spec row: **always rendered**, fixed height (`min-h`), even when a listing has
+  no figures at all — an empty spec row keeps its space rather than collapsing
+- title: clamped to exactly 2 lines with a reserved 2-line box, so a one-line
+  title occupies the same height as a two-line one
+- description: clamped to 2 lines with a reserved 2-line box, rendered even when
+  the listing has no description
+- price row: pushed to the bottom with `mt-auto` and a hairline top border, so it
+  sits on one line across the row
 
-## Density, deliberately varied
+A very long title is clamped at two lines with an ellipsis (`line-clamp-2`), and
+the full title is available to assistive tech and on hover via `title`. It never
+pushes the price down. The clamp height is expressed in `em` from the card's own
+type scale so a font change in `site_settings` cannot break the reservation.
 
-- Text sections breathe: wider vertical padding, narrower measure, larger
-  leading.
-- The property grid tightens: less space between heading and grid, smaller
-  gutters, so three cards read as one object instead of three sections.
-- Section separation stops being one constant. Three rhythm steps — a major
-  break before an argument block, a normal break, and a tight break between two
-  blocks that belong together (property grid → sold, credentials → seals).
+Worst-case check: one-line title, no description, one spec chip beside a
+two-line title with five chips plus energy class — verified in the browser at
+mobile, 2-col and 3-col widths.
 
-## The credentials fix
+## 2. Icons instead of text labels
 
-One block, one heading, no institution named twice:
+From `lucide-react` (already a dependency), four portal conventions:
 
-- The four named institutions stay as the emphasis row (this is the answer to
-  "will she know what my house is worth").
-- Qualifications that merely repeat an institution already shown in that row are
-  dropped from the list; the remaining qualifications render as a quieter
-  supporting line, not a second full-weight section with its own headline.
-- Seals attach to the same block instead of standing alone.
-- The de-duplication is a rule, not a hand edit: it lives in `/lib` and works on
-  whatever any client puts in `site_settings`, so a clone with different
-  institutions behaves the same.
+- `Ruler` — living area (or plot area for land): the measuring convention every
+  portal uses for m²
+- `LayoutGrid` — rooms: a floor divided into cells, the standard "Zimmer" glyph
+- `BedDouble` — bedrooms: unmistakable, no legend needed
+- `Bath` — bathrooms: the tub is the universal bathroom sign
 
-## Hero right side
+Each icon is `aria-hidden`, and the number carries a visually hidden label from
+the message files (`5 Zimmer`, `2 Bäder`), so a screen reader reads
+"5 Zimmer" and not "5". The icon also gets a `title` for pointer hover.
 
-In the text layout the right column is currently empty and the signature sits on
-the bottom border. It gains a deliberate right-hand anchor: the signature plus
-the primary credential line, aligned to the actions' baseline, so the empty area
-reads as composition rather than leftover space.
+Energy class stays textual — letter grade plus its label, keeping the existing
+`energyClassOf` / `energyClassTone` tokens, because it is a legal disclosure.
+
+Icons are picked in `/lib` (`src/lib/listings/card-specs.ts`): a pure function
+turns a listing plus settings into an ordered list of
+`{ key, icon, value, label }`. The component only renders.
+
+## 3. Photo carousel on the card
+
+New `src/components/brand/ListingCardCarousel.tsx`, a CSS scroll-snap track —
+no motion library, no JS layout, SSR-safe.
+
+- The track renders **all** slides server-side, but only the cover image has a
+  real `src`. Every other slide starts as an empty token-coloured placeholder and
+  receives its `src` the first time the visitor interacts (swipe, arrow, dot,
+  or pointer entering the media area). Once armed, the current, previous and next
+  slides get real `src` values; the rest arm as browsing continues.
+- Capped at 6 slides; if the listing has more, the last slide shows a `+N`
+  affordance that reads as "there are more inside", and the card links through
+  as usual.
+- Ordering is the gallery's ordering (`sort_order`, cover first), so floor plans
+  and visualisations will drop out automatically once those flags get a UI.
+- Arrows appear on hover/focus for pointer devices only; dots show position and
+  are real buttons. Touch users swipe the snap track natively.
+- First paint of a 20-card catalogue page: 20 `card`-variant images, exactly what
+  it costs today. Nothing else is fetched until interaction. No extra database
+  work either — the list query already returns every image row per listing, so
+  the carousel adds markup, not requests.
+
+## 4. Link vs carousel on both input types
+
+The card stays a single `<Link>` (one tab stop, one target). Inside it:
+
+- Controls are `<button type="button">` with `onClick` calling
+  `preventDefault()` and `stopPropagation()`, so a click on an arrow or dot never
+  navigates.
+- The snap track swallows nothing on touch: swiping is native scrolling, and a
+  swipe does not fire a click. To stop a drag that ends on the media from being
+  read as a tap-through on pointer devices, the media area records pointer-down
+  position and cancels the link's default when the pointer moved more than a few
+  pixels.
+- Controls are `tabIndex={-1}` and `aria-hidden` for keyboard order, so keyboard
+  users get one card = one target as required; the full gallery is on the detail
+  page.
+
+## 5. Title never falls back to the slug
+
+`ListingCard` renders no headline when the title is empty for the active locale
+(falling back to the default locale first, never to `listing.slug`). The title
+zone keeps its reserved height so the card still lines up.
+
+Audit result for the same pattern elsewhere — two more places, both on the
+listing detail route:
+
+- `src/routes/$locale.immobilien.$slug.tsx:105` — `pickLocalized(title) || listing.slug`
+  feeding the page `<title>` and meta description
+- `src/routes/$locale.immobilien.$slug.tsx:203` — the same fallback for the H1
+
+The detail page is explicitly out of scope for this task, so the plan reports
+them and leaves them untouched; say the word and they go in the same pass.
 
 ## Technical notes
 
-- New type utilities in `src/styles.css` (`text-section`, plus a lead and a
-  minor step) so heading weight is a named tier, never an ad-hoc `text-6xl` in a
-  component. All sizes stay derived from the existing font tokens.
-- New `src/lib/homepage/rhythm.ts` exporting the three spacing steps, and each
-  brand block takes its spacing from there instead of a literal `mt-40`.
-- New `src/lib/homepage/credentials.ts` — merges stats, qualifications and seals
-  into one resolved shape and drops the duplicates. `Credentials.tsx` renders it;
-  `QualificationsList.tsx` becomes the quieter supporting list.
-- Grid density: `LISTING_CARD_GRID` in `src/lib/homepage/card-grid.ts` tightens
-  its gutters. It is the single grid definition, so homepage, catalogue and sold
-  page stay identical — this is the one shared value that changes.
-- Files touched: `src/styles.css`, `src/lib/homepage/{rhythm,credentials,card-grid}.ts`,
-  and the brand blocks `Hero`, `ValuationInvite`, `Credentials`,
-  `QualificationsList`, `CredibilityBar`, `TrustSeals`, `FeaturedListings`,
-  `SoldStrip`, `AboutBroker`, `TwoPaths`, `PhotoBand`, `AreaLinks`,
-  `ContactSection`.
-- No colour, hex or font literals — tokens only. No new client data, no
-  translation-key removals; any new label goes into both `de.json` and `en.json`.
-- Not touched: `ListingCard`, the listings index, the detail page, the admin,
-  navigation, the seed files, or `homepage_sections` order.
-
-## Open question
-
-`homepage_sections` currently places `valuation` second-to-last, after both
-property blocks. Making it the most resolved block after the hero argues for
-moving it above `featured`. That is seed/settings data, not code — say the word
-and I will move it in the same pass; otherwise the order stays as configured.
+- New: `src/components/brand/ListingCardCarousel.tsx`,
+  `src/components/brand/ListingCardSpecs.tsx`,
+  `src/lib/listings/card-specs.ts`.
+- Rewritten: `src/components/brand/ListingCard.tsx` (stays well under 200 lines
+  by delegating media and specs).
+- `ListingFactPills.tsx` remains for the detail page; the card stops using it.
+- New keys in `de.json` and `en.json` under `listings.card.*` (icon labels, "+N
+  more photos", previous/next/goto-photo labels). `scripts/check-i18n-keys.mjs`
+  must stay green.
+- Colours, radii and borders keep using tokens (`bg-card`, `border-border`,
+  `rounded-media`, `text-primary`). No hex, no `text-white`.
+- Status labels reuse the shipped `listings.reserved` / `sold` / `rented` /
+  `coming_soon` keys; the default "for sale, available" state renders no badge.
+- No change to the detail page, the admin, the image pipeline or the queries.
