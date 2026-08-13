@@ -59,6 +59,10 @@ function Footer({ locale, settings }: { locale: Locale; settings: SiteSettings }
             © {new Date().getFullYear()} {settings.legal_name ?? settings.site_name}.{" "}
             {t("footer.rights")}.
           </div>
+          <LegalLinks
+            locale={locale}
+            className="mt-2 flex flex-wrap gap-4 md:justify-end"
+          />
           <div className="mt-2 flex gap-4 md:justify-end">
             <Link to="/$locale/admin" params={{ locale }} className="hover:text-foreground">
               {t("nav.admin")}
