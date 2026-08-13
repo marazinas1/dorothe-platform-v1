@@ -153,3 +153,5 @@ Rules:
 6. Create the owner user and grant permissions; confirm the admin panel loads.
 7. Confirm no client detail was added outside the seed file and
    `site_settings`.
+Project context and the current work plan are in PLAN.md. Read it before
+planning any task.
