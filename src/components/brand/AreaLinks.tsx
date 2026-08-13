@@ -43,11 +43,11 @@ export function AreaLinks({ locale, cities, linkable = true }: Props) {
             search={{ ...SEARCH_DEFAULTS, city }}
             className="group border-t border-border py-8 transition-opacity duration-300 hover:opacity-70"
           >
-            <div className="font-heading text-3xl md:text-4xl">{city}</div>
+            <div className="text-section-sm">{city}</div>
           </Link>
           ) : (
             <div key={city} className="border-t border-border py-8">
-              <div className="font-heading text-3xl md:text-4xl">{city}</div>
+              <div className="text-section-sm">{city}</div>
             </div>
           ),
         )}

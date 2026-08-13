@@ -126,7 +126,8 @@ export function ShortInquiryForm({ mode, locale }: Props) {
         </button>
         {mode === "seller" ? (
           <Link
-            to="/$locale/immobilienbewertung"
+            to="/$locale/verkaufen"
+            hash="form"
             params={{ locale }}
             className="text-sm text-muted-foreground underline-offset-4 transition-colors duration-300 hover:text-foreground hover:underline"
           >

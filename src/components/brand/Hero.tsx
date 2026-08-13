@@ -112,7 +112,8 @@ function HeroActions({ locale, className }: { locale: Locale; className?: string
       className={`flex flex-wrap items-center gap-x-8 gap-y-4 ${className ?? "mt-10"}`}
     >
       <Link
-        to="/$locale/immobilienbewertung"
+        to="/$locale/verkaufen"
+            hash="form"
         params={{ locale }}
         className="eyebrow inline-flex h-12 items-center rounded-sm bg-primary px-7 text-primary-foreground transition-opacity duration-300 hover:opacity-90"
       >
