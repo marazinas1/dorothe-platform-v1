@@ -37,13 +37,30 @@ function normalize(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9äöüß]+/g, " ").trim();
 }
 
-/** A qualification belongs to an institution when it names it, or restates it. */
-function matches(qualification: string, institution: string, description: string): boolean {
+/**
+ * A qualification belongs to an institution when it names it, or when it
+ * restates the institution's own description in any configured language — a
+ * client may write qualifications in one locale while the labels are
+ * translated, and the grouping must still hold.
+ */
+function matches(qualification: string, institution: string, descriptions: string[]): boolean {
   const q = normalize(qualification);
   const inst = normalize(institution);
   if (inst.length > 1 && new RegExp(`(^| )${inst}( |$)`).test(q)) return true;
-  const desc = normalize(description);
-  return desc.length > 8 && (q === desc || q.includes(desc) || desc.includes(q));
+  return descriptions.some((raw) => {
+    const desc = normalize(raw);
+    return desc.length > 8 && (q === desc || q.includes(desc) || desc.includes(q));
+  });
+}
+
+/** The institution is the row label, so drop it from the item text. */
+function stripInstitution(qualification: string, institution: string): string {
+  const inst = institution.trim();
+  if (inst.length < 2) return qualification;
+  const escaped = inst.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return qualification
+    .replace(new RegExp(`\\s*[({\\[]\\s*${escaped}\\s*[)}\\]]`, "i"), "")
+    .trim();
 }
 
 export function buildCredentials(
@@ -57,17 +74,20 @@ export function buildCredentials(
 
   const taken = new Set<number>();
   const groups: CredentialGroup[] = stats.map((stat) => {
-    const description =
-      pickLocalized(stat.label, locale, settings.default_locale) ?? "";
+    const description = pickLocalized(stat.label, locale, settings.default_locale);
+    const allDescriptions = Object.values(stat.label ?? {}).filter(
+      (value): value is string => typeof value === "string",
+    );
     const items: string[] = [];
     qualifications.forEach((qualification, index) => {
       if (taken.has(index)) return;
-      if (!matches(qualification, stat.value, description)) return;
+      if (!matches(qualification, stat.value, allDescriptions)) return;
       taken.add(index);
-      items.push(qualification);
+      items.push(stripInstitution(qualification, stat.value));
     });
     return { institution: stat.value, description, items };
   });
+
 
   const other = qualifications.filter((_, index) => !taken.has(index));
   const heading =
