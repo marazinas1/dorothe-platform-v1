@@ -42,16 +42,16 @@ export function WhyHer({ locale, settings }: Props) {
               evidence={t("home.claim_valuation_evidence")}
             />
             <ClaimColumn
-              icon={ShieldCheck}
-              title={t("home.claim_inheritance_title")}
-              body={t("home.claim_inheritance_body")}
-              evidence={t("home.claim_inheritance_evidence")}
-            />
-            <ClaimColumn
               icon={ScanLine}
               title={t("home.claim_personal_title")}
               body={t("home.claim_personal_body")}
               evidence={t("home.claim_personal_evidence")}
+            />
+            <ClaimColumn
+              icon={ShieldCheck}
+              title={t("home.claim_inheritance_title")}
+              body={t("home.claim_inheritance_body")}
+              evidence={t("home.claim_inheritance_evidence")}
             />
           </div>
 
