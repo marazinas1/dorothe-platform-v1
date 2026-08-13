@@ -49,15 +49,13 @@ export function statusOptionsFor(
   });
 }
 
-/** Statuses the public policy exposes; used to decide checklist enforcement. */
-export const PUBLIC_STATUSES: ListingStatus[] = [
-  "active",
-  "coming_soon",
-  "reserved",
-  "sold",
-  "rented",
-];
+/**
+ * Statuses the database validates on entry (listings_validate_energy_on_publish):
+ * taking a listing live is what must satisfy the publish checklist. Closing a
+ * live listing (reserved / sold / rented) is never blocked.
+ */
+export const GO_LIVE_STATUSES: ListingStatus[] = ["active", "coming_soon"];
 
-export function isPublicStatus(status: string): boolean {
-  return PUBLIC_STATUSES.includes(status as ListingStatus);
+export function requiresChecklist(status: string): boolean {
+  return GO_LIVE_STATUSES.includes(status as ListingStatus);
 }
