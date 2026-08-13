@@ -9,23 +9,37 @@ Last verified against `marazinas1/dorothe-platform-v1` on 2026-08-13.
 
 ## 1. What this project actually is
 
-This is **not a website for Dorothe Waltner**. It is a **broker platform
-template**, and Dorothe is the first clone.
+This is the **first site in a portfolio of broker websites**. Dorothe
+Waltner is client one. The next client is cloned from this repository and
+adapted.
 
-That single fact decides most arguments:
+Cloning is the customisation mechanism. That means editing code for a new
+client is normal and expected — it is not a failure of abstraction. Do not
+turn every difference into a setting.
 
-- Structure, navigation, cards and the listing page matter most — they carry
-  to every future client.
-- Dorothe's specific texts, photos and listing data matter least — they are
-  one client's content and will be replaced in every clone.
-- Anything hardcoded for Dorothe is a defect, even if it looks right today.
-- Anything a second broker would need differently belongs in `site_settings`.
+Two layers, treated differently:
 
-When a decision is unclear, ask: *would the next broker want this the same
-way?* If not, it is a setting, not a design.
+**Presentation — free to change per client, in code.**
+Texts, colours, fonts, imagery, page set, navigation, homepage blocks,
+section copy. A new client gets whatever suits them, edited directly. Do not
+add configuration switches for things one client wants.
 
----
+**Core — shared, and where the real work lives.**
+The listing data model, statuses and status flow, publish rules, energy
+validation for DE/AT/CH, field visibility by property and deal type,
+permissions and RLS, the image pipeline, the inquiry model, the admin
+editor, the dashboard. Bugs here are expensive and repeat across every
+clone. Changes here need care and should stay client-agnostic.
 
+The one rule that survives regardless of layer: **no client data in
+migrations.** Client values belong in `supabase/seed/<client>.sql` and in
+`site_settings`. A migration carrying one client's colours will silently
+overwrite the next client's. This has already happened once and needed a
+neutralising migration.
+
+This is not a SaaS product and should not be built like one. If a future
+decision depends on "what would the next broker want", the answer is
+usually: the next broker gets their own edit.
 ## 2. The business thesis behind the design
 
 A solo broker's website is not a listings board.
