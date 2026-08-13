@@ -95,12 +95,13 @@ function SignatureBlock({
   align = "left",
 }: {
   settings: SiteSettings;
-  align?: "left" | "right";
+  align?: "left" | "right" | "center";
 }) {
+  const alignment =
+    align === "right" ? "md:items-end" : align === "center" ? "items-center text-center" : "items-start";
   return (
-    <div
-      className={`flex flex-col gap-1 ${align === "right" ? "md:items-end" : "items-start"}`}
-    >
+    <div className={`flex flex-col gap-1 ${alignment}`}>
+
       <Signature name={settings.primary_agent_name} size="md" />
       {settings.primary_agent_role ? (
         <span className="text-sm text-muted-foreground">{settings.primary_agent_role}</span>
