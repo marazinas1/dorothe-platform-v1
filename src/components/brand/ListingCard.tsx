@@ -81,7 +81,11 @@ export function ListingCard({
           e.stopPropagation();
         }
       }}
-      className="group relative flex h-full flex-col rounded-media border border-border/70 bg-card p-3 md:p-4"
+      className={
+        size === "large"
+          ? "group relative flex h-full flex-col rounded-media border border-border/70 bg-card p-3 md:p-4"
+          : "group relative flex h-full flex-col rounded-media border border-border/70 bg-card p-2 md:p-3"
+      }
     >
       <ListingCardCarousel
         images={listing.images}
@@ -90,7 +94,13 @@ export function ListingCard({
         eager={eager}
       />
 
-      <div className="flex flex-1 flex-col px-2 pt-5 pb-2 md:px-3">
+      <div
+        className={
+          size === "large"
+            ? "flex flex-1 flex-col px-2 pt-5 pb-2 md:px-3"
+            : "flex flex-1 flex-col px-1.5 pt-4 pb-1 md:px-2"
+        }
+      >
         <div className="flex items-baseline justify-between gap-4">
           <span className={status.accent ? "eyebrow text-primary" : "eyebrow text-muted-foreground"}>
             {status.label}
@@ -109,7 +119,7 @@ export function ListingCard({
         <h3
           className={
             size === "large"
-              ? "mt-4 line-clamp-2 min-h-[2.5em] font-heading text-2xl leading-tight text-foreground md:text-[1.75rem]"
+              ? "mt-4 line-clamp-3 min-h-[3.75em] font-heading text-2xl leading-tight text-foreground md:text-[1.75rem]"
               : "mt-4 line-clamp-2 min-h-[2.5em] font-heading text-xl leading-tight text-foreground md:text-2xl"
           }
           title={headline || undefined}
@@ -126,9 +136,12 @@ export function ListingCard({
           </Link>
         </h3>
 
-        <p className="mt-2 line-clamp-2 min-h-[3.25em] text-sm leading-relaxed text-muted-foreground">
-          {description}
-        </p>
+        {/* The compact card is a proof point, not a pitch: no description. */}
+        {size === "large" ? (
+          <p className="mt-2 line-clamp-2 min-h-[3.25em] text-sm leading-relaxed text-muted-foreground">
+            {description}
+          </p>
+        ) : null}
 
         <div className="mt-auto flex items-baseline justify-between gap-6 border-t border-border/70 pt-4 text-sm">
           {/* On closed properties the price row disappears rather than reading

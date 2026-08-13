@@ -42,17 +42,20 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
               </p>
             ) : null}
             <HeroActions locale={locale} />
-            <div className="mt-12">
-              <SignatureBlock settings={settings} />
-            </div>
           </div>
+          {/* Portrait after the text on a phone: the headline is read first.
+              Between md and lg the column is narrow, so the crop tightens to
+              3/4 rather than becoming a sliver. */}
           <div className="md:col-span-5">
             <img
               src={image}
               alt={settings.primary_agent_name ?? settings.site_name}
-              className="aspect-[4/5] w-full rounded-sm object-cover object-top"
+              className="aspect-[3/4] w-full min-w-[240px] rounded-sm object-cover object-top lg:aspect-[4/5]"
               fetchPriority="high"
             />
+            <div className="mt-6">
+              <SignatureBlock settings={settings} />
+            </div>
           </div>
         </div>
       </section>
