@@ -146,7 +146,18 @@ const IDENTIFIERS = {
   // src/components/admin/dashboard/QueueGroup.tsx — group title/empty state.
   titleKey: { prefix: "admin.dashboard.queue" },
   emptyKey: { prefix: "admin.dashboard.queue" },
+  // src/lib/listings/card-specs.ts — accessible labels for the card spec icons.
+  "spec.labelKey": {
+    keys: [
+      "listings.detail.living_area",
+      "listings.detail.plot_area",
+      "listings.detail.rooms",
+      "listings.detail.bedrooms",
+      "listings.detail.bathrooms",
+    ],
+  },
 };
+
 
 
 function listFrom(file, name) {

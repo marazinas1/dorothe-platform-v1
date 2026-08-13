@@ -254,6 +254,13 @@
       "let": "Let",
       "vacant": "Vacant",
       "partially_let": "Partially let"
+    },
+    "card": {
+      "property": "Property",
+      "type_in_city": "{{type}} in {{city}}",
+      "more_photos": "+{{count}} photos",
+      "prev_photo": "Previous photo",
+      "next_photo": "Next photo"
     }
   },
   "inquiry": {

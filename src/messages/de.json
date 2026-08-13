@@ -254,6 +254,13 @@
       "let": "Vermietet",
       "vacant": "Frei",
       "partially_let": "Teilweise vermietet"
+    },
+    "card": {
+      "property": "Immobilie",
+      "type_in_city": "{{type}} in {{city}}",
+      "more_photos": "+{{count}} Fotos",
+      "prev_photo": "Vorheriges Foto",
+      "next_photo": "Nächstes Foto"
     }
   },
   "inquiry": {

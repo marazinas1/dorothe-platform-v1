@@ -27,6 +27,7 @@ import { getListingPreview } from "@/lib/listings/preview.functions";
 import { countListingView } from "@/lib/listings/views.functions";
 import { useCountListingView } from "@/lib/listings/use-count-view";
 import { pickImageUrl } from "@/lib/listings/image";
+import { listingDisplayName } from "@/lib/listings/display-title";
 import { pickLocalized } from "@/lib/listings/format";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 import { buildHead } from "@/lib/seo/build-head";
@@ -102,7 +103,11 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
     }
     const { settings, origin, locale, isPreview } = loaderData;
     const listing = loaderData.listing as PublicListing;
-    const localTitle = pickLocalized(listing.title, locale) || listing.slug;
+    // Never the slug: an untitled listing gets a descriptive name ("Wohnung in
+    // Kevelaer") because the page <title> is what search results show.
+    const localTitle = listingDisplayName(listing, locale, (key, vars) =>
+      translate(locale, key, vars),
+    );
     const localDesc = pickLocalized(listing.description, locale);
     const title = `${localTitle} — ${settings.site_name}`;
     const primary = listing.images.find((i) => i.is_primary) ?? listing.images[0];
@@ -200,7 +205,7 @@ function ListingDetail() {
 
   if (!listing) return null;
   const l = listing as PublicListing;
-  const title = pickLocalized(l.title, locale) || l.slug;
+  const title = listingDisplayName(l, locale, t);
   const shareUrl = `${origin}/${locale}/immobilien/${l.slug}`;
 
   const locationLine =

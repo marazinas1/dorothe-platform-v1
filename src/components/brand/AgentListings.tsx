@@ -38,7 +38,7 @@ export function AgentListings({ locale, items, settings, heading }: Props) {
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
         {items.slice(0, 6).map((l, i) => (
-          <Reveal key={l.id} delay={i * 90}>
+          <Reveal key={l.id} delay={i * 90} className="h-full">
             <ListingCard listing={l} locale={locale} settings={settings} size="compact" />
           </Reveal>
         ))}
