@@ -7,13 +7,18 @@ const ListingInquiryInput = z.object({
   email: z.string().trim().email().max(320),
   phone: z.string().trim().max(50).optional().or(z.literal("")),
   message: z.string().trim().min(1).max(4000),
+  consent: z.literal(true),
+  locale: z.string().trim().max(10).optional(),
 });
 
 export const submitInquiry = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => ListingInquiryInput.parse(raw))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { consentColumns } = await import("./consent.server");
+    const consent = await consentColumns(data.locale);
     const { error } = await supabaseAdmin.from("inquiries").insert({
+      ...consent,
       listing_id: data.listing_id,
       name: data.name,
       email: data.email,
@@ -36,14 +41,19 @@ const BuyerInquiryInput = z.object({
   rooms_min: z.number().nullable().optional(),
   area_min: z.number().nullable().optional(),
   price_max: z.number().nullable().optional(),
+  consent: z.literal(true),
+  locale: z.string().trim().max(10).optional(),
 });
 
 export const submitBuyerInquiry = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => BuyerInquiryInput.parse(raw))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { name, email, phone, message, ...criteria } = data;
+    const { consentColumns } = await import("./consent.server");
+    const { name, email, phone, message, consent: _c, locale, ...criteria } = data;
+    const consent = await consentColumns(locale);
     const { error } = await supabaseAdmin.from("inquiries").insert({
+      ...consent,
       listing_id: null,
       type: "buyer",
       name,
@@ -77,13 +87,17 @@ const SellerInquiryInput = z.object({
   year_built: z.number().nullable().optional(),
   condition: z.string().trim().max(200).optional().or(z.literal("")),
   photos: z.array(SellerPhotoInput).max(4).optional(),
+  consent: z.literal(true),
+  locale: z.string().trim().max(10).optional(),
 });
 
 export const submitSellerInquiry = createServerFn({ method: "POST" })
   .inputValidator((raw: unknown) => SellerInquiryInput.parse(raw))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { name, email, phone, message, photos, ...criteria } = data;
+    const { consentColumns } = await import("./consent.server");
+    const { name, email, phone, message, photos, consent: _c, locale, ...criteria } = data;
+    const consent = await consentColumns(locale);
 
     const photo_paths: string[] = [];
     if (photos && photos.length > 0) {
@@ -105,6 +119,7 @@ export const submitSellerInquiry = createServerFn({ method: "POST" })
     }
 
     const { error } = await supabaseAdmin.from("inquiries").insert({
+      ...consent,
       listing_id: null,
       type: "seller",
       name,
