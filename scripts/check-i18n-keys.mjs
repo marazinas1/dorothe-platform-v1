@@ -146,6 +146,20 @@ const IDENTIFIERS = {
   // src/components/admin/dashboard/QueueGroup.tsx — group title/empty state.
   titleKey: { prefix: "admin.dashboard.queue" },
   emptyKey: { prefix: "admin.dashboard.queue" },
+  // src/lib/listings/energy-display.ts — certificate row labels, the country
+  // footnote, and the reason a certificate is not required.
+  "cell.labelKey": { prefix: "listings.detail.energy_fields" },
+  "view.footnoteKey": {
+    keys: [
+      "listings.detail.energy_note_de",
+      "listings.detail.energy_note_at",
+      "listings.detail.energy_note_ch",
+      "listings.detail.energy_note_generic",
+    ],
+  },
+  "view.exemptionKey": { prefix: "listings.energyExemption" },
+  // src/components/brand/EnergyPanel.tsx — one fuel type per stored value.
+  k: { prefix: "listings.energySource" },
   // src/lib/listings/spec-groups.ts — grouped specification table titles.
   "group.titleKey": { prefix: "listings.detail.sections" },
   // src/lib/listings/energy-display.ts — certificate type wording.
