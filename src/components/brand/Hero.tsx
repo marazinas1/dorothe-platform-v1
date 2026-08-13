@@ -31,7 +31,7 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
 
   if (layout === "split" && image) {
     return (
-      <section className="mx-auto max-w-[1400px] px-6 pt-28 pb-24 lg:px-10 lg:pt-36 lg:pb-32">
+      <section className="mx-auto flex max-w-[1400px] flex-col justify-center px-6 pb-16 pt-28 lg:min-h-svh lg:px-10 lg:pb-20 lg:pt-32">
         <div className="grid items-center gap-14 md:grid-cols-12 md:gap-16">
           <div className="md:col-span-7">
             <div className="eyebrow text-muted-foreground">{settings.site_name}</div>
@@ -39,23 +39,25 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
               {title}
             </h1>
             {subline ? (
-              <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+              <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground lg:mt-6 md:text-xl">
                 {subline}
               </p>
             ) : null}
-            <HeroActions locale={locale} />
+            <HeroActions locale={locale} className="mt-8" />
           </div>
           {/* Portrait after the text on a phone: the headline is read first.
               Between md and lg the column is narrow, so the crop tightens to
               3/4 rather than becoming a sliver. */}
           <div className="md:col-span-5">
-            <img
-              src={image}
-              alt={settings.primary_agent_name ?? settings.site_name}
-              className="aspect-[3/4] w-full min-w-[240px] rounded-sm object-cover object-top lg:aspect-[4/5]"
-              fetchPriority="high"
-            />
-            <div className="mt-6">
+            <div className="mx-auto aspect-[3/4] w-full max-w-[380px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(320px,48svh,480px)] lg:w-auto lg:max-w-none">
+              <img
+                src={image}
+                alt={settings.primary_agent_name ?? settings.site_name}
+                className="h-full w-full object-cover object-top"
+                fetchPriority="high"
+              />
+            </div>
+            <div className="mt-5">
               <SignatureBlock settings={settings} />
             </div>
           </div>
