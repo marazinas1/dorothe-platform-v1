@@ -25,13 +25,14 @@ All run inside one admin-gated server function file, as the signed-in user (RLS 
 
 | Group | Query | Bound |
 |---|---|---|
-| New enquiries | `select id,type,name,email,created_at,listing_id,listings(slug,title) from inquiries where status='new' order by created_at asc limit 9` + `select count(*) head` | 8 shown, 9th row proves "more"; count exact |
-| Cannot be published | `select <checklist columns>, listing_images(...) from listings where status in ('draft','coming_soon') order by updated_at desc limit 25` then checklist filter | 25 candidate rows max, 8 rendered, remainder as "+N more" |
-| Published with gaps | one Postgres RPC `admin_listing_gaps(_limit int)` returning id, slug, title, and boolean gap flags, computed in SQL; `where status in ('active','coming_soon') and (any gap)` order by `updated_at desc` | `limit 9`, plus exact count in the same RPC |
+| Unhandled enquiries | `select id,type,status,name,email,created_at,listing_id,listings(slug,title) from inquiries where status in ('new','read') order by created_at asc limit 9` + exact `count(*)` head request | 8 shown, 9th row proves "more"; count exact |
+| Cannot be published | `select <checklist columns>, listing_images(...) from listings where status in ('draft','coming_soon') order by updated_at desc limit 25` then `rowPublishBlockers` filter | 25 candidate rows max, 8 rendered, remainder as "+N more" |
+| Published with gaps | `select <gap columns>, listing_images(id) from listings where status in ('active','coming_soon') order by updated_at desc limit 25`, then `publishedGaps()` filter — count and items derive from the same call, no RPC | 25 candidate rows max, 8 rendered, "+N more" from the same filtered array |
 | Reserved | `select id,slug,title,updated_at from listings where status='reserved' order by updated_at asc limit 9` | 8 shown + count |
-| Long active, no enquiries | same RPC family: `admin_stale_active(_days int, _limit int)` — `left join inquiries i on i.listing_id=l.id`, `having count(i.id)=0`, `published_at < now() - interval` | `limit 9` + exact count |
+| Long active, no enquiries | RPC `admin_stale_active(_days int, _limit int)` — `left join inquiries i on i.listing_id=l.id`, `having count(i.id)=0`, `published_at < now() - interval` | `limit 9` + exact count |
 
-Drafts are few by construction (junk-draft cleanup already runs), so the checklist group can safely fetch a bounded candidate set and evaluate in TypeScript — this is what keeps it from disagreeing with the editor.
+Both listing-side queue groups use the same shape: a bounded candidate set fetched from `listings`, filtered by the one TypeScript rule, count and items from a single call. That is what guarantees the header number and the list can never disagree, and that a row can never be selected and then render with no reason. If listing volume ever makes 25 candidates too tight, we revisit with a real number.
+
 
 ### Where the rules live
 
