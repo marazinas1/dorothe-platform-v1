@@ -24,6 +24,7 @@ import {
   type PublicListing,
 } from "@/lib/listings/queries.functions";
 import { getListingPreview } from "@/lib/listings/preview.functions";
+import { countListingView } from "@/lib/listings/views.functions";
 import { useCountListingView } from "@/lib/listings/use-count-view";
 import { pickImageUrl } from "@/lib/listings/image";
 import { pickLocalized } from "@/lib/listings/format";
