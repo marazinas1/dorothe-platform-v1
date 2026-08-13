@@ -40,6 +40,8 @@ export type Database = {
       }
       inquiries: {
         Row: {
+          consent_at: string | null
+          consent_privacy_version: string | null
           created_at: string
           email: string
           handled_at: string | null
@@ -57,6 +59,8 @@ export type Database = {
           type: string
         }
         Insert: {
+          consent_at?: string | null
+          consent_privacy_version?: string | null
           created_at?: string
           email: string
           handled_at?: string | null
@@ -74,6 +78,8 @@ export type Database = {
           type?: string
         }
         Update: {
+          consent_at?: string | null
+          consent_privacy_version?: string | null
           created_at?: string
           email?: string
           handled_at?: string | null
@@ -1219,6 +1225,10 @@ export type Database = {
       current_user_is_active: { Args: never; Returns: boolean }
       current_user_role: { Args: never; Returns: string }
       has_role: { Args: { _roles: string[] }; Returns: boolean }
+      increment_listing_view: {
+        Args: { _listing_id: string }
+        Returns: undefined
+      }
       listing_is_public: { Args: { _listing_id: string }; Returns: boolean }
       listing_slug_base: {
         Args: {
