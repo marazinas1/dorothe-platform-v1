@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { ShareButtons } from "@/components/public/ShareButtons";
-import { n } from "@/hooks/use-feature-flag";
+import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { Locale } from "@/i18n/config";
 import {
   listingDocumentsQueryOptions,
@@ -55,7 +55,7 @@ export function ListingDetailBody({ listing, locale, settings, shareUrl, title }
 
   // The documents feature has no admin UI yet, so while the flag is off the
   // site's busiest page runs no query for it at all.
-  const documentsEnabled = n("listing_documents");
+  const documentsEnabled = useFeatureFlag("listing_documents");
   const documents = useSuspenseQuery(
     listingDocumentsQueryOptions(l.id, documentsEnabled),
   );

@@ -51,7 +51,7 @@ export function ListingDocuments({ documents }: Props) {
                 disabled={busy === doc.id}
                 className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
               >
-                {t(busy === doc.id ? "common.loading" : "listings.detail.document_open")}
+                {t(busy === doc.id ? "listings.detail.document_loading" : "listings.detail.document_open")}
               </button>
             ) : (
               <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
