@@ -6,6 +6,7 @@ import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
 import { Reveal } from "@/components/shared/Reveal";
+import { LISTING_CARD_GRID } from "@/lib/homepage/card-grid";
 
 import { ListingCard } from "./ListingCard";
 
@@ -31,14 +32,13 @@ export function SoldStrip({ locale, items, settings, hidePrice = false }: Props)
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={LISTING_CARD_GRID}>
         {items.slice(0, 3).map((l, i) => (
           <Reveal key={l.id} delay={i * 90}>
             <ListingCard
               listing={l}
               locale={locale}
               settings={settings}
-              size="compact"
               hidePrice={hidePrice}
             />
           </Reveal>
