@@ -32,8 +32,8 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
   if (layout === "split" && image) {
     return (
       <section className="mx-auto flex max-w-[1400px] flex-col justify-center px-6 pb-14 pt-10 lg:min-h-[calc(100svh-7rem)] lg:px-10 lg:pb-8 lg:pt-6">
-        <div className="grid items-center gap-10 md:grid-cols-12 md:gap-12 lg:gap-14">
-          <div className="md:col-span-7">
+        <div className="mx-auto flex w-full max-w-[1120px] flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-16">
+          <div className="w-full lg:max-w-[560px] lg:-translate-y-6">
             <div className="eyebrow text-muted-foreground">{settings.site_name}</div>
             <h1 className="text-hero-split mt-4 max-w-[20ch] text-balance hyphens-auto lg:mt-5">
               {title}
@@ -45,11 +45,8 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
             ) : null}
             <HeroActions locale={locale} className="mt-6 lg:mt-7" />
           </div>
-          {/* Portrait after the text on a phone: the headline is read first.
-              The portrait keeps its generous scale and is bounded by viewport
-              height so the whole hero stays on one screen. */}
-          <div className="md:col-span-5">
-            <div className="mx-auto aspect-[3/4] w-full max-w-[420px] overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(360px,66svh,640px)] lg:w-auto lg:max-w-none">
+          <div className="w-full max-w-[420px] shrink-0 lg:w-auto lg:max-w-none">
+            <div className="aspect-[3/4] w-full overflow-hidden rounded-sm lg:aspect-[4/5] lg:h-[clamp(360px,66svh,640px)] lg:w-auto">
               <img
                 src={image}
                 alt={settings.primary_agent_name ?? settings.site_name}
@@ -57,8 +54,7 @@ export function Hero({ locale, settings, layout, image, headline, subline }: Pro
                 fetchPriority="high"
               />
             </div>
-            {/* Signature sits centred beneath the portrait it belongs to. */}
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4">
               <SignatureBlock settings={settings} align="center" />
             </div>
           </div>
