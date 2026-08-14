@@ -142,12 +142,12 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
             <Arrow
               dir="prev"
               label={t("listings.card.prev_photo")}
-              onClick={() => scrollTo(index - 1)}
+              onClick={() => goTo(index - 1)}
             />
             <Arrow
               dir="next"
               label={t("listings.card.next_photo")}
-              onClick={() => scrollTo(index + 1)}
+              onClick={() => goTo(index + 1)}
             />
           </div>
 
@@ -158,7 +158,7 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
                 type="button"
                 tabIndex={-1}
                 aria-hidden="true"
-                onClick={() => scrollTo(i)}
+                onClick={() => goTo(i)}
                 className={cn(
                   "h-1.5 w-1.5 rounded-full transition-colors duration-300",
                   i === index ? "bg-card" : "bg-card/50",
