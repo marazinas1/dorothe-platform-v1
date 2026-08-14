@@ -150,7 +150,7 @@ export function SellerInquiryForm() {
           accept="image/*"
           multiple
           onChange={onFiles}
-          className="mt-3 block w-full text-sm text-muted-foreground file:mr-4 file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-[11px] file:uppercase file:tracking-[0.16em] file:text-background"
+          className="mt-3 block w-full text-sm text-muted-foreground file:mr-4 file:border-0 file:bg-primary file:px-4 file:py-2 file:text-[11px] file:uppercase file:tracking-[0.16em] file:text-primary-foreground"
         />
         {files.length > 0 ? (
           <div className="mt-2 text-xs text-muted-foreground">
@@ -195,7 +195,7 @@ export function SellerInquiryForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="inline-flex h-12 items-center justify-center bg-foreground px-8 text-[11px] uppercase tracking-[0.18em] text-background transition-opacity duration-300 hover:opacity-85 disabled:opacity-60"
+        className="inline-flex h-12 items-center justify-center bg-primary px-8 text-[11px] uppercase tracking-[0.18em] text-primary-foreground transition-opacity duration-300 hover:opacity-85 disabled:opacity-60"
       >
         {status === "submitting" ? t("inquiry.submitting") : t("inquiry.seller.submit")}
       </button>
