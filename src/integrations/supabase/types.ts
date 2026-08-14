@@ -746,6 +746,7 @@ export type Database = {
           secondary_color: string | null
           service_areas: Json
           service_region: Json
+          service_region_in: Json
           show_sold_prices: boolean
           site_name: string
           social: Json
@@ -805,6 +806,7 @@ export type Database = {
           secondary_color?: string | null
           service_areas?: Json
           service_region?: Json
+          service_region_in?: Json
           show_sold_prices?: boolean
           site_name: string
           social?: Json
@@ -864,6 +866,7 @@ export type Database = {
           secondary_color?: string | null
           service_areas?: Json
           service_region?: Json
+          service_region_in?: Json
           show_sold_prices?: boolean
           site_name?: string
           social?: Json

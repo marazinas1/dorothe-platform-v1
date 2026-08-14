@@ -3,8 +3,8 @@
     "complete": "Einrichtung abgeschlossen"
   },
   "home": {
-    "title": "Immobilien in {{region}}",
-    "description": "Sorgfältig ausgewählte Häuser und Wohnungen in {{region}}.",
+    "title": "Immobilien {{region_in}}",
+    "description": "Sorgfältig ausgewählte Häuser und Wohnungen {{region_in}}.",
     "hero_line": "Ihr Zuhause in guten Händen",
     "featured": "Ausgewählte Objekte",
     "recent_sales": "Kürzlich vermittelt",
@@ -61,7 +61,7 @@
   },
   "listings": {
     "title": "Immobilien",
-    "description": "Aktuelle Angebote in {{region}}.",
+    "description": "Aktuelle Angebote {{region_in}}.",
     "sold_title": "Verkauft & vermittelt",
     "sold_description": "Referenzen aus den letzten Monaten.",
     "sold_empty": "Noch keine vermittelten Objekte veröffentlicht.",
@@ -1211,7 +1211,7 @@
       "proof_link": "[Platzhalter] Zum Verkauft-Archiv"
     },
     "about": {
-      "meta_description_solo": "Über {{agent}} — Immobilienberatung in {{region}} mit persönlicher Betreuung von der Bewertung bis zur Übergabe.",
+      "meta_description_solo": "Über {{agent}} — Immobilienberatung {{region_in}} mit persönlicher Betreuung von der Bewertung bis zur Übergabe.",
       "meta_description_team": "Lernen Sie das Team hinter der Immobilienberatung kennen — persönlich, sorgfältig, in der Region verwurzelt.",
       "kicker": "Persönlich",
       "solo": {

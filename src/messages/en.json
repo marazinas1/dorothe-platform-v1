@@ -3,8 +3,8 @@
     "complete": "Setup complete"
   },
   "home": {
-    "title": "Real estate in {{region}}",
-    "description": "Carefully selected houses and apartments across {{region}}.",
+    "title": "Real estate {{region_in}}",
+    "description": "Carefully selected houses and apartments {{region_in}}.",
     "hero_line": "Your home in good hands",
     "featured": "Selected properties",
     "recent_sales": "Recently sold",
@@ -61,7 +61,7 @@
   },
   "listings": {
     "title": "Properties",
-    "description": "Current offerings across {{region}}.",
+    "description": "Current offerings {{region_in}}.",
     "sold_title": "Sold & completed",
     "sold_description": "A record of recently completed transactions.",
     "sold_empty": "No completed sales published yet.",
@@ -1211,7 +1211,7 @@
       "proof_link": "[Placeholder] See the sold archive"
     },
     "about": {
-      "meta_description_solo": "About {{agent}} — a solo real estate advisor in {{region}} with personal support from valuation to handover.",
+      "meta_description_solo": "About {{agent}} — a solo real estate advisor {{region_in}} with personal support from valuation to handover.",
       "meta_description_team": "Meet the team behind our real estate practice — personal, careful, rooted in the region.",
       "kicker": "Personal",
       "solo": {
