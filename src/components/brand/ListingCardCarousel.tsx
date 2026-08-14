@@ -100,7 +100,11 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
     <div
       className="group/media relative aspect-[3/2] w-full overflow-hidden rounded-media bg-muted"
       onPointerEnter={() => setArmed(true)}
-      onTouchStart={() => setArmed(true)}
+      onTouchStart={(e) => {
+        setArmed(true);
+        touchX.current = e.touches[0]?.clientX ?? null;
+      }}
+      onTouchEnd={onTouchEnd}
     >
       <div
         ref={trackRef}
