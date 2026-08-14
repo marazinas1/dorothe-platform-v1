@@ -1279,19 +1279,19 @@
     },
     "inheritance": {
       "title": "Erben & Immobilien",
-      "meta_description": "[Platzhalter] Kurzbeschreibung für Suchmaschinen. Echter Text folgt.",
-      "kicker": "[Platzhalter] Erben & Immobilien",
-      "headline": "[Platzhalter] Eine geerbte Immobilie, in Ruhe geordnet.",
-      "intro": "[Platzhalter] Ein Satz zur Situation, sachlich und ohne Verkaufston. Echter Text folgt.",
-      "appraisal_title": "[Platzhalter] Verkehrswertgutachten",
-      "appraisal_body": "[Platzhalter] Ein Satz dazu, was das ist und wann das Finanzamt es braucht. Echter Text folgt.",
-      "community_title": "[Platzhalter] Erbengemeinschaft",
-      "community_body": "[Platzhalter] Ein Satz zum Verkauf, wenn mehrere Erben zustimmen müssen. Echter Text folgt.",
-      "credential_title": "[Platzhalter] Qualifikation",
-      "credential_body": "[Platzhalter] Ein Satz zur Sprengnetter-Qualifikation im Erbrecht, einmal und sachlich. Echter Text folgt.",
-      "contact_title": "[Platzhalter] Wenn Sie sprechen möchten",
-      "contact_body": "[Platzhalter] Ein ruhiger Satz zum Gesprächsangebot. Echter Text folgt.",
-      "contact_link": "[Platzhalter] Kontakt"
+      "meta_description": "Geerbte Immobilie im Saarland: Verkehrswertgutachten für das Finanzamt, neutrale Bewertung bei Erbengemeinschaften und Begleitung beim Verkauf.",
+      "kicker": "Erbimmobilien",
+      "headline": "Eine geerbte Immobilie, in Ruhe geordnet.",
+      "intro": "Ein Erbfall bringt Fragen mit sich, auf die sich niemand vorbereitet: Was ist die Immobilie wert? Welche Zahl will das Finanzamt sehen? Und was gilt, wenn mehrere Erben gemeinsam entscheiden müssen? Ich übernehme den Teil, der die Immobilie betrifft — bewerten, einordnen und, wenn Sie sich dafür entscheiden, verkaufen.",
+      "appraisal_title": "Verkehrswertgutachten",
+      "appraisal_body": "Für das Finanzamt zählt der Verkehrswert zum Todestag, nicht der heutige Marktpreis. Liegt die pauschale Bewertung des Finanzamts über dem tatsächlichen Wert, kann ein qualifiziertes Gutachten die Grundlage für eine Korrektur sein. Ich erstelle die Bewertung nach anerkannten Verfahren und dokumentiere sie nachvollziehbar. Die steuerliche Beurteilung selbst besprechen Sie mit Ihrem Steuerberater.",
+      "community_title": "Erbengemeinschaft",
+      "community_body": "Wenn mehrere Erben entscheiden müssen, scheitert ein Verkauf selten am Markt, sondern an unterschiedlichen Vorstellungen vom Wert. Eine neutrale, belegbare Bewertung schafft eine gemeinsame Zahl, über die sich sachlich sprechen lässt. Danach begleite ich den Verkauf so, dass alle Beteiligten denselben Informationsstand haben — ohne Partei zu ergreifen.",
+      "credential_title": "Qualifikation",
+      "credential_body": "Immo-Erbrechts-Expertin (Sprengnetter) und DEKRA-zertifizierte Sachverständige für Immobilienbewertung. Rechtliche und steuerliche Fragen klären Sie mit Notar, Anwalt oder Steuerberater — ich bringe die Immobilie und ihren Wert sauber in diesen Prozess ein.",
+      "contact_title": "Wenn Sie sprechen möchten",
+      "contact_body": "Ein Erbfall hat kein festes Tempo. Wenn Sie zunächst nur wissen möchten, woran Sie sind, schreiben Sie mir. Ein erstes Gespräch verpflichtet zu nichts.",
+      "contact_link": "Kontakt aufnehmen"
     }
   },
   "brand": {

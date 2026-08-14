@@ -1278,20 +1278,20 @@
       "map_missing": "The map appears once office coordinates are set."
     },
     "inheritance": {
-      "title": "Inheritance & property",
-      "meta_description": "[Placeholder] Short description for search engines. Real copy to follow.",
-      "kicker": "[Placeholder] Inheritance & property",
-      "headline": "[Placeholder] An inherited property, sorted calmly.",
-      "intro": "[Placeholder] One line on the situation, plainly and without a sales tone. Real copy to follow.",
-      "appraisal_title": "[Placeholder] Market value appraisal",
-      "appraisal_body": "[Placeholder] One line on what it is and when the tax office needs one. Real copy to follow.",
-      "community_title": "[Placeholder] Community of heirs",
-      "community_body": "[Placeholder] One line on selling when several heirs must agree. Real copy to follow.",
-      "credential_title": "[Placeholder] Qualification",
-      "credential_body": "[Placeholder] One line on the Sprengnetter inheritance-law qualification, stated once. Real copy to follow.",
-      "contact_title": "[Placeholder] If you would like to talk",
-      "contact_body": "[Placeholder] One quiet line offering a conversation. Real copy to follow.",
-      "contact_link": "[Placeholder] Contact"
+      "title": "Inherited property",
+      "meta_description": "Inherited property in the Saarland: market value appraisals for the tax office, neutral valuations for co-heirs, and support through the sale.",
+      "kicker": "Inherited property",
+      "headline": "An inherited property, settled calmly.",
+      "intro": "An inheritance raises questions nobody prepares for. What is the property worth? Which figure does the tax office want to see? And what applies when several heirs have to decide together? I take on the part that concerns the property — valuing it, putting it in context and, if you decide to, selling it.",
+      "appraisal_title": "Market value appraisal",
+      "appraisal_body": "For the tax office what counts is the market value on the date of death, not today's asking price. Where the tax office's standardised valuation sits above the actual value, a qualified appraisal can be the basis for a correction. I prepare the valuation using recognised methods and document it so it can be followed. The tax assessment itself is something you discuss with your tax adviser.",
+      "community_title": "Co-heirs",
+      "community_body": "When several heirs have to agree, a sale rarely fails because of the market. It fails because everyone has a different figure in mind. A neutral, evidenced valuation creates one number that can be discussed calmly. From there I handle the sale so that everyone involved works from the same information — without taking sides.",
+      "credential_title": "Qualifications",
+      "credential_body": "Certified specialist in inheritance-related property matters (Sprengnetter) and DEKRA-certified expert for property valuation. Legal and tax questions are settled with your notary, lawyer or tax adviser — my part is bringing the property and its value into that process cleanly.",
+      "contact_title": "If you would like to talk",
+      "contact_body": "An inheritance runs at its own pace. If for now you simply want to know where you stand, write to me. A first conversation commits you to nothing.",
+      "contact_link": "Get in touch"
     }
   },
   "brand": {

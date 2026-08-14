@@ -64,7 +64,6 @@ function InheritancePage() {
       <TextSection
         title={t("pages.inheritance.credential_title")}
         body={t("pages.inheritance.credential_body")}
-        gap="tight"
         quiet
       />
 
@@ -72,7 +71,6 @@ function InheritancePage() {
         <TextSection
           title={t("pages.inheritance.contact_title")}
           body={t("pages.inheritance.contact_body")}
-          gap="major"
           quiet
         >
           <Link
