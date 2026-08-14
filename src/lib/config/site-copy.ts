@@ -16,6 +16,16 @@ export function serviceRegion(settings: SiteSettings, locale: string): string {
   return settings.address_city ?? settings.site_name;
 }
 
+/**
+ * Localized region including its preposition ("im Saarland", "in Bayern").
+ * Falls back to "in " + service_region when the setting is empty.
+ */
+export function serviceRegionIn(settings: SiteSettings, locale: string): string {
+  const value = pickLocalized(settings.service_region_in, locale, settings.default_locale);
+  if (value) return value;
+  return `in ${serviceRegion(settings, locale)}`;
+}
+
 /** Public-facing name of the primary contact person. */
 export function agentName(settings: SiteSettings): string {
   return settings.primary_agent_name ?? settings.legal_name ?? settings.site_name;
@@ -30,6 +40,7 @@ export function exampleCity(settings: SiteSettings, locale: string): string {
 export function copyVars(settings: SiteSettings, locale: string) {
   return {
     region: serviceRegion(settings, locale),
+    region_in: serviceRegionIn(settings, locale),
     agent: agentName(settings),
     city: exampleCity(settings, locale),
     site: settings.site_name,

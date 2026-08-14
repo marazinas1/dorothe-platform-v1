@@ -57,9 +57,7 @@ export function AgentIntro({
         <div className="md:col-span-7">
           <div className="eyebrow text-muted-foreground">{role}</div>
           <h1 className="mt-5 font-heading text-4xl leading-[1.05] md:text-6xl">{name}</h1>
-          {showSignature ? (
-            <Signature name={name} size="md" className="mt-4 block" />
-          ) : null}
+          {/* Signature intentionally not rendered here — it lives in the homepage hero. */}
 
           <div className="mt-8 space-y-6 text-base leading-relaxed text-foreground">
             {bio ? <p>{bio}</p> : null}

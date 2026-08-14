@@ -10,6 +10,8 @@ export interface SiteSettings {
   enabled_locales: string[];
   /** Localized service region name, interpolated into translated copy. */
   service_region: Record<string, string>;
+  /** Localized region with its preposition ("im Saarland", "in Bayern"). */
+  service_region_in: Record<string, string>;
   currency: string;
   area_unit: AreaUnit;
   logo_url: string | null;
