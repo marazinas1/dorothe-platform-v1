@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { Locale } from "@/i18n/config";
@@ -24,18 +24,22 @@ type Props = {
   eager?: boolean;
 };
 
-/** Nobody browses forty photos on a card; the rest are behind the link. */
-const MAX_SLIDES = 6;
+/** However many photos a listing carries, the dot row stays this short. */
+const MAX_DOTS = 6;
 
 /**
  * Card carousel as a CSS scroll-snap track: swipe on touch, arrows on hover for
  * pointer devices, dots for position. No motion library, and the markup renders
  * server-side unchanged.
  *
+ * Every photo is browsable. Looping is seamless because the first photo is
+ * cloned once at the end of the track: sliding past the last one scrolls into
+ * that clone like any other slide, and once the scroll settles the track is
+ * silently repositioned to the real first slide. The same trick runs backwards
+ * from the first photo.
+ *
  * Only the cover has a `src` on first paint — a catalogue of twenty cards costs
- * twenty images, exactly what it cost before. The remaining slides are armed on
- * the first interaction (pointer entering the media, a swipe, an arrow, a dot),
- * and then only the current neighbourhood loads.
+ * twenty images. The neighbouring slides are armed on the first interaction.
  *
  * The controls are hidden from keyboard and assistive tech on purpose: the card
  * is one tab stop and one target, and the full gallery lives on the detail page.
@@ -45,77 +49,98 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [armed, setArmed] = useState(false);
   const [index, setIndex] = useState(0);
+  const settle = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const usable = images.filter((i) => pickImageUrl(i.variants, "card"));
-  const slides = usable.slice(0, MAX_SLIDES);
-  const overflow = usable.length - slides.length;
+  useEffect(() => () => {
+    if (settle.current) clearTimeout(settle.current);
+  }, []);
 
-  if (slides.length === 0) {
+  const slides = images.filter((i) => pickImageUrl(i.variants, "card"));
+  const total = slides.length;
+
+  if (total === 0) {
     return <div className="aspect-[3/2] w-full rounded-media bg-muted" />;
   }
 
-  /**
-   * The track is a finite scroll-snap row, so looping is done by hand: stepping
-   * past either end jumps to the opposite end instantly (a smooth scroll across
-   * every slide would read as a rewind, not a loop).
-   */
-  const goTo = (next: number) => {
+  // The clone of the cover, so the last -> first step is a normal slide move.
+  const rendered = total > 1 ? [...slides, slides[0]!] : slides;
+
+  const jump = (slot: number) => {
     const track = trackRef.current;
-    const last = slides.length - 1;
-    const wrapped = next > last ? 0 : next < 0 ? last : next;
-    const jumped = wrapped !== next;
+    track?.scrollTo({ left: slot * (track.clientWidth || 0), behavior: "auto" });
+  };
+
+  const step = (dir: 1 | -1) => {
+    const track = trackRef.current;
+    if (!track || total < 2) return;
     setArmed(true);
-    setIndex(wrapped);
-    track?.scrollTo({
-      left: wrapped * track.clientWidth,
-      behavior: jumped ? "auto" : "smooth",
-    });
+    if (dir === 1) {
+      // From the last photo, glide into the clone; onScroll snaps back after.
+      track.scrollTo({ left: (index + 1) * track.clientWidth, behavior: "smooth" });
+      setIndex(index + 1 >= total ? 0 : index + 1);
+      return;
+    }
+    if (index === 0) {
+      // Teleport to the clone first, then glide left into the real last photo.
+      jump(total);
+      requestAnimationFrame(() => {
+        track.scrollTo({ left: (total - 1) * track.clientWidth, behavior: "smooth" });
+      });
+      setIndex(total - 1);
+      return;
+    }
+    track.scrollTo({ left: (index - 1) * track.clientWidth, behavior: "smooth" });
+    setIndex(index - 1);
+  };
+
+  const goTo = (target: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    setArmed(true);
+    setIndex(target);
+    track.scrollTo({ left: target * track.clientWidth, behavior: "smooth" });
   };
 
   const onScroll = () => {
     const track = trackRef.current;
     if (!track || track.clientWidth === 0) return;
     setArmed(true);
-    setIndex(Math.round(track.scrollLeft / track.clientWidth));
+    const slot = Math.round(track.scrollLeft / track.clientWidth);
+    setIndex(slot >= total ? 0 : slot);
+    if (settle.current) clearTimeout(settle.current);
+    // Once the scroll has come to rest on the clone, sit on the real cover.
+    settle.current = setTimeout(() => {
+      const t2 = trackRef.current;
+      if (!t2 || t2.clientWidth === 0) return;
+      if (Math.round(t2.scrollLeft / t2.clientWidth) >= total) jump(0);
+    }, 140);
   };
 
-  // Touch swipes are native scrolling, which cannot pass the last slide — so a
-  // swipe that ends at an edge wraps the same way the arrows do.
-  const touchX = useRef<number | null>(null);
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const start = touchX.current;
-    touchX.current = null;
-    const track = trackRef.current;
-    if (start == null || !track || slides.length < 2) return;
-    const delta = (e.changedTouches[0]?.clientX ?? start) - start;
-    if (Math.abs(delta) < 40) return;
-    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
-    const atStart = track.scrollLeft <= 2;
-    if (delta < 0 && atEnd) goTo(slides.length);
-    if (delta > 0 && atStart) goTo(-1);
-  };
-
+  // A window of dots that follows the current photo, so forty photos still read
+  // as a calm row of six.
+  const dotStart = Math.max(0, Math.min(index - Math.floor(MAX_DOTS / 2), total - MAX_DOTS));
+  const dotCount = Math.min(MAX_DOTS, total);
 
   return (
     <div
       className="group/media relative aspect-[3/2] w-full overflow-hidden rounded-media bg-muted"
       onPointerEnter={() => setArmed(true)}
-      onTouchStart={(e) => {
-        setArmed(true);
-        touchX.current = e.touches[0]?.clientX ?? null;
-      }}
-      onTouchEnd={onTouchEnd}
+      onTouchStart={() => setArmed(true)}
     >
       <div
         ref={trackRef}
         onScroll={onScroll}
         className="no-scrollbar flex h-full w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden"
       >
-        {slides.map((img, i) => {
-          const near = i === 0 || (armed && Math.abs(i - index) <= 1);
+        {rendered.map((img, i) => {
+          const real = i === total ? 0 : i;
+          const near =
+            i === 0 ||
+            (armed &&
+              (Math.abs(i - index) <= 1 || (i === total && index >= total - 1) || real === index));
           const src = near ? pickImageUrl(img.variants, "card") : null;
           return (
-            <div key={img.id ?? i} className="relative h-full w-full shrink-0 snap-center">
+            <div key={`${img.id ?? "i"}-${i}`} className="relative h-full w-full shrink-0 snap-center">
               {src ? (
                 <img
                   src={src}
@@ -129,34 +154,21 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
               ) : (
                 <div className="h-full w-full bg-muted" />
               )}
-              {i === slides.length - 1 && overflow > 0 ? (
-                <span className="absolute right-3 bottom-3 rounded-full bg-card/85 px-3 py-1 text-xs text-foreground">
-                  {t("listings.card.more_photos", { count: overflow })}
-                </span>
-              ) : null}
             </div>
           );
         })}
       </div>
 
-      {slides.length > 1 ? (
+      {total > 1 ? (
         <>
           {/* Above the title link's inset overlay, so no event gymnastics. */}
           <div className="pointer-events-none absolute inset-0 z-20 hidden items-center justify-between px-3 opacity-0 transition-opacity duration-300 group-hover/media:opacity-100 md:flex">
-            <Arrow
-              dir="prev"
-              label={t("listings.card.prev_photo")}
-              onClick={() => goTo(index - 1)}
-            />
-            <Arrow
-              dir="next"
-              label={t("listings.card.next_photo")}
-              onClick={() => goTo(index + 1)}
-            />
+            <Arrow dir="prev" label={t("listings.card.prev_photo")} onClick={() => step(-1)} />
+            <Arrow dir="next" label={t("listings.card.next_photo")} onClick={() => step(1)} />
           </div>
 
           <div className="absolute inset-x-0 bottom-3 z-20 flex justify-center gap-1.5">
-            {slides.map((_, i) => (
+            {Array.from({ length: dotCount }, (_, k) => dotStart + k).map((i) => (
               <button
                 key={i}
                 type="button"
