@@ -128,7 +128,7 @@ export function BuyerInquiryForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="inline-flex h-12 items-center justify-center bg-foreground px-8 text-[11px] uppercase tracking-[0.18em] text-background transition-opacity duration-300 hover:opacity-85 disabled:opacity-60"
+        className="inline-flex h-12 items-center justify-center bg-primary px-8 text-[11px] uppercase tracking-[0.18em] text-primary-foreground transition-opacity duration-300 hover:opacity-85 disabled:opacity-60"
       >
         {status === "submitting" ? t("inquiry.submitting") : t("inquiry.buyer.submit")}
       </button>
