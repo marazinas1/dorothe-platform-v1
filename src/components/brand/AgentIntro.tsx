@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import brokerPlaceholder from "@/assets/broker-placeholder.jpg";
-import { Signature } from "@/components/brand/Signature";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
 

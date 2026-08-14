@@ -28,6 +28,7 @@ UPDATE public.site_settings SET
   default_locale   = 'de',
   enabled_locales  = ARRAY['de','en'],
   service_region   = '{"de":"Saarland","en":"the Saarland"}'::jsonb,
+  service_region_in = '{"de":"im Saarland","en":"in Saarland"}'::jsonb,
   currency         = 'EUR',
   area_unit        = 'sqm',
   primary_color    = '#6B7259',
