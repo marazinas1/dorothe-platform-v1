@@ -54,12 +54,22 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
     return <div className="aspect-[3/2] w-full rounded-media bg-muted" />;
   }
 
-  const scrollTo = (next: number) => {
+  /**
+   * The track is a finite scroll-snap row, so looping is done by hand: stepping
+   * past either end jumps to the opposite end instantly (a smooth scroll across
+   * every slide would read as a rewind, not a loop).
+   */
+  const goTo = (next: number) => {
     const track = trackRef.current;
-    const clamped = Math.max(0, Math.min(slides.length - 1, next));
+    const last = slides.length - 1;
+    const wrapped = next > last ? 0 : next < 0 ? last : next;
+    const jumped = wrapped !== next;
     setArmed(true);
-    setIndex(clamped);
-    track?.scrollTo({ left: clamped * track.clientWidth, behavior: "smooth" });
+    setIndex(wrapped);
+    track?.scrollTo({
+      left: wrapped * track.clientWidth,
+      behavior: jumped ? "auto" : "smooth",
+    });
   };
 
   const onScroll = () => {
@@ -69,11 +79,32 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
     setIndex(Math.round(track.scrollLeft / track.clientWidth));
   };
 
+  // Touch swipes are native scrolling, which cannot pass the last slide — so a
+  // swipe that ends at an edge wraps the same way the arrows do.
+  const touchX = useRef<number | null>(null);
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touchX.current;
+    touchX.current = null;
+    const track = trackRef.current;
+    if (start == null || !track || slides.length < 2) return;
+    const delta = (e.changedTouches[0]?.clientX ?? start) - start;
+    if (Math.abs(delta) < 40) return;
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+    const atStart = track.scrollLeft <= 2;
+    if (delta < 0 && atEnd) goTo(slides.length);
+    if (delta > 0 && atStart) goTo(-1);
+  };
+
+
   return (
     <div
       className="group/media relative aspect-[3/2] w-full overflow-hidden rounded-media bg-muted"
       onPointerEnter={() => setArmed(true)}
-      onTouchStart={() => setArmed(true)}
+      onTouchStart={(e) => {
+        setArmed(true);
+        touchX.current = e.touches[0]?.clientX ?? null;
+      }}
+      onTouchEnd={onTouchEnd}
     >
       <div
         ref={trackRef}
@@ -115,12 +146,12 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
             <Arrow
               dir="prev"
               label={t("listings.card.prev_photo")}
-              onClick={() => scrollTo(index - 1)}
+              onClick={() => goTo(index - 1)}
             />
             <Arrow
               dir="next"
               label={t("listings.card.next_photo")}
-              onClick={() => scrollTo(index + 1)}
+              onClick={() => goTo(index + 1)}
             />
           </div>
 
@@ -131,7 +162,7 @@ export function ListingCardCarousel({ images, locale, name, eager = false }: Pro
                 type="button"
                 tabIndex={-1}
                 aria-hidden="true"
-                onClick={() => scrollTo(i)}
+                onClick={() => goTo(i)}
                 className={cn(
                   "h-1.5 w-1.5 rounded-full transition-colors duration-300",
                   i === index ? "bg-card" : "bg-card/50",
