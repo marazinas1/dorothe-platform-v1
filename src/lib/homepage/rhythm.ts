@@ -12,12 +12,12 @@
  *             credentials → seals) so they read as one object
  */
 export const SECTION_GAP = {
-  major: "mt-40 lg:mt-56",
-  normal: "mt-24 lg:mt-32",
-  tight: "mt-14 lg:mt-16",
+  major: "mt-28 lg:mt-36",
+  normal: "mt-20 lg:mt-24",
+  tight: "mt-12 lg:mt-14",
 } as const;
 
 export type SectionGap = keyof typeof SECTION_GAP;
 
 /** Inner padding for a block that must breathe (text-led argument blocks). */
-export const BLOCK_PADDING_ROOMY = "py-16 lg:py-24";
+export const BLOCK_PADDING_ROOMY = "py-14 lg:py-20";

@@ -27,7 +27,7 @@ export function ContactSection({ locale, settings }: Props) {
   const [tab, setTab] = useState<Tab>("seller");
 
   return (
-    <section className={`mx-auto ${SECTION_GAP.normal} max-w-[1400px] px-6 pb-32 lg:px-10`}>
+    <section className={`mx-auto ${SECTION_GAP.normal} max-w-[1400px] px-6 pb-20 lg:px-10 lg:pb-24`}>
       <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
         <div className="md:col-span-4">
           <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
