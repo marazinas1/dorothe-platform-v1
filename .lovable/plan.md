@@ -61,4 +61,4 @@ Application code:
 - `AdminSidebar.tsx`: `team` nav item becomes `users` pointing at the new route
 - new keys in `src/messages/en.json` and `de.json`; nothing client-specific anywhere
 
-Verification: sign in as the Developer account, confirm the Users page lists all accounts, that Dorothe shows as Owner and the developer row is shielded, and that an Editor account cannot reach settings or the Users page.
+Verification after the change is applied: exactly one profile row remains (rutkusmarius@gmail.com, `developer`); the other two accounts are gone from both authentication and profiles; the role check allows only the three roles; `role_permissions` holds 16 keys × 3 roles with Developer and Owner identical and Editor reduced; the Users page loads for the Developer; typecheck passes.
