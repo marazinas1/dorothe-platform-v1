@@ -12,14 +12,26 @@ import { LegalLinks } from "@/components/public/LegalLinks";
 import { useSignOut } from "@/lib/auth/use-sign-out";
 import type { Locale } from "@/i18n/config";
 
-/** Public-site link and sign-out, kept together at the bottom of the sidebar. */
-export function AdminSidebarFooter() {
+interface Props {
+  /** Who is signed in — shown at the bottom of the sidebar. */
+  email: string;
+  roleLabel: string;
+}
+
+/** Signed-in identity, public-site link and sign-out at the sidebar bottom. */
+export function AdminSidebarFooter({ email, roleLabel }: Props) {
   const { t } = useTranslation();
   const { locale } = useParams({ strict: false }) as { locale: Locale };
   const signOut = useSignOut();
 
   return (
     <SidebarFooter className="border-t border-sidebar-border">
+      <div className="px-2 py-1 group-data-[collapsible=icon]:hidden">
+        <div className="truncate text-xs text-muted-foreground">{email}</div>
+        <div className="text-[11px] uppercase tracking-wider text-muted-foreground/70">
+          {roleLabel}
+        </div>
+      </div>
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton asChild tooltip={t("admin.nav.viewSite")}>

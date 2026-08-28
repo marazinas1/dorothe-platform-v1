@@ -85,7 +85,7 @@ function NavRow({ item, locale }: { item: NavItem; locale: Locale }) {
   );
 }
 
-export function AdminSidebar() {
+export function AdminSidebar({ email, roleLabel }: { email: string; roleLabel: string }) {
   const { t } = useTranslation();
   const { locale } = useParams({ strict: false }) as { locale: Locale };
   return (
@@ -103,7 +103,7 @@ export function AdminSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <AdminSidebarFooter />
+      <AdminSidebarFooter email={email} roleLabel={roleLabel} />
     </Sidebar>
   );
 }

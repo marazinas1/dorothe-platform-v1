@@ -28,8 +28,7 @@ export function AdminShell({
     <SidebarProvider>
       {/* One design system: same tokens as the public site, denser scale only. */}
       <div className="admin-density flex min-h-screen w-full bg-background text-foreground">
-
-        <AdminSidebar />
+        <AdminSidebar email={profile.email ?? displayName} roleLabel={roleLabel} />
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border bg-card px-3 sm:px-4">
             <div className="flex min-w-0 items-center gap-3">
@@ -41,13 +40,7 @@ export function AdminShell({
                 {t("admin.topbar.title", { site: settings.site_name })}
               </span>
             </div>
-            <div className="flex min-w-0 items-center gap-3">
-              <AdminLocaleToggle current={interfaceLocale} />
-              <div className="hidden min-w-0 text-right sm:block">
-                <div className="truncate text-sm font-medium">{displayName}</div>
-                <div className="truncate text-xs text-muted-foreground">{roleLabel}</div>
-              </div>
-            </div>
+            <AdminLocaleToggle current={interfaceLocale} />
           </header>
           <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
         </div>

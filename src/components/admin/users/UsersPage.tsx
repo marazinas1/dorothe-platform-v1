@@ -3,7 +3,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Role } from "@/lib/auth/permissions";
 import type { InviteResult } from "@/lib/users/types";
 import {
@@ -29,17 +28,17 @@ export function UsersPage() {
     m.remove.isPending;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">{t("admin.users.title")}</h1>
-        <p className="text-sm text-muted-foreground">{t("admin.users.subtitle")}</p>
-      </div>
+    <div className="mx-auto max-w-5xl space-y-8">
+      <header>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("admin.users.title")}</h1>
+        <p className="mt-1.5 text-sm text-muted-foreground">{t("admin.users.subtitle")}</p>
+      </header>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("admin.users.invite.title")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <section className="rounded-[var(--radius)] border border-border bg-card p-5 sm:p-6">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {t("admin.users.invite.title")}
+        </h2>
+        <div className="mt-4 space-y-4">
           <InviteUserForm
             callerRole={data.callerRole}
             pending={m.invite.isPending}
@@ -51,11 +50,11 @@ export function UsersPage() {
             }
           />
           {result ? <InviteResultPanel result={result} /> : null}
-        </CardContent>
-      </Card>
+        </div>
+      </section>
 
       <section className="overflow-hidden rounded-[var(--radius)] border border-border bg-card">
-        <header className="border-b border-border px-4 py-3 sm:px-6">
+        <header className="border-b border-border px-4 py-4 sm:px-6">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             {t("admin.users.list.title")}
           </h2>

@@ -201,8 +201,11 @@
 }
 
 .admin-density :is(h1, h2, h3, h4, h5, h6, .font-heading) {
+  /* A tool reads better in the body face; still the same site_settings font. */
+  font-family: var(--font-body);
+  font-weight: 600;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .admin-density h1 {
@@ -216,6 +219,21 @@
 .admin-density h3 {
   font-size: 1.0625rem;
 }
+
+/*
+ * Controls in the admin sit on the ink/paper pair rather than the brand accent:
+ * a tool should read as neutral chrome and keep the accent for the public site.
+ * Both values still come from the shared tokens, so re-tinting site_settings
+ * re-tints the admin too — no second palette is introduced.
+ */
+.admin-density {
+  --primary: var(--foreground);
+  --primary-foreground: var(--background);
+  --ring: var(--foreground);
+  --sidebar-primary: var(--foreground);
+  --sidebar-primary-foreground: var(--background);
+}
+
 
 
 
