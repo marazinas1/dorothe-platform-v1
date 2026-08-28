@@ -29,11 +29,14 @@ export function AdminShell({
         <AdminSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border bg-card px-3 sm:px-4">
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 items-center gap-3">
               <SidebarTrigger
                 aria-label={t("admin.topbar.toggleSidebar")}
                 className="text-foreground"
               />
+              <span className="truncate text-sm font-medium tracking-tight">
+                {t("admin.topbar.title", { site: settings.site_name })}
+              </span>
             </div>
             <div className="flex min-w-0 items-center gap-3">
               <AdminLocaleToggle current={interfaceLocale} />
