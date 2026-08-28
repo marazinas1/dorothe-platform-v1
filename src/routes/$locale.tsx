@@ -7,6 +7,7 @@ import {
   siteSettingsQueryOptions,
 } from "@/lib/config/site-settings.functions";
 import { featureFlagsQueryOptions } from "@/lib/config/feature-flags.functions";
+import { usePageTracking } from "@/lib/analytics/use-page-tracking";
 
 export const Route = createFileRoute("/$locale")({
   beforeLoad: async ({ params }) => {
@@ -39,6 +40,7 @@ export const Route = createFileRoute("/$locale")({
 
 function LocaleLayout() {
   const { locale } = Route.useParams();
+  usePageTracking();
   return (
     <I18nProvider locale={locale as Locale}>
       <Outlet />

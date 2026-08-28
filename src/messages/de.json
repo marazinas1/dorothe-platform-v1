@@ -460,6 +460,42 @@
       "content": "Inhalte",
       "analytics": "Auswertung"
     },
+    "analytics": {
+      "title": "Auswertung",
+      "subtitle": "Eigene Zugriffsmessung. Ohne Cookies, ohne Dienste Dritter.",
+      "range": "{{count}} Tage",
+      "loading": "Auswertung wird geladen…",
+      "error": "Auswertung konnte nicht geladen werden.",
+      "vsPrevious": "gegenüber Vorperiode",
+      "traffic": "Zugriffe",
+      "views": "Seitenaufrufe",
+      "visitors": "Eindeutige Besucher",
+      "inquiries": "Anfragen",
+      "conversion": "Konversion",
+      "topPages": "Häufigste Seiten",
+      "sources": "Zugriffsquellen",
+      "devices": "Geräte",
+      "emptyPages": "Noch keine Seitenaufrufe erfasst.",
+      "emptySources": "Noch keine Quellen erfasst.",
+      "emptyDevices": "Noch keine Geräte erfasst.",
+      "emptyHint": "Besuche der öffentlichen Website erscheinen hier innerhalb einer Minute.",
+      "source": {
+        "direct": "Direkt",
+        "google": "Google",
+        "search": "Andere Suche",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "portals": "Immobilienportale",
+        "other": "Andere Websites"
+      },
+      "device": {
+        "desktop": "Desktop",
+        "mobile": "Mobil",
+        "tablet": "Tablet",
+        "unknown": "Unbekannt"
+      }
+    },
     "auth": {
       "login": {
         "title": "Anmelden",

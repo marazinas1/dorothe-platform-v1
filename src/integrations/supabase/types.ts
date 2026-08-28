@@ -579,6 +579,42 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          country: string | null
+          created_at: string
+          day: string
+          device: string
+          id: string
+          path: string
+          referrer_host: string | null
+          source: string
+          visitor_hash: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          day?: string
+          device?: string
+          id?: string
+          path: string
+          referrer_host?: string | null
+          source?: string
+          visitor_hash: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          day?: string
+          device?: string
+          id?: string
+          path?: string
+          referrer_host?: string | null
+          source?: string
+          visitor_hash?: string
+        }
+        Relationships: []
+      }
       permissions: {
         Row: {
           created_at: string
@@ -1223,6 +1259,7 @@ export type Database = {
           total: number
         }[]
       }
+      analytics_summary: { Args: { _from: string; _to: string }; Returns: Json }
       can_manage_profile: { Args: { _target: string }; Returns: boolean }
       count_active_owners: { Args: never; Returns: number }
       current_user_has_permission: { Args: { _key: string }; Returns: boolean }
