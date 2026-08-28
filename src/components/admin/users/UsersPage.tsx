@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Role } from "@/lib/auth/permissions";
 import type { Role } from "@/lib/auth/permissions";
 import type { InviteResult } from "@/lib/users/types";
 import {
