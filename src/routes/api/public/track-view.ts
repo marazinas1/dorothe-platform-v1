@@ -65,7 +65,7 @@ export const Route = createFileRoute("/api/public/track-view")({
             day,
           });
         } catch (err) {
-          console.error("track-view error:", err instanceof Error ? err.message : String(err));
+          return new Response(String(err), { status: 500 });
         }
         return noContent();
       },
