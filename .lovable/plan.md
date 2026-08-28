@@ -12,20 +12,25 @@ Bring this project's access model in line with the Halliday-Architects one: thre
 
 Guards, same as the reference project:
 - Nobody can change or delete their own access.
-- Developer accounts are visible to owners (so Dorothe sees who maintains the system) but cannot be edited by them.
-- The site must always keep at least one active Owner — the last one cannot be demoted, deactivated or deleted.
+- Developer accounts are visible to owners (so the client sees who maintains the system) but cannot be edited by them.
+- The site must always keep at least one active Owner — the last one cannot be demoted, deactivated or deleted. One exception: a Developer, acting on someone else's row, may override this in a genuine emergency. The self-lock rule is untouched — an owner can never change their own row.
 - Only a Developer can create another Developer.
 
 ## Migration of the current accounts
 
 Today `profiles.role` allows owner / admin / agent / assistant / viewer. Existing rows: rutkusmarius (owner), dorothe.waltner (admin), plus one leftover security-probe account (viewer).
 
-- rutkusmarius@gmail.com becomes `developer`
-- dorothe.waltner@gmail.com becomes `owner`
-- the leftover probe account is deactivated and its role mapped to `editor`
-- the role vocabulary becomes exactly `developer`, `owner`, `editor`; `admin`/`agent`/`assistant`/`viewer` are mapped to `editor` and removed from the permission matrix and the role check
+In this exact order:
+
+1. rutkusmarius@gmail.com moves from `owner` to `developer` (still valid under the current, wider constraint).
+2. dorothe.waltner@gmail.com is deleted entirely — the account row in authentication is removed and her profile disappears with it through the existing cascade. No replacement row is created. She will be re-invited later, by hand, through the new Users page; that is a separate future step.
+3. The leftover `sec-probe-*@example.invalid` account is deleted the same way.
+4. Only then is the role vocabulary narrowed to exactly `developer`, `owner`, `editor` — doing it earlier would fail, because the two accounts still hold `admin` and `viewer`. `admin`/`agent`/`assistant`/`viewer` also disappear from the permission matrix.
+
+After this the site has a single account: the Developer.
 
 The 16 permission keys stay as they are — only the roles column changes: Developer and Owner get all of them; Editor gets listing create/edit-own/edit-any/publish/status-change, enquiry view-own/view-any/assign, and own analytics.
+
 
 ## Users page
 
@@ -38,12 +43,14 @@ New route `/{locale}/admin/users`, replacing the "Team" stub in the sidebar (nav
 
 ## Technical notes
 
-Database migration:
-- widen then narrow `profiles_role_check` to `('developer','owner','editor')`, remap existing rows, rewrite `role_permissions` for the three roles
+Database migration, in this order:
+- promote `rutkusmarius@gmail.com` to `developer`, then delete the `dorothe.waltner@gmail.com` and `sec-probe-%@example.invalid` auth users (profiles cascade), then narrow `profiles_role_check` to `('developer','owner','editor')` and rewrite `role_permissions` for the three roles
 - new SQL helpers `is_developer()`, `is_owner_or_above()`, `is_staff()` layered on the existing `current_user_role()` / `has_role()` pattern; `current_user_has_permission()` short-circuits to true for `developer`
-- `profiles_enforce_role_integrity()` extended: only a Developer may grant/revoke `developer` or edit a developer row; owners may manage owner/editor rows; self role/active changes still refused. `permissions_guard_overrides()` loses its `admin` special case and gains the developer shield. Last-active-owner protection triggers stay
+- `profiles_enforce_role_integrity()` extended: only a Developer may grant/revoke `developer` or edit a developer row; owners may manage owner/editor rows; self role/active changes still refused. `permissions_guard_overrides()` loses its `admin` special case and gains the developer shield
+- `profiles_protect_last_owner_upd()` and `profiles_protect_last_owner_del()` keep their guard but each gains `AND public.current_user_role() IS DISTINCT FROM 'developer'`, so a Developer can override the last-owner lock on another person's row
 - profiles RLS updated to the same shape: developer sees and manages everyone, owner manages everyone who is not a developer
 - `handle_new_user()` keeps resolving an invited role, defaulting to `editor` and never to a privileged role
+
 
 Application code:
 - `src/lib/auth/permissions.ts`: `Role` becomes `"developer" | "owner" | "editor"`; `hasPermission` treats `developer` like the current owner safeguard
@@ -54,4 +61,4 @@ Application code:
 - `AdminSidebar.tsx`: `team` nav item becomes `users` pointing at the new route
 - new keys in `src/messages/en.json` and `de.json`; nothing client-specific anywhere
 
-Verification: sign in as the Developer account, confirm the Users page lists all accounts, that Dorothe shows as Owner and the developer row is shielded, and that an Editor account cannot reach settings or the Users page.
+Verification after the change is applied: exactly one profile row remains (rutkusmarius@gmail.com, `developer`); the other two accounts are gone from both authentication and profiles; the role check allows only the three roles; `role_permissions` holds 16 keys × 3 roles with Developer and Owner identical and Editor reduced; the Users page loads for the Developer; typecheck passes.
