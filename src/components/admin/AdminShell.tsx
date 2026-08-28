@@ -19,6 +19,7 @@ export function AdminShell({
   interfaceLocale: Locale;
 }) {
   const { t } = useTranslation();
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
 
   const displayName = profile.full_name || profile.email || t("admin.topbar.unknownUser");
   const roleLabel = t(`admin.role.${profile.role}`);
