@@ -4,15 +4,10 @@
 // client code loads the matrix via getPermissionMatrix and passes it to
 // hasPermission(), which stays pure and unit-testable.
 
-export type Role = "owner" | "admin" | "agent" | "assistant" | "viewer";
+export type Role = "developer" | "owner" | "editor";
 
-export const ROLES: readonly Role[] = [
-  "owner",
-  "admin",
-  "agent",
-  "assistant",
-  "viewer",
-] as const;
+export const ROLES: readonly Role[] = ["developer", "owner", "editor"] as const;
+
 
 export type PermissionKey =
   | "listing.create"
