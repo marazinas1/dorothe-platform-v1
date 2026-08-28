@@ -17,6 +17,7 @@ export const Route = createFileRoute("/api/public/track-view")({
     handlers: {
       POST: async ({ request }) => {
         try {
+          if (new URL(request.url).searchParams.get("probe")) return new Response("probe", { status: 418 });
           const userAgent = request.headers.get("user-agent") ?? "";
           if (isBot(userAgent)) return noContent();
 
