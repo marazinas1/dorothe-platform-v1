@@ -1223,6 +1223,7 @@ export type Database = {
           total: number
         }[]
       }
+      can_manage_profile: { Args: { _target: string }; Returns: boolean }
       count_active_owners: { Args: never; Returns: number }
       current_user_has_permission: { Args: { _key: string }; Returns: boolean }
       current_user_is_active: { Args: never; Returns: boolean }
@@ -1232,6 +1233,9 @@ export type Database = {
         Args: { _listing_id: string }
         Returns: undefined
       }
+      is_developer: { Args: never; Returns: boolean }
+      is_owner_or_above: { Args: never; Returns: boolean }
+      is_staff: { Args: never; Returns: boolean }
       listing_is_public: { Args: { _listing_id: string }; Returns: boolean }
       listing_slug_base: {
         Args: {
