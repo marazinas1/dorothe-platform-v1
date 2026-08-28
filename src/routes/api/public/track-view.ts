@@ -17,12 +17,11 @@ export const Route = createFileRoute("/api/public/track-view")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          
           const userAgent = request.headers.get("user-agent") ?? "";
-          if (isBot(userAgent)) return new Response("bot", { status: 418 });
+          if (isBot(userAgent)) return noContent();
 
           const raw = await request.text();
-          if (!raw) return new Response("noraw", { status: 418 });
+          if (!raw) return noContent();
           let body: { path?: unknown; referrer?: unknown };
           try {
             body = JSON.parse(raw);
@@ -31,7 +30,7 @@ export const Route = createFileRoute("/api/public/track-view")({
           }
 
           const path = typeof body.path === "string" ? body.path.slice(0, 300) : "";
-          if (!path.startsWith("/") || /\/admin(\/|$)/.test(path)) return new Response("path:"+path, { status: 418 });
+          if (!path.startsWith("/") || /\/admin(\/|$)/.test(path)) return noContent();
 
           const selfHost = new URL(request.url).hostname.toLowerCase();
           let referrerHost: string | null = null;
@@ -66,7 +65,7 @@ export const Route = createFileRoute("/api/public/track-view")({
             day,
           });
         } catch (err) {
-          return new Response(String(err), { status: 500 });
+          console.error("track-view error:", err instanceof Error ? err.message : String(err));
         }
         return noContent();
       },
