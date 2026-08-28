@@ -39,6 +39,7 @@ export const Route = createFileRoute("/$locale")({
 
 function LocaleLayout() {
   const { locale } = Route.useParams();
+  usePageTracking();
   return (
     <I18nProvider locale={locale as Locale}>
       <Outlet />

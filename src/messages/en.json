@@ -460,6 +460,42 @@
       "content": "Content",
       "analytics": "Analytics"
     },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "First-party traffic data. No cookies, no third-party tracking.",
+      "range": "{{count}} days",
+      "loading": "Loading analytics…",
+      "error": "Could not load analytics.",
+      "vsPrevious": "vs previous period",
+      "traffic": "Traffic",
+      "views": "Page views",
+      "visitors": "Unique visitors",
+      "inquiries": "Inquiries",
+      "conversion": "Conversion",
+      "topPages": "Top pages",
+      "sources": "Traffic sources",
+      "devices": "Devices",
+      "emptyPages": "No page views recorded yet.",
+      "emptySources": "No sources recorded yet.",
+      "emptyDevices": "No devices recorded yet.",
+      "emptyHint": "Visits to the public site appear here within a minute.",
+      "source": {
+        "direct": "Direct",
+        "google": "Google",
+        "search": "Other search",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "portals": "Property portals",
+        "other": "Other sites"
+      },
+      "device": {
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "tablet": "Tablet",
+        "unknown": "Unknown"
+      }
+    },
     "auth": {
       "login": {
         "title": "Sign in",
