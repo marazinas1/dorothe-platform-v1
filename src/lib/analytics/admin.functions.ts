@@ -16,13 +16,11 @@ export const analyticsSummary = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { range: AnalyticsRange }) => RangeInput.parse(input))
   .handler(async ({ data, context }): Promise<AnalyticsSummary> => {
+    // The RPC is newer than the generated types, so the call is loosely typed
+    // here and re-narrowed by AnalyticsSummary on the way out.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rpc = context.supabase.rpc as unknown as (
-      name: string,
-      args: Record<string, unknown>,
-    ) => Promise<{ data: unknown; error: { message: string } | null }>;
-
-    const { data: result, error } = await rpc("analytics_summary", {
+    const client = context.supabase as any;
+    const { data: result, error } = await client.rpc("analytics_summary", {
       _from: isoDay(data.range - 1),
       _to: isoDay(0),
     });
