@@ -175,8 +175,9 @@ export async function changeUserRole(
   assertCanManage(caller, target);
   assertCanAssign(caller, input.role);
 
-  const db = await admin();
-  const { error } = await db
+  // Written through the caller's own session so the database triggers see the
+  // real actor (a developer may override the last-owner lock, an owner may not).
+  const { error } = await supabase
     .from("profiles")
     .update({ role: input.role })
     .eq("id", target.id);
@@ -194,8 +195,7 @@ async function setActive(
   const target = await loadTarget(targetId);
   assertCanManage(caller, target);
 
-  const db = await admin();
-  const { error } = await db
+  const { error } = await supabase
     .from("profiles")
     .update({ is_active: isActive })
     .eq("id", target.id);
