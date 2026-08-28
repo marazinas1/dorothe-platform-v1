@@ -433,7 +433,8 @@
       "unknownUser": "Unknown user",
       "interfaceLanguage": "Panel language",
       "interfaceLanguageHint": "Only changes the language of this panel, not the website.",
-      "interfaceLanguageFailed": "Could not save the panel language."
+      "interfaceLanguageFailed": "Could not save the panel language.",
+      "title": "{{site}} Admin"
     },
     "role": {
       "developer": "Developer",
@@ -448,7 +449,8 @@
       "analytics": "Analytics",
       "settings": "Settings",
       "viewSite": "View public site",
-      "users": "Users"
+      "users": "Users",
+      "group": "Manage"
     },
     "pages": {
       "dashboard": "Dashboard",
@@ -1128,7 +1130,8 @@
       },
       "locked": {
         "self": "You cannot change your own access.",
-        "developer": "Only a developer may manage a developer account."
+        "developer": "Only a developer may manage a developer account.",
+        "lastOwner": "At least one owner account must remain."
       },
       "form": {
         "email": "Email address",
@@ -1148,7 +1151,8 @@
         "handoverHint": "Pass these on through a channel you trust. The link expires after first use."
       },
       "list": {
-        "title": "People with access"
+        "title": "People with access",
+        "empty": "No accounts yet."
       },
       "actions": {
         "revoke": "Revoke access",
@@ -1156,6 +1160,14 @@
         "delete": "Delete",
         "confirmDelete": "Confirm",
         "confirmWord": "Type DELETE"
+      },
+      "confirm": {
+        "cancel": "Cancel",
+        "revokeTitle": "Remove access for {{email}}?",
+        "revokeBody": "Their account stays, but they will no longer be able to open the admin panel. You can give access back at any time.",
+        "deleteTitle": "Delete {{email}}?",
+        "deleteBody": "This permanently deletes the account and cannot be undone. Listings and enquiries are not affected. Type DELETE to confirm.",
+        "deleteAction": "Delete permanently"
       }
     }
   },
