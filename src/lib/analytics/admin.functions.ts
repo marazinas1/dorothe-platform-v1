@@ -20,19 +20,10 @@ export const analyticsSummary = createServerFn({ method: "GET" })
     // here and re-narrowed by AnalyticsSummary on the way out.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const client = context.supabase as any;
-    let result: unknown = null;
-    let error: { message: string } | null = null;
-    try {
-      const res = await client.rpc("analytics_summary", {
-        _from: isoDay(data.range - 1),
-        _to: isoDay(0),
-      });
-      result = res.data;
-      error = res.error;
-    } catch (e) {
-      console.error("ANALYTICS_DEBUG", e instanceof Error ? e.stack : String(e));
-      throw e;
-    }
+    const { data: result, error } = await client.rpc("analytics_summary", {
+      _from: isoDay(data.range - 1),
+      _to: isoDay(0),
+    });
     if (error) throw new Error(error.message);
     return { ...EMPTY_SUMMARY, ...((result as AnalyticsSummary | null) ?? {}) };
   });
