@@ -93,8 +93,13 @@ export function UsersPage() {
               }
             />
           ))}
-        </CardContent>
-      </Card>
+          {data.users.length === 0 ? (
+            <li className="px-6 py-10 text-center text-sm text-muted-foreground">
+              {t("admin.users.list.empty")}
+            </li>
+          ) : null}
+        </ul>
+      </section>
     </div>
   );
 }
