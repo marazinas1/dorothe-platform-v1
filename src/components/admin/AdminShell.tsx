@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import type { Locale } from "@/i18n/config";
 import type { VerifiedAdminProfile } from "@/lib/auth/admin-gate.server";
 
