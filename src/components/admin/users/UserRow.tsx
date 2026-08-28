@@ -64,7 +64,9 @@ export function UserRow({
             <Badge variant="destructive">{t("admin.users.badges.revoked")}</Badge>
           ) : null}
         </div>
-        <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+        {user.full_name ? (
+          <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+        ) : null}
         <p className="text-xs text-muted-foreground">
           {user.last_sign_in_at
             ? t("admin.users.lastSignIn", {

@@ -436,11 +436,9 @@
       "interfaceLanguageFailed": "Could not save the panel language."
     },
     "role": {
+      "developer": "Developer",
       "owner": "Owner",
-      "admin": "Administrator",
-      "agent": "Agent",
-      "assistant": "Assistant",
-      "viewer": "Viewer"
+      "editor": "Editor"
     },
     "nav": {
       "dashboard": "Dashboard",
