@@ -29,7 +29,7 @@ import type { PermissionKey } from "@/lib/auth/permissions";
 import type { Locale } from "@/i18n/config";
 
 interface NavItem {
-  key: "dashboard" | "listings" | "inquiries" | "team" | "content" | "analytics" | "settings";
+  key: "dashboard" | "listings" | "inquiries" | "users" | "content" | "analytics" | "settings";
   to: string;
   icon: React.ComponentType<{ className?: string }>;
   permission: PermissionKey;
@@ -40,7 +40,7 @@ const ITEMS: NavItem[] = [
   { key: "dashboard", to: "/$locale/admin", icon: LayoutDashboard, permission: "inquiry.view.own" },
   { key: "listings", to: "/$locale/admin/listings", icon: Building2, permission: "listing.create" },
   { key: "inquiries", to: "/$locale/admin/inquiries", icon: Inbox, permission: "inquiry.view.own" },
-  { key: "team", to: "/$locale/admin/team", icon: Users, permission: "user.manage", flag: "team" },
+  { key: "users", to: "/$locale/admin/users", icon: Users, permission: "user.manage" },
   { key: "content", to: "/$locale/admin/content", icon: FileText, permission: "content.edit", flag: "blog" },
   { key: "analytics", to: "/$locale/admin/analytics", icon: BarChart3, permission: "analytics.view.own" },
   { key: "settings", to: "/$locale/admin/settings", icon: Settings, permission: "settings.edit" },

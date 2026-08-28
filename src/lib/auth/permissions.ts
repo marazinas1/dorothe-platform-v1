@@ -4,15 +4,10 @@
 // client code loads the matrix via getPermissionMatrix and passes it to
 // hasPermission(), which stays pure and unit-testable.
 
-export type Role = "owner" | "admin" | "agent" | "assistant" | "viewer";
+export type Role = "developer" | "owner" | "editor";
 
-export const ROLES: readonly Role[] = [
-  "owner",
-  "admin",
-  "agent",
-  "assistant",
-  "viewer",
-] as const;
+export const ROLES: readonly Role[] = ["developer", "owner", "editor"] as const;
+
 
 export type PermissionKey =
   | "listing.create"
@@ -59,9 +54,11 @@ export function hasPermission(
   const role = (
     typeof profile.role === "string" ? profile.role.trim().toLowerCase() : ""
   ) as Role;
-  // Safeguard: the owner is never locked out of their own admin UI, even if a
-  // matrix row is missing. Server-side assertPermission still governs actions.
-  if (role === "owner") return true;
+  // Safeguard: the top tiers are never locked out of their own admin UI, even
+  // if a matrix row is missing. Server-side assertPermission still governs
+  // actions; the developer tier is an unconditional superuser in SQL too.
+  if (role === "developer" || role === "owner") return true;
+
   const override = overrides.find((o) => o.permission_key === key);
   if (override) return override.granted;
   if (!matrix) return false;
