@@ -446,11 +446,11 @@
       "dashboard": "Übersicht",
       "listings": "Angebote",
       "inquiries": "Anfragen",
-      "team": "Team",
       "content": "Inhalte",
       "analytics": "Auswertung",
       "settings": "Einstellungen",
-      "viewSite": "Website ansehen"
+      "viewSite": "Website ansehen",
+      "users": "Benutzer"
     },
     "pages": {
       "dashboard": "Übersicht",
@@ -1109,6 +1109,55 @@
         "title": "Noch nichts vorhanden",
         "body": "Sobald das erste Objekt existiert, zeigt diese Seite, was zu tun ist: offene Anfragen, Entwürfe, die noch nicht online gehen können, und veröffentlichte Objekte mit Lücken.",
         "cta": "Erstes Objekt anlegen"
+      }
+    },
+    "users": {
+      "title": "Benutzer",
+      "subtitle": "Wer sich im Admin anmelden darf – und was erlaubt ist.",
+      "saved": "Zugriff aktualisiert",
+      "deleted": "Konto gelöscht",
+      "lastSignIn": "Letzte Anmeldung {{date}}",
+      "neverSignedIn": "Noch nie angemeldet",
+      "roles": {
+        "developer": "Developer",
+        "owner": "Inhaberin",
+        "editor": "Redaktion"
+      },
+      "badges": {
+        "you": "Sie",
+        "lastOwner": "Letzte Inhaberin",
+        "revoked": "Zugriff entzogen"
+      },
+      "locked": {
+        "self": "Sie können Ihren eigenen Zugriff nicht ändern.",
+        "developer": "Nur ein Developer darf ein Developer-Konto verwalten."
+      },
+      "form": {
+        "email": "E-Mail-Adresse",
+        "emailPlaceholder": "name@example.com",
+        "role": "Rolle",
+        "submit": "Einladung senden",
+        "inviting": "Wird eingeladen…"
+      },
+      "invite": {
+        "title": "Person einladen",
+        "done": "Einladung vorbereitet",
+        "emailSent": "Einladung an {{email}} versendet.",
+        "existed": "{{email}} hat bereits ein Konto – senden Sie den Link unten zum Setzen eines neuen Passworts.",
+        "manual": "E-Mail-Versand war nicht möglich, das Konto für {{email}} wurde direkt angelegt.",
+        "tempPassword": "Temporäres Passwort",
+        "resetLink": "Passwort-Link",
+        "handoverHint": "Bitte nur über einen vertrauenswürdigen Kanal weitergeben. Der Link gilt einmalig."
+      },
+      "list": {
+        "title": "Personen mit Zugriff"
+      },
+      "actions": {
+        "revoke": "Zugriff entziehen",
+        "restore": "Zugriff wiederherstellen",
+        "delete": "Löschen",
+        "confirmDelete": "Bestätigen",
+        "confirmWord": "DELETE eingeben"
       }
     }
   },

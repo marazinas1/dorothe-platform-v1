@@ -446,11 +446,11 @@
       "dashboard": "Dashboard",
       "listings": "Listings",
       "inquiries": "Inquiries",
-      "team": "Team",
       "content": "Content",
       "analytics": "Analytics",
       "settings": "Settings",
-      "viewSite": "View public site"
+      "viewSite": "View public site",
+      "users": "Users"
     },
     "pages": {
       "dashboard": "Dashboard",
@@ -1109,6 +1109,55 @@
         "title": "Nothing here yet",
         "body": "As soon as the first property exists, this page shows what needs doing: unanswered enquiries, drafts that cannot go live yet and published properties with gaps.",
         "cta": "Create first property"
+      }
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Who can sign in to the admin, and what they may do.",
+      "saved": "Access updated",
+      "deleted": "Account deleted",
+      "lastSignIn": "Last sign-in {{date}}",
+      "neverSignedIn": "Never signed in",
+      "roles": {
+        "developer": "Developer",
+        "owner": "Owner",
+        "editor": "Editor"
+      },
+      "badges": {
+        "you": "You",
+        "lastOwner": "Last owner",
+        "revoked": "Access revoked"
+      },
+      "locked": {
+        "self": "You cannot change your own access.",
+        "developer": "Only a developer may manage a developer account."
+      },
+      "form": {
+        "email": "Email address",
+        "emailPlaceholder": "name@example.com",
+        "role": "Role",
+        "submit": "Send invitation",
+        "inviting": "Inviting…"
+      },
+      "invite": {
+        "title": "Invite someone",
+        "done": "Invitation prepared",
+        "emailSent": "Invitation email sent to {{email}}.",
+        "existed": "{{email}} already has an account — send them the link below to set a new password.",
+        "manual": "Email delivery was unavailable, so the account for {{email}} was created directly.",
+        "tempPassword": "Temporary password",
+        "resetLink": "Password link",
+        "handoverHint": "Pass these on through a channel you trust. The link expires after first use."
+      },
+      "list": {
+        "title": "People with access"
+      },
+      "actions": {
+        "revoke": "Revoke access",
+        "restore": "Restore access",
+        "delete": "Delete",
+        "confirmDelete": "Confirm",
+        "confirmWord": "Type DELETE"
       }
     }
   },
