@@ -54,11 +54,13 @@ export function UsersPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("admin.users.list.title")}</CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0">
+      <section className="overflow-hidden rounded-[var(--radius)] border border-border bg-card">
+        <header className="border-b border-border px-4 py-3 sm:px-6">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            {t("admin.users.list.title")}
+          </h2>
+        </header>
+        <ul className="divide-y divide-border">
           {data.users.map((user) => (
             <UserRow
               key={user.id}
