@@ -10,6 +10,7 @@ import {
   revokeAccess,
   setUserRole,
 } from "./manage.functions";
+import type { Role } from "@/lib/auth/permissions";
 import type { InviteResult, UsersOverview } from "./types";
 
 export const usersQueryOptions = queryOptions({
@@ -35,15 +36,14 @@ export function useUserMutations(onInvited: (result: InviteResult) => void) {
 
   return {
     invite: useMutation({
-      mutationFn: (data: Parameters<typeof inviteUser>[0]["data"]) => invite({ data }),
+      mutationFn: (data: { email: string; role: Role }) => invite({ data }),
       onSuccess: (result) => {
         onInvited(result);
         invalidate();
       },
     }),
     setRole: useMutation({
-      mutationFn: (data: Parameters<typeof setUserRole>[0]["data"]) =>
-        changeRole({ data }),
+      mutationFn: (data: { userId: string; role: Role }) => changeRole({ data }),
       onSuccess: invalidate,
     }),
     revoke: useMutation({
