@@ -64,5 +64,5 @@ export async function insertPageView(row: PageViewRow): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const table = (supabaseAdmin as any).from("page_views");
   const { error } = await table.insert(row);
-  if (error) throw new Error(`insert: ${error.message}`);
+  if (error) console.error("page_views insert failed:", error.message);
 }
