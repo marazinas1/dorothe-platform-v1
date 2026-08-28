@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ShieldCheck } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import type { Role } from "@/lib/auth/permissions";
 import type { AdminUser } from "@/lib/users/types";
+
+import { UserRowDialogs } from "./UserRowDialogs";
 
 interface Props {
   user: AdminUser;
@@ -34,8 +36,7 @@ export function UserRow({
   onDelete,
 }: Props) {
   const { t } = useTranslation();
-  const [confirm, setConfirm] = useState("");
-  const [confirming, setConfirming] = useState(false);
+  const [confirm, setConfirm] = useState<"revoke" | "delete" | null>(null);
 
   const roles: Role[] =
     callerRole === "developer" ? ["developer", "owner", "editor"] : ["owner", "editor"];
@@ -44,10 +45,12 @@ export function UserRow({
     ? t("admin.users.locked.self")
     : !user.can_manage
       ? t("admin.users.locked.developer")
-      : undefined;
+      : user.is_last_owner
+        ? t("admin.users.locked.lastOwner")
+        : undefined;
 
   return (
-    <div className="flex flex-col gap-3 border-b border-border py-4 last:border-b-0 md:flex-row md:items-center">
+    <li className="flex flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between">
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <p className="truncate text-sm font-medium">{user.full_name ?? user.email}</p>
@@ -55,7 +58,10 @@ export function UserRow({
             <Badge variant="secondary">{t("admin.users.badges.you")}</Badge>
           ) : null}
           {user.role === "developer" ? (
-            <Badge variant="outline">{t("admin.users.roles.developer")}</Badge>
+            <Badge variant="outline" className="gap-1">
+              <ShieldCheck className="h-3 w-3" />
+              {t("admin.users.roles.developer")}
+            </Badge>
           ) : null}
           {user.is_last_owner ? (
             <Badge variant="outline">{t("admin.users.badges.lastOwner")}</Badge>
@@ -67,7 +73,9 @@ export function UserRow({
         {user.full_name ? (
           <p className="truncate text-xs text-muted-foreground">{user.email}</p>
         ) : null}
-        <p className="text-xs text-muted-foreground">
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          {t(`admin.users.roles.${user.role}`)}
+          {" · "}
           {user.last_sign_in_at
             ? t("admin.users.lastSignIn", {
                 date: new Date(user.last_sign_in_at).toLocaleDateString(),
@@ -76,13 +84,13 @@ export function UserRow({
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2" title={reason}>
+      <div className="flex flex-wrap items-center gap-2">
         <Select
           value={user.role}
           disabled={locked}
           onValueChange={(value) => onSetRole(value as Role)}
         >
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-full sm:w-36" title={reason}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -95,7 +103,13 @@ export function UserRow({
         </Select>
 
         {user.is_active ? (
-          <Button variant="outline" size="sm" disabled={locked} onClick={onRevoke}>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={locked}
+            title={reason ?? t("admin.users.actions.revoke")}
+            onClick={() => setConfirm("revoke")}
+          >
             {t("admin.users.actions.revoke")}
           </Button>
         ) : (
@@ -104,38 +118,25 @@ export function UserRow({
           </Button>
         )}
 
-        {confirming ? (
-          <div className="flex items-center gap-2">
-            <Input
-              value={confirm}
-              className="w-32"
-              placeholder={t("admin.users.actions.confirmWord")}
-              onChange={(event) => setConfirm(event.target.value)}
-            />
-            <Button
-              variant="destructive"
-              size="sm"
-              disabled={locked || confirm.trim().toUpperCase() !== "DELETE"}
-              onClick={() => {
-                onDelete();
-                setConfirming(false);
-                setConfirm("");
-              }}
-            >
-              {t("admin.users.actions.confirmDelete")}
-            </Button>
-          </div>
-        ) : (
-          <Button
-            variant="ghost"
-            size="sm"
-            disabled={locked}
-            onClick={() => setConfirming(true)}
-          >
-            {t("admin.users.actions.delete")}
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-destructive hover:text-destructive"
+          disabled={locked}
+          title={reason}
+          onClick={() => setConfirm("delete")}
+        >
+          {t("admin.users.actions.delete")}
+        </Button>
       </div>
-    </div>
+
+      <UserRowDialogs
+        email={user.email}
+        open={confirm}
+        onClose={() => setConfirm(null)}
+        onRevoke={onRevoke}
+        onDelete={onDelete}
+      />
+    </li>
   );
 }

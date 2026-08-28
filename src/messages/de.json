@@ -433,7 +433,8 @@
       "unknownUser": "Unbekannter Nutzer",
       "interfaceLanguage": "Sprache der Oberfläche",
       "interfaceLanguageHint": "Ändert nur die Sprache dieses Panels, nicht die der Website.",
-      "interfaceLanguageFailed": "Die Sprache der Oberfläche konnte nicht gespeichert werden."
+      "interfaceLanguageFailed": "Die Sprache der Oberfläche konnte nicht gespeichert werden.",
+      "title": "{{site}} Admin"
     },
     "role": {
       "developer": "Developer",
@@ -448,7 +449,8 @@
       "analytics": "Auswertung",
       "settings": "Einstellungen",
       "viewSite": "Website ansehen",
-      "users": "Benutzer"
+      "users": "Benutzer",
+      "group": "Verwalten"
     },
     "pages": {
       "dashboard": "Übersicht",
@@ -1128,7 +1130,8 @@
       },
       "locked": {
         "self": "Sie können Ihren eigenen Zugriff nicht ändern.",
-        "developer": "Nur ein Developer darf ein Developer-Konto verwalten."
+        "developer": "Nur ein Developer darf ein Developer-Konto verwalten.",
+        "lastOwner": "Mindestens ein Inhaber-Konto muss bestehen bleiben."
       },
       "form": {
         "email": "E-Mail-Adresse",
@@ -1148,7 +1151,8 @@
         "handoverHint": "Bitte nur über einen vertrauenswürdigen Kanal weitergeben. Der Link gilt einmalig."
       },
       "list": {
-        "title": "Personen mit Zugriff"
+        "title": "Personen mit Zugriff",
+        "empty": "Noch keine Konten."
       },
       "actions": {
         "revoke": "Zugriff entziehen",
@@ -1156,6 +1160,14 @@
         "delete": "Löschen",
         "confirmDelete": "Bestätigen",
         "confirmWord": "DELETE eingeben"
+      },
+      "confirm": {
+        "cancel": "Abbrechen",
+        "revokeTitle": "Zugang für {{email}} entfernen?",
+        "revokeBody": "Das Konto bleibt bestehen, der Zugang zum Adminbereich wird jedoch entzogen. Sie können ihn jederzeit wieder erteilen.",
+        "deleteTitle": "{{email}} löschen?",
+        "deleteBody": "Das Konto wird endgültig gelöscht und kann nicht wiederhergestellt werden. Objekte und Anfragen bleiben unberührt. Zur Bestätigung DELETE eingeben.",
+        "deleteAction": "Endgültig löschen"
       }
     }
   },

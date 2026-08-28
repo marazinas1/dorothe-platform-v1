@@ -18,11 +18,14 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Badge } from "@/components/ui/badge";
 import { AdminSidebarFooter } from "./AdminSidebarFooter";
+import { AdminSidebarHeader } from "./AdminSidebarHeader";
 import { usePermission } from "@/lib/auth/use-permission";
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { PermissionKey } from "@/lib/auth/permissions";
@@ -72,9 +75,9 @@ function NavRow({ item, locale }: { item: NavItem; locale: Locale }) {
           <item.icon className="h-4 w-4" />
           <span>{t(`admin.nav.${item.key}`)}</span>
           {badge > 0 ? (
-            <span className="ml-auto rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-medium leading-none text-primary-foreground">
+            <Badge className="ml-auto h-5 min-w-5 justify-center px-1.5 text-[11px]">
               {badge}
-            </span>
+            </Badge>
           ) : null}
         </Link>
       </SidebarMenuButton>
@@ -83,11 +86,14 @@ function NavRow({ item, locale }: { item: NavItem; locale: Locale }) {
 }
 
 export function AdminSidebar() {
+  const { t } = useTranslation();
   const { locale } = useParams({ strict: false }) as { locale: Locale };
   return (
     <Sidebar collapsible="icon">
+      <AdminSidebarHeader />
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>{t("admin.nav.group")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {ITEMS.map((item) => (
