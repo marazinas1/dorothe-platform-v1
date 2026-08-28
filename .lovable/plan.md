@@ -43,12 +43,14 @@ New route `/{locale}/admin/users`, replacing the "Team" stub in the sidebar (nav
 
 ## Technical notes
 
-Database migration:
-- widen then narrow `profiles_role_check` to `('developer','owner','editor')`, remap existing rows, rewrite `role_permissions` for the three roles
+Database migration, in this order:
+- promote `rutkusmarius@gmail.com` to `developer`, then delete the `dorothe.waltner@gmail.com` and `sec-probe-%@example.invalid` auth users (profiles cascade), then narrow `profiles_role_check` to `('developer','owner','editor')` and rewrite `role_permissions` for the three roles
 - new SQL helpers `is_developer()`, `is_owner_or_above()`, `is_staff()` layered on the existing `current_user_role()` / `has_role()` pattern; `current_user_has_permission()` short-circuits to true for `developer`
-- `profiles_enforce_role_integrity()` extended: only a Developer may grant/revoke `developer` or edit a developer row; owners may manage owner/editor rows; self role/active changes still refused. `permissions_guard_overrides()` loses its `admin` special case and gains the developer shield. Last-active-owner protection triggers stay
+- `profiles_enforce_role_integrity()` extended: only a Developer may grant/revoke `developer` or edit a developer row; owners may manage owner/editor rows; self role/active changes still refused. `permissions_guard_overrides()` loses its `admin` special case and gains the developer shield
+- `profiles_protect_last_owner_upd()` and `profiles_protect_last_owner_del()` keep their guard but each gains `AND public.current_user_role() IS DISTINCT FROM 'developer'`, so a Developer can override the last-owner lock on another person's row
 - profiles RLS updated to the same shape: developer sees and manages everyone, owner manages everyone who is not a developer
 - `handle_new_user()` keeps resolving an invited role, defaulting to `editor` and never to a privileged role
+
 
 Application code:
 - `src/lib/auth/permissions.ts`: `Role` becomes `"developer" | "owner" | "editor"`; `hasPermission` treats `developer` like the current owner safeguard
