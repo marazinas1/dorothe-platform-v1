@@ -18,11 +18,14 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Badge } from "@/components/ui/badge";
 import { AdminSidebarFooter } from "./AdminSidebarFooter";
+import { AdminSidebarHeader } from "./AdminSidebarHeader";
 import { usePermission } from "@/lib/auth/use-permission";
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { PermissionKey } from "@/lib/auth/permissions";
