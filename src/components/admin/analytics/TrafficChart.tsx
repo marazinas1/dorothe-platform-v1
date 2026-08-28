@@ -35,29 +35,29 @@ export function TrafficChart({ data, locale }: { data: Point[]; locale: string }
           <AreaChart data={rows} margin={{ left: -20, right: 8, top: 8 }}>
             <defs>
               <linearGradient id="analyticsViews" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="analyticsVisitors" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity={0} />
+                <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="hsl(var(--border))"
+              stroke="var(--border)"
               vertical={false}
             />
             <XAxis
               dataKey="label"
-              tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+              tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
               tickLine={false}
               axisLine={false}
               minTickGap={24}
             />
             <YAxis
               allowDecimals={false}
-              tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+              tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
               tickLine={false}
               axisLine={false}
             />
@@ -65,16 +65,16 @@ export function TrafficChart({ data, locale }: { data: Point[]; locale: string }
               contentStyle={{
                 fontSize: 12,
                 borderRadius: 8,
-                background: "hsl(var(--card))",
-                borderColor: "hsl(var(--border))",
-                color: "hsl(var(--foreground))",
+                background: "var(--card)",
+                borderColor: "var(--border)",
+                color: "var(--foreground)",
               }}
             />
             <Area
               type="monotone"
               dataKey="views"
               name={t("admin.analytics.views")}
-              stroke="hsl(var(--primary))"
+              stroke="var(--primary)"
               fill="url(#analyticsViews)"
               strokeWidth={2}
             />
@@ -82,7 +82,7 @@ export function TrafficChart({ data, locale }: { data: Point[]; locale: string }
               type="monotone"
               dataKey="visitors"
               name={t("admin.analytics.visitors")}
-              stroke="hsl(var(--accent))"
+              stroke="var(--accent)"
               fill="url(#analyticsVisitors)"
               strokeWidth={2}
             />
